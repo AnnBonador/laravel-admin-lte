@@ -93,7 +93,7 @@
                                     <div class="form-group col-sm-4">
                                         <label>Status</label>
                                         <span class="text-danger">*</span>
-                                        <select name="status" class="form-control">
+                                        <select name="status" class="custom-select">
                                             <option value="1">Active</option>
                                             <option value="0">Inactive</option>
                                         </select>

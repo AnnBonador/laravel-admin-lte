@@ -30,7 +30,7 @@
                         </div>
                         <div class="card-body">
                             @include('layouts.partials.messages')
-                            <form action="{{ route('patients.store') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('receptionist.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row mb-4">
                                     <div class="form-group col-sm-4">
@@ -102,7 +102,7 @@
                                     <div class="form-group col-sm-4">
                                         <label>Status</label>
                                         <span class="text-danger">*</span>
-                                        <select name="status" class="form-control">
+                                        <select name="status" class="custom-select">
                                             <option value="1">Active</option>
                                             <option value="0">Inactive</option>
                                         </select>

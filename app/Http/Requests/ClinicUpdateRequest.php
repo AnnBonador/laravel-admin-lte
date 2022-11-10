@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ClinicCreateRequest extends FormRequest
+class ClinicUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,7 @@ class ClinicCreateRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'email' => 'required|email:rfc,dns|unique:clinics,email',
+            'email' => 'required|email:rfc,dns|unique:clinics,email,' . $this->id,
             'contact' => ['required', 'regex:/^(09|\+639)\d{9}$/'],
             'specialization_id' => 'required|array|min:1',
             'status' => 'required',
@@ -33,6 +33,13 @@ class ClinicCreateRequest extends FormRequest
             'country' => 'required',
             'city' => 'required'
 
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'specialization_id.required' => 'The specialization field is required'
         ];
     }
 }

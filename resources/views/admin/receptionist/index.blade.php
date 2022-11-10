@@ -45,17 +45,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- @foreach ($patient as $data)
+                                    @foreach ($receptionists as $data)
                                         <tr>
                                             <td>
                                                 <img alt="Avatar" class="user-image img-circle"
-                                                    width="50"src="{{ asset('uploads/patient/' . $data->image) }}">
+                                                    width="50"src="{{ asset('uploads/receptionist/' . $data->image) }}">
                                                 {{ $data->full_name }}
                                             </td>
                                             <td>{{ $data->clinic->name }}</td>
                                             <td>{{ $data->email }}</td>
                                             <td>{{ $data->contact }}</td>
-                                            <td>{{ date_format($data->created_at, 'Y-m-d') }}</td>
                                             <td>
                                                 @if ($data->status == '1')
                                                     <small class="badge badge-primary">Active</small>
@@ -64,14 +63,14 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="{{ route('patients.edit', $data->id) }}"
+                                                <a href="{{ route('receptionist.edit', $data->id) }}"
                                                     class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
 
                                                 <button type="button" class="btn btn-sm btn-danger deleteRecordbtn"
                                                     value="{{ $data->id }}"><i class="fa fa-trash"></i></button>
                                             </td>
                                         </tr>
-                                    @endforeach --}}
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -91,7 +90,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('patients.delete') }}" method="POST">
+                <form action="{{ route('receptionist.delete') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <p>Are you sure you want to delete the record?</p>

@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-primary card-outline">
-                        <div class="card-header">Schedule Create
+                        <div class="card-header">Doctor Schedule Edit
                             <a href="{{ route('schedules.index') }}" class="btn btn-sm btn-danger float-right"> Back</a>
                         </div>
                         <div class="card-body">

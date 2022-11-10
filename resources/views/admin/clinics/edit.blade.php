@@ -25,18 +25,19 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-primary card-outline">
-                        <div class="card-header">Clinic Create
+                        <div class="card-header">Clinic Edit
                             <a href="{{ route('clinics.index') }}" class="btn btn-sm btn-danger float-right"> Back</a>
                         </div>
                         <div class="card-body">
                             @include('layouts.partials.messages')
-                            <form action="{{ route('clinics.store') }}" method="POST">
+                            <form action="{{ route('clinics.update', $clinic->id) }}" method="POST">
+                                @method('PUT')
                                 @csrf
                                 <div class="row mb-4">
                                     <div class="form-group col-sm-4">
                                         <label for="">Name</label>
                                         <span class="text-danger">*</span>
-                                        <input type="text" name="name" value="{{ old('name') }}"
+                                        <input type="text" name="name" value="{{ $clinic->name }}"
                                             class="form-control" placeholder="Enter clinic name">
                                         @if ($errors->has('name'))
                                             <span class="text-danger text-left">{{ $errors->first('name') }}</span>
@@ -45,7 +46,7 @@
                                     <div class="form-group col-sm-4">
                                         <label for="">Email</label>
                                         <span class="text-danger">*</span>
-                                        <input type="email" name="email" value="{{ old('email') }}"
+                                        <input type="email" name="email" value="{{ $clinic->email }}"
                                             class="form-control" placeholder="Enter email address">
                                         @if ($errors->has('email'))
                                             <span class="text-danger text-left">{{ $errors->first('email') }}</span>
@@ -54,7 +55,7 @@
                                     <div class="form-group col-sm-4">
                                         <label for="">Contact No.</label>
                                         <span class="text-danger">*</span>
-                                        <input type="text" name="contact" value="{{ substr(old('contact'), 3) }}"
+                                        <input type="text" name="contact" value="{{ substr($clinic->contact, 3) }}"
                                             class="form-control js-phone" placeholder="Enter contact number">
                                         @if ($errors->has('contact'))
                                             <span class="text-danger text-left">{{ $errors->first('contact') }}</span>
@@ -67,8 +68,8 @@
                                             data-allow-clear="true" multiple="multiple" style="width: 100%;">
                                             <option value=""></option>
                                             @foreach ($specialize as $id => $item)
-                                                <option value="{{ $item }}"
-                                                    {{ in_array($item, old('specialization_id') ?: []) ? 'selected' : '' }}>
+                                                <option value="{{ $id }}"
+                                                    {{ in_array($id, $clinic->specialization_id ?: []) ? 'selected' : '' }}>
                                                     {{ $item }}</option>
                                             @endforeach
                                         </select>
@@ -82,9 +83,9 @@
                                         <span class="text-danger">*</span>
                                         <select name="status" class="custom-select">
                                             <option value=""> Select a status</option>
-                                            <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Active
+                                            <option value="1" {{ $clinic->status == '1' ? 'selected' : '' }}>Active
                                             </option>
-                                            <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Inactive
+                                            <option value="0" {{ $clinic->status == '0' ? 'selected' : '' }}>Inactive
                                             </option>
                                         </select>
                                         @if ($errors->has('status'))
@@ -97,7 +98,7 @@
                                     <div class="form-group col-sm-12">
                                         <label for="">Address</label>
                                         <span class="text-danger">*</span>
-                                        <input type="text" name="address" value="{{ old('address') }}"
+                                        <input type="text" name="address" value="{{ $clinic->address }}"
                                             class="form-control" placeholder="Enter address">
                                         @if ($errors->has('address'))
                                             <span class="text-danger text-left">{{ $errors->first('address') }}</span>
@@ -106,7 +107,7 @@
                                     <div class="form-group col-sm-4">
                                         <label for="">Country</label>
                                         <span class="text-danger">*</span>
-                                        <input type="text" name="country" value="{{ old('country') }}"
+                                        <input type="text" name="country" value="{{ $clinic->country }}"
                                             class="form-control" placeholder="Enter country name">
                                         @if ($errors->has('country'))
                                             <span class="text-danger text-left">{{ $errors->first('country') }}</span>
@@ -115,7 +116,7 @@
                                     <div class="form-group col-sm-4">
                                         <label for="">City</label>
                                         <span class="text-danger">*</span>
-                                        <input type="text" name="city" value="{{ old('city') }}"
+                                        <input type="text" name="city" value="{{ $clinic->city }}"
                                             class="form-control" placeholder="Enter city">
                                         @if ($errors->has('city'))
                                             <span class="text-danger text-left">{{ $errors->first('city') }}</span>

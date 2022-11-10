@@ -34,6 +34,8 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
         Route::get('/clinics',  'index')->name('clinics.index');
         Route::get('/clinics/create', 'create')->name('clinics.create');
         Route::post('/clinics', 'store')->name('clinics.store');
+        Route::get('/clinics/{id}/edit', 'edit')->name('clinics.edit');
+        Route::put('/clinics/{id}', 'update')->name('clinics.update');
     });
     Route::controller(App\Http\Controllers\Admin\AppointmentController::class)->group(function () {
         Route::get('/appointment',  'index')->name('appointments.index');

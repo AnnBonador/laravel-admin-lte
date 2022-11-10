@@ -21,7 +21,7 @@ class DoctorController extends Controller
 
     public function create()
     {
-        $clinic = Clinic::pluck('name', 'id');
+        $clinic = Clinic::where('status', '1')->pluck('name', 'id');
         $specialize = Specialization::pluck('name', 'id');
         return view('admin.doctor.create', compact('clinic', 'specialize'));
     }
@@ -59,7 +59,7 @@ class DoctorController extends Controller
     {
         $doctor = Doctor::findOrFail($id);
         $specialize = Specialization::pluck('name', 'id');
-        $clinic = Clinic::pluck('name', 'id');
+        $clinic = Clinic::where('status', '1')->pluck('name', 'id');
         return view('admin.doctor.edit', compact('doctor', 'clinic', 'specialize'));
     }
 

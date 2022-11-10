@@ -19,14 +19,14 @@ class ServicesController extends Controller
 
     public function create()
     {
-        $doctor = Doctor::get()->pluck('full_name', 'id');
+        $doctor = Doctor::where('status', '1')->get()->pluck('full_name', 'id');
         $service_cat = ServiceCategory::pluck('name', 'id');
         return view('admin.service.create', compact('doctor', 'service_cat'));
     }
 
     public function store(ServiceStoreRequest $request)
     {
-        $service = Services::create($request->all());
+        Services::create($request->all());
 
         return redirect()->route('services.index')->with('success', 'Service added successfully');
     }
@@ -34,7 +34,7 @@ class ServicesController extends Controller
     public function edit($id)
     {
         $service = Services::findOrFail($id);
-        $doctor = Doctor::get()->pluck('full_name', 'id');
+        $doctor = Doctor::where('status', '1')->get()->pluck('full_name', 'id');
         $service_cat = ServiceCategory::pluck('name', 'id');
         return view('admin.service.edit', compact('service', 'doctor', 'service_cat'));
     }

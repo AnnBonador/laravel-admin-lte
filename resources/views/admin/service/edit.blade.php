@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-primary card-outline">
-                        <div class="card-header">Service Create
+                        <div class="card-header">Service Edit
                             <a href="{{ route('services.index') }}" class="btn btn-sm btn-danger float-right"> Back</a>
                         </div>
                         <div class="card-body">
@@ -95,7 +95,7 @@
                                     <div class="form-group col-sm-4">
                                         <label>Status</label>
                                         <span class="text-danger">*</span>
-                                        <select name="status" class="form-control">
+                                        <select name="status" class="custom-select">
                                             <option value="1" {{ $service->status == '1' ? 'selected' : '' }}>Active
                                             </option>
                                             <option value="0" {{ $service->status == '0' ? 'selected' : '' }}>Inactive

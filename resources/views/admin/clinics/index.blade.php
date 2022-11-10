@@ -53,14 +53,26 @@
                                             <td>{{ $data->email }}</td>
                                             <td></td>
                                             <td>{{ $data->contact }}</td>
-                                            <td>{{ $data->specialization }}</td>
+                                            <td>
+                                                {{ implode(', ', $data->specialization_id) }}
+                                                {{-- @foreach ($data->specialization_id as $value)
+                                                    {!! $value !!}
+                                                @endforeach --}}
+
+                                            </td>
                                             <td>{{ date_format($data->created_at, 'Y-m-d') }}</td>
                                             <td>
                                                 @if ($data->status == '1')
                                                     <small class="badge badge-primary">Active</small>
                                                 @endif
                                             </td>
-                                            <td></td>
+                                            <td>
+                                                <a href="{{ route('clinics.edit', $data->id) }}"
+                                                    class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
+
+                                                <button type="button" class="btn btn-sm btn-danger deleteRecordbtn"
+                                                    value="{{ $data->id }}"><i class="fa fa-trash"></i></button>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>

@@ -21,22 +21,21 @@ class ScheduleController extends Controller
 
     public function create()
     {
-        $doctor = Doctor::get()->pluck('full_name', 'id');
-        $clinic = Clinic::pluck('name', 'id');
-        return view('admin.schedule.create', compact('doctor', 'clinic'));
+        $clinic = Clinic::where('status', '1')->pluck('name', 'id');
+        return view('admin.schedule.create', compact('clinic'));
     }
 
     public function getDoctor(Request $request)
     {
         $id = $request->clinic_id;
-        $doctor = Doctor::where('clinic_id', $id)->get()->pluck('full_name', 'id');
+        $doctor = Doctor::where('clinic_id', $id)->where('status', '1')->get()->pluck('full_name', 'id');
         return response()->json($doctor);
     }
 
     public function getService(Request $request)
     {
         $id = $request->doctor_id;
-        $services = Services::where('doctor_id', $id)->pluck('name', 'id');
+        $services = Services::where('doctor_id', $id)->where('status', '1')->pluck('name', 'id');
         return response()->json($services);
     }
 
@@ -62,8 +61,8 @@ class ScheduleController extends Controller
     public function edit($id)
     {
         $schedule = Schedule::findOrFail($id);
-        $clinic = Clinic::pluck('name', 'id');
-        $doctor = Doctor::where('clinic_id', $schedule->clinic_id)->get();
+        $clinic = Clinic::where('status', '1')->pluck('name', 'id');
+        $doctor = Doctor::where('clinic_id', $schedule->clinic_id)->where('status', '1')->get();
         return view("admin.schedule.edit", compact('schedule', 'doctor', 'clinic'));
     }
 
