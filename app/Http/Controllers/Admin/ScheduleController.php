@@ -37,7 +37,21 @@ class ScheduleController extends Controller
     {
         $id = $request->doctor_id;
         $services = Services::where('doctor_id', $id)->where('status', '1')->pluck('name', 'id');
-        return response()->json($services);
+
+        $dates = Schedule::where('day', '>=', date('m/d/Y'))
+            ->where('day', '!=', date('m/d/Y'))
+            ->where('day', '!=',  date("m/d/Y", strtotime('tomorrow')))
+            ->where('doctor_id', $id)
+            ->pluck('day')->toArray();
+
+        $user_id = Schedule::select('doctor_id')->where('doctor_id', $id)->distinct()->pluck('doctor_id')->all();
+
+        $user[] = [
+            'user_id' => $user_id,
+            'dates' => $dates
+        ];
+
+        return response()->json(["services" => $services, "user" => $user]);
     }
 
     public function getSlots(Request $request)
@@ -67,7 +81,6 @@ class ScheduleController extends Controller
             for ($i = 0; $i < count($array_of_time) - 1; $i++) {
                 $new_array_of_time[] = '' . $array_of_time[$i] . ' - ' . $array_of_time[$i + 1];
             }
-
         } else {
             return response(['message' => 'not found'], 404);
         }

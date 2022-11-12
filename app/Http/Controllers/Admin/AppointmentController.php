@@ -23,7 +23,7 @@ class AppointmentController extends Controller
             ->where('day', '!=', date('m/d/Y'))
             ->where('day', '!=',  date("m/d/Y", strtotime('tomorrow')))
             ->where('doctor_id', '10')
-            ->pluck('id', 'day')->toArray();
+            ->pluck('day')->toArray();
 
 
         $schedule = Schedule::where('doctor_id', '10')->pluck('day')->toArray();

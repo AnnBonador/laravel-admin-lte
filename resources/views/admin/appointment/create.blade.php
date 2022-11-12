@@ -180,17 +180,15 @@
 
 @section('scripts')
     <script>
-        // var datas = @json($data2);
-        var data = JSON.parse('@json($data2)');
-
-        const output = {
-            [data[0].user_id]: data[0].dates,
-        };
-
+        // var data = JSON.parse('@json($data2)');
+        // var date_sched;
         var doctor_dates;
-        $("#schedDay").on("show.datetimepicker update.datetimepicker", function() {
-            highlight();
-        });
+
+
+        $("#schedDay").on("show.datetimepicker update.datetimepicker",
+            function() {
+                highlight();
+            });
 
         function highlight() {
             // var dateToHilight = text;
@@ -204,8 +202,10 @@
                     array[i].classList.add('highlighted');
                 }
             }
-        }
+        } // Will not run because arr is undefined
 
+
+        // var data = JSON.parse('@json($data2)');
         //get time slots am and pm
         $(document).on('click', 'input[name="booking_id"]', function() {
             $('#get_time_value').val(this.nextSibling.textContent);
@@ -269,23 +269,27 @@
                             _token: "{{ csrf_token() }}"
                         },
                         success: function(data) {
-                            if (data) {
-                                $('#load_service').empty();
-                                $('#load_service').append(
-                                    '<option value=""> Select Service</option>');
-                                $.each(data, function(key, value) {
-                                    $('#load_service').append($(
-                                        "<option/>", {
-                                            value: value,
-                                            text: value
-                                        }));
+                            $('#load_service').empty();
+                            $('#load_service').append(
+                                '<option value=""> Select Service</option>');
+                            $.each(data.services, function(key, value) {
+                                $('#load_service').append($(
+                                    "<option/>", {
+                                        value: value,
+                                        text: value
+                                    }));
 
-                                });
-                                $('#get_doctor_id').val(doctor_id);
-                            } else {
-                                $("#load_service").val([]).change();
-                                $('#load_slots').empty();
-                            }
+                            });
+                            var date_sched = data.user;
+                            var outPutArray = date_sched.map(({
+                                user_id,
+                                dates
+                            }) => ({
+                                [user_id]: dates
+                            }))[0];
+                            var convert = JSON.stringify(outPutArray);
+                            console.log(convert);
+
                         }
                     })
                 } else {
