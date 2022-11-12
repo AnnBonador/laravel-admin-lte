@@ -14,9 +14,10 @@ $(function () {
     $('#apptDay').datetimepicker({
         format: 'L',
     });
-    // $('#schedDay').datetimepicker({
-    //     format: 'L',
-    // });
+    $('#schedDay').datetimepicker({
+        format: 'L',
+        minDate: new Date()
+    });
 
      //Timepicker
      $('#startTime').datetimepicker({

@@ -45,6 +45,7 @@
         href="{{ asset('admin-assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     {{-- toast --}}
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/toastr/toastr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin-assets/dist/css/custom.css') }}">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">

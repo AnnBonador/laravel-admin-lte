@@ -13,10 +13,6 @@ class ClinicsController extends Controller
 {
     public function index()
     {
-        // $data->specialization_id
-        // $data = '["2","3"]';
-        // $data = json_decode($data);
-        // dd($data);
         $clinic = Clinic::all();
         return view('admin.clinics.index', compact('clinic'));
     }

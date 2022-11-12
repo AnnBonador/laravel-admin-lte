@@ -40,6 +40,7 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
     Route::controller(App\Http\Controllers\Admin\AppointmentController::class)->group(function () {
         Route::get('/appointment',  'index')->name('appointments.index');
         Route::get('/appointment/create', 'create')->name('appointments.create');
+        Route::post('/appointment', 'store')->name('appointments.store');
         // Route::post('/clinics', 'store')->name('clinics.store');
     });
 
@@ -86,6 +87,7 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
         Route::post('/schedule', 'store')->name('schedules.store');
         Route::get('/schedule/{id}/edit', 'edit')->name('schedules.edit');
         Route::get('/schedule/viewDoctor', 'getDoctor')->name('viewDoctor');
+        Route::post('/schedule/getSlots', 'getSlots')->name('getSlots');
         Route::put('/schedule/{id}', 'update')->name('schedules.update');
         Route::post('/schedule/delete', 'destroy')->name('schedules.delete');
     });

@@ -67,9 +67,9 @@
                                         <select name="specialization_id[]" class="select2bs4" data-placeholder="Search"
                                             data-allow-clear="true" multiple="multiple" style="width: 100%;">
                                             <option value=""></option>
-                                            @foreach ($specialize as $id => $item)
-                                                <option value="{{ $id }}"
-                                                    {{ in_array($id, $clinic->specialization_id ?: []) ? 'selected' : '' }}>
+                                            @foreach ($specialize as $item)
+                                                <option value="{{ $item }}"
+                                                    {{ in_array($item, $clinic->specialization_id ?: []) ? 'selected' : '' }}>
                                                     {{ $item }}</option>
                                             @endforeach
                                         </select>

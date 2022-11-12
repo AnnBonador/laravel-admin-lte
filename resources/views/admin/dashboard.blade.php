@@ -93,6 +93,37 @@
                 </div>
                 <!-- /.col -->
             </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <h3 class="card-title">Today's Appointment List</h3>
+                            <div class="card-tools">
+                                <a href="#" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-eye"></i> &nbsp;All upcoming appointments
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                                <p class="d-flex flex-column">
+                                    <span class="font-weight-bold">
+                                        roseannbonador5@gmail.com <span class="fw-light">(8:00 AM - 9:00
+                                            PM)</span>
+                                    </span>
+                                    <span class="text-muted">VALLEY CLINIC</span>
+                                    <span class="fw-lighter">Dr. Faraah</span>
+                                </p>
+                                <p class="text-success text-right">
+                                    <span class="right badge badge-light">Booked</span>
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
             <!-- /.row -->
         </div>
 

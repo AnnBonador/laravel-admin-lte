@@ -55,10 +55,6 @@
                                             <td>{{ $data->contact }}</td>
                                             <td>
                                                 {{ implode(', ', $data->specialization_id) }}
-                                                {{-- @foreach ($data->specialization_id as $value)
-                                                    {!! $value !!}
-                                                @endforeach --}}
-
                                             </td>
                                             <td>{{ date_format($data->created_at, 'Y-m-d') }}</td>
                                             <td>
