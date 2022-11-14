@@ -48,8 +48,8 @@
                                     @foreach ($appointments as $data)
                                         <tr>
                                             <td>
-                                                <b>{{ $data->patient->full_name }}</b><br>
-                                                Doctor: {{ $data->doctor->full_name }}<br>
+                                                <b>{{ $data->patients->full_name }}</b><br>
+                                                Doctor: {{ $data->doctors->full_name }}<br>
                                                 Clinic: <span class="text-primary">{{ $data->clinic->name }}</span>
                                             </td>
                                             <td>{{ $data->start_time . ' - ' . $data->end_time }}</td>

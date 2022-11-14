@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ScheduleStoreRequest;
 use App\Http\Requests\ScheduleUpdateRequest;
 use App\Models\Appointment;
+use App\Models\User;
 
 class ScheduleController extends Controller
 {
@@ -30,7 +31,7 @@ class ScheduleController extends Controller
     public function getDoctor(Request $request)
     {
         $id = $request->clinic_id;
-        $doctor = Doctor::where('clinic_id', $id)->where('status', '1')->get()->pluck('full_name', 'id');
+        $doctor = User::where('type', '2')->where('clinic_id', $id)->where('status', '1')->get()->pluck('full_name', 'id');
         return response()->json($doctor);
     }
 
@@ -129,7 +130,7 @@ class ScheduleController extends Controller
     {
         $schedule = Schedule::findOrFail($id);
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
-        $doctor = Doctor::where('status', '1')->where('clinic_id', $schedule->clinic_id)->get()->pluck('full_name', 'id');
+        $doctor = User::where('type', '2')->where('status', '1')->where('clinic_id', $schedule->clinic_id)->get()->pluck('full_name', 'id');
         return view("admin.schedule.edit", compact('schedule', 'doctor', 'clinic'));
     }
 

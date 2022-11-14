@@ -36,6 +36,15 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
         Route::post('/clinics', 'store')->name('clinics.store');
         Route::get('/clinics/{id}/edit', 'edit')->name('clinics.edit');
         Route::put('/clinics/{id}', 'update')->name('clinics.update');
+        Route::post('/clinics/delete', 'destroy')->name('clinics.delete');
+    });
+
+    Route::controller(App\Http\Controllers\Admin\RatingsController::class)->group(function () {
+        Route::get('/doctor/{id}/ratings',  'ratings')->name('ratings.index');
+        // Route::get('/clinics/create', 'create')->name('clinics.create');
+        // Route::post('/clinics', 'store')->name('clinics.store');
+        // Route::get('/clinics/{id}/edit', 'edit')->name('clinics.edit');
+        // Route::put('/clinics/{id}', 'update')->name('clinics.update');
     });
     Route::controller(App\Http\Controllers\Admin\AppointmentController::class)->group(function () {
         Route::get('/appointment',  'index')->name('appointments.index');
@@ -106,24 +115,13 @@ Route::prefix('user')->middleware(['auth', 'user-access:user'])->group(function 
 });
 
 
-/*------------------------------------------
---------------------------------------------
-All Admin Routes List
---------------------------------------------
---------------------------------------------*/
-Route::middleware(['auth', 'user-access:doctor'])->group(function () {
 
-    Route::get('/doctor/home', [HomeController::class, 'managerHome'])->name('doctor.home');
+Route::prefix('doctor')->middleware(['auth', 'user-access:doctor'])->group(function () {
+
+    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'doctorHome'])->name('doctor.dashboard');
 });
 
-Auth::routes();
+Route::prefix('receptionist')->middleware(['auth', 'user-access:receptionist'])->group(function () {
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::get('/', [UserAuthController::class, 'index'])
-    ->name('user.home')
-    ->middleware('auth:web');
-
-Route::get('admin/', [AdminAuthController::class, 'index'])
-    ->name('admin.home')
-    ->middleware('auth:webadmin');
+    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'receptionistHome'])->name('receptionist.dashboard');
+});

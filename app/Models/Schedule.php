@@ -14,8 +14,8 @@ class Schedule extends Model
         return $this->belongsTo(Clinic::class, 'clinic_id', 'id');
     }
 
-    public function doctor()
+    public function doctors()
     {
-        return $this->belongsTo(Doctor::class, 'doctor_id', 'id');
+        return $this->belongsTo(User::class, 'doctor_id', 'id');
     }
 }

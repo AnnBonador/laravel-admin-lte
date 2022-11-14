@@ -7,13 +7,14 @@ use App\Http\Requests\ReceptionistStoreRequest;
 use App\Http\Requests\ReceptionistUpdateRequest;
 use App\Models\Clinic;
 use App\Models\Receptionist;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ReceptionistController extends Controller
 {
     public function index()
     {
-        $receptionists = Receptionist::all();
+        $receptionists = User::where('type', '3')->get();
         return view('admin.receptionist.index', compact('receptionists'));
     }
 
@@ -26,7 +27,7 @@ class ReceptionistController extends Controller
     public function store(ReceptionistStoreRequest $request)
     {
         $validatedData = $request->validated();
-        $receptionist = new Receptionist();
+        $receptionist = new User();
         $receptionist->fname = $validatedData['fname'];
         $receptionist->lname = $validatedData['lname'];
         $receptionist->email = $validatedData['email'];
@@ -38,6 +39,7 @@ class ReceptionistController extends Controller
         $receptionist->country = $validatedData['country'];
         $receptionist->city = $validatedData['city'];
         $receptionist->status = $validatedData['status'];
+        $receptionist->type = 3;
 
         if ($request->hasfile('image')) {
             $file = $request->file('image');
@@ -52,7 +54,7 @@ class ReceptionistController extends Controller
 
     public function edit($id)
     {
-        $receptionist = Receptionist::findOrFail($id);
+        $receptionist = User::findOrFail($id);
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
         return view('admin.receptionist.edit', compact('receptionist', 'clinic'));
     }
@@ -60,7 +62,7 @@ class ReceptionistController extends Controller
     public function update(ReceptionistUpdateRequest $request, $id)
     {
         $validatedData = $request->validated();
-        $receptionist = Receptionist::find($id);
+        $receptionist = User::find($id);
         $receptionist->fname = $validatedData['fname'];
         $receptionist->lname = $validatedData['lname'];
         $receptionist->email = $validatedData['email'];

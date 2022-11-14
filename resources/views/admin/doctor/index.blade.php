@@ -53,10 +53,18 @@
                                                     width="50"src="{{ asset('uploads/doctor/' . $data->image) }}">
                                                 {{ $data->full_name }}
                                             </td>
-                                            <td>{{ $data->clinic->name }}</td>
+                                            <td>
+                                                @if ($data->clinic()->exists())
+                                                    {{ $data->clinic->name }}
+                                                @endif
+                                            </td>
                                             <td>{{ $data->email }}</td>
                                             <td>{{ $data->contact }}</td>
-                                            <td>{{ $data->specialty->name }}</td>
+                                            <td>
+                                                @if ($data->specialty()->exists())
+                                                    {{ $data->specialty->name }}
+                                                @endif
+                                            </td>
                                             <td>
                                                 @if ($data->status == '1')
                                                     <small class="badge badge-primary">Active</small>
@@ -66,10 +74,21 @@
                                             </td>
                                             <td>
                                                 <a href="{{ route('doctors.edit', $data->id) }}"
-                                                    class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
+                                                    class="btn btn-sm btn-success"><i class="fa fa-edit"
+                                                        data-toggle="tooltip" data-placement="top" title="Edit"></i></a>
+                                                <a href="{{ route('doctors.edit', $data->id) }}"
+                                                    class="btn btn-sm btn-primary"><i class="fas fa-paper-plane"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Send credentials"></i></a>
+                                                <a href="{{ route('ratings.index', $data->id) }}"
+                                                    class="btn btn-sm btn-warning" data-toggle="tooltip"
+                                                    data-placement="top" title="Patient Ratings"><i
+                                                        class="fas fa-star"></i></a>
 
                                                 <button type="button" class="btn btn-sm btn-danger deleteRecordbtn"
-                                                    value="{{ $data->id }}"><i class="fa fa-trash"></i></button>
+                                                    value="{{ $data->id }}"><i class="fa fa-trash"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Delete"></i></button>
                                             </td>
                                         </tr>
                                     @endforeach

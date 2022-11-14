@@ -26,9 +26,9 @@ class DoctorStoreRequest extends FormRequest
         return [
             'fname' => 'required|max:255',
             'lname' => 'required|max:255',
-            'email' => 'required|email:rfc,dns|unique:doctors,email',
+            'email' => 'required|email:rfc,dns|unique:users,email',
             'clinic_id' => 'required',
-            'contact' => 'required',
+            'contact' => ['required', 'regex:/^(09|\+639)\d{9}$/'],
             'dob' => 'required|date_format:m/d/Y|before:today',
             'specialization_id' => 'required|max:255',
             'experience' => 'required',

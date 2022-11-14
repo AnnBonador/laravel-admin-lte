@@ -115,6 +115,24 @@
 
                       </ul>
                   </li>
+                  <li class="nav-item">
+                      <a href="#" class="nav-link">
+                          <i class="nav-icon fas fa-users"></i>
+                          <p>
+                              Settings
+                              <i class="right fas fa-angle-left"></i>
+                          </p>
+                      </a>
+                      <ul class="nav nav-treeview">
+                          <li class="nav-item">
+                              <a href="" class="nav-link">
+                                  <i class="far fas fa-user"></i>
+                                  <p>System Settings</p>
+                              </a>
+                          </li>
+
+                      </ul>
+                  </li>
 
               </ul>
           </nav>

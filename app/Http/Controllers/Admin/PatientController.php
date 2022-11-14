@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use App\Models\Clinic;
-use App\Models\Patient;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
@@ -14,7 +14,7 @@ class PatientController extends Controller
 {
     public function index()
     {
-        $patient = Patient::all();
+        $patient = User::where('type', '0')->get();
         return view('admin.patient.index', compact('patient'));
     }
 
@@ -27,7 +27,7 @@ class PatientController extends Controller
     public function store(PatientStoreRequest $request)
     {
         $validatedData = $request->validated();
-        $patient = new Patient();
+        $patient = new User;
         $patient->fname = $validatedData['fname'];
         $patient->lname = $validatedData['lname'];
         $patient->email = $validatedData['email'];
@@ -39,6 +39,7 @@ class PatientController extends Controller
         $patient->country = $validatedData['country'];
         $patient->city = $validatedData['city'];
         $patient->status = $validatedData['status'];
+        $patient->type = 0;
 
         if ($request->hasfile('image')) {
             $file = $request->file('image');
@@ -53,7 +54,7 @@ class PatientController extends Controller
 
     public function edit($id)
     {
-        $patient = Patient::findOrFail($id);
+        $patient = User::findOrFail($id);
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
         return view('admin.patient.edit', compact('patient', 'clinic'));
     }
@@ -61,7 +62,7 @@ class PatientController extends Controller
     public function update(PatientUpdateRequest $request, $id)
     {
         $validatedData = $request->validated();
-        $patient = Patient::find($id);
+        $patient = User::find($id);
         $patient->fname = $validatedData['fname'];
         $patient->lname = $validatedData['lname'];
         $patient->email = $validatedData['email'];
@@ -97,7 +98,7 @@ class PatientController extends Controller
 
     public function destroy(Request $request)
     {
-        $patient = patient::find($request->delete_id);
+        $patient = User::find($request->delete_id);
         if ($patient->image) {
             $path = 'uploads/patient/' . $patient->image;
             if (File::exists($path)) {

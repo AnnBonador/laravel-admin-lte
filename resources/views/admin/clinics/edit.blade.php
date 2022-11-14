@@ -129,47 +129,78 @@
                                     <div class="form-group col-sm-4">
                                         <label for="">First Name</label>
                                         <span class="text-danger">*</span>
-                                        <input type="text" name="fname" class="form-control"
+                                        <input type="text" name="fname_admin" class="form-control"
+                                            value=@if ($clinic->users()->exists()) {{ $clinic->users->fname }} @endif
                                             placeholder="Enter first name">
+                                        @if ($errors->has('fname_admin'))
+                                            <span class="text-danger text-left">{{ $errors->first('fname_admin') }}</span>
+                                        @endif
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="">Last Name</label>
                                         <span class="text-danger">*</span>
-                                        <input type="text" name="lname" class="form-control"
+                                        <input type="text" name="lname_admin" class="form-control"
+                                            value=@if ($clinic->users()->exists()) {{ $clinic->users->lname }} @endif
                                             placeholder="Enter last name">
+                                        @if ($errors->has('lname_admin'))
+                                            <span class="text-danger text-left">{{ $errors->first('lname_admin') }}</span>
+                                        @endif
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="">Email</label>
                                         <span class="text-danger">*</span>
                                         <input type="email" name="email_admin" class="form-control"
+                                            value=@if ($clinic->users()->exists()) {{ $clinic->users->email }} @endif
                                             placeholder="Enter email address">
+                                        @if ($errors->has('email_admin'))
+                                            <span class="text-danger text-left">{{ $errors->first('email_admin') }}</span>
+                                        @endif
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="">Contact No.</label>
                                         <span class="text-danger">*</span>
                                         <input type="text" name="contact_admin" class="form-control js-phone"
+                                            value=@if ($clinic->users()->exists()) {{ substr($clinic->users->contact, 3) }} @endif
                                             placeholder="Enter contact number">
+                                        @if ($errors->has('contact_admin'))
+                                            <span
+                                                class="text-danger text-left">{{ $errors->first('contact_admin') }}</span>
+                                        @endif
                                     </div>
                                     <div class="form-group col-sm-4">
-                                        <label>Date</label>
+                                        <label>Birthday</label>
                                         <span class="text-danger">*</span>
                                         <div class="input-group date" id="dob" data-target-input="nearest">
                                             <input name="dob" type="text"
-                                                class="form-control datetimepicker-input" data-target="#dob" />
+                                                class="form-control datetimepicker-input" data-target="#dob"
+                                                value=@if ($clinic->users()->exists()) {{ $clinic->users->dob }} @endif
+                                                placeholder="mm/dd/yyyy" />
                                             <div class="input-group-append" data-target="#dob"
                                                 data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                             </div>
                                         </div>
+                                        @if ($errors->has('dob'))
+                                            <span class="text-danger text-left">{{ $errors->first('dob') }}</span>
+                                        @endif
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label>Gender</label>
                                         <span class="text-danger">*</span>
-                                        <select name="gender" class="form-control">
-                                            <option>Male</option>
-                                            <option>Female</option>
-                                            <option>Others</option>
+                                        <select name="gender" class="custom-select">
+                                            <option value="Male"
+                                                @if ($clinic->users()->exists()) {{ $clinic->users->gender == 'Male' ? 'selected' : '' }} @endif>
+                                                Male</option>
+                                            <option value="Female"
+                                                @if ($clinic->users()->exists()) {{ $clinic->users->gender == 'Female' ? 'selected' : '' }} @endif>
+                                                Female</option>
+                                            <option value="Others"
+                                                @if ($clinic->users()->exists()) {{ $clinic->users->gender == 'Others' ? 'selected' : '' }} @endif>
+                                                Others</option>
                                         </select>
+                                        @if ($errors->has('gender'))
+                                            <span class="text-danger text-left">{{ $errors->first('gender') }}</span>
+                                        @endif
                                     </div>
                                 </div>
                                 <button class="btn btn-primary" type="submit">Save</button>

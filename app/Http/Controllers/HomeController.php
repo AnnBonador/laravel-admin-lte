@@ -53,6 +53,11 @@ class HomeController extends Controller
      */
     public function doctorHome()
     {
-        return view('managerHome');
+        return view('doctor.dashboard');
+    }
+
+    public function receptionistHome()
+    {
+        return view('receptionist.dashboard');
     }
 }

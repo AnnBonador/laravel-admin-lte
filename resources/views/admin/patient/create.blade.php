@@ -103,8 +103,10 @@
                                         <label>Status</label>
                                         <span class="text-danger">*</span>
                                         <select name="status" class="custom-select">
-                                            <option value="1">Active</option>
-                                            <option value="0">Inactive</option>
+                                            <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Active
+                                            </option>
+                                            <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Inactive
+                                            </option>
                                         </select>
                                         @if ($errors->has('status'))
                                             <span class="text-danger text-left">{{ $errors->first('status') }}</span>

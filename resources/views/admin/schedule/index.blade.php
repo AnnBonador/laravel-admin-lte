@@ -47,7 +47,11 @@
                                 <tbody>
                                     @foreach ($schedule as $data)
                                         <tr>
-                                            <td>{{ $data->doctor->full_name }}</td>
+                                            <td>
+                                                @if ($data->doctors()->exists())
+                                                    {{ $data->doctors->full_name }}
+                                                @endif
+                                            </td>
                                             <td>{{ $data->clinic->name }}</td>
                                             <td>{{ $data->day }}</td>
                                             <td>{{ $data->start_time . ' to ' . $data->end_time }}</td>

@@ -52,7 +52,11 @@
                                                     width="50"src="{{ asset('uploads/receptionist/' . $data->image) }}">
                                                 {{ $data->full_name }}
                                             </td>
-                                            <td>{{ $data->clinic->name }}</td>
+                                            <td>
+                                                @if ($data->clinic()->exists())
+                                                    {{ $data->clinic->name }}
+                                                @endif
+                                            </td>
                                             <td>{{ $data->email }}</td>
                                             <td>{{ $data->contact }}</td>
                                             <td>

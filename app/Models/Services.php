@@ -15,8 +15,8 @@ class Services extends Model
         return $this->belongsTo(ServiceCategory::class, 'service_cid', 'id');
     }
 
-    public function doctor()
+    public function doctors()
     {
-        return $this->belongsTo(Doctor::class, 'doctor_id', 'id');
+        return $this->belongsTo(User::class, 'doctor_id', 'id');
     }
 }

@@ -28,6 +28,9 @@ $(function () {
         format: 'LT'
       });
 
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
 //Phone Format
 jQuery(document).ready(function($){
     $(".js-phone").inputmask({

@@ -53,7 +53,11 @@
                                                     width="50"src="{{ asset('uploads/patient/' . $data->image) }}">
                                                 {{ $data->full_name }}
                                             </td>
-                                            <td>{{ $data->clinic->name }}</td>
+                                            <td>
+                                                @if ($data->clinic()->exists())
+                                                    {{ $data->clinic->name }}
+                                                @endif
+                                            </td>
                                             <td>{{ $data->email }}</td>
                                             <td>{{ $data->contact }}</td>
                                             <td>{{ date_format($data->created_at, 'Y-m-d') }}</td>
@@ -66,9 +70,15 @@
                                             </td>
                                             <td>
                                                 <a href="{{ route('patients.edit', $data->id) }}"
-                                                    class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
+                                                    class="btn btn-sm btn-success" data-toggle="tooltip"
+                                                    data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
+                                                <a href="{{ route('doctors.edit', $data->id) }}"
+                                                    class="btn btn-sm btn-primary"><i class="fas fa-paper-plane"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Send credentials"></i></a>
 
                                                 <button type="button" class="btn btn-sm btn-danger deleteRecordbtn"
+                                                    data-toggle="tooltip" data-placement="top" title="Delete"
                                                     value="{{ $data->id }}"><i class="fa fa-trash"></i></button>
                                             </td>
                                         </tr>

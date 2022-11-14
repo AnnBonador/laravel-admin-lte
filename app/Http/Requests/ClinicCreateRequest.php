@@ -31,8 +31,23 @@ class ClinicCreateRequest extends FormRequest
             'status' => 'required',
             'address' => 'required',
             'country' => 'required',
-            'city' => 'required'
+            'city' => 'required',
 
+            'fname_admin' => 'required',
+            'lname_admin' => 'required',
+            'dob' => 'required',
+            'email_admin' => 'required',
+            'gender' => 'required',
+            'contact_admin' => ['required', 'regex:/^(09|\+639)\d{9}$/']
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'dob.required' => 'The birthday field is required',
+            'fname_admin.required' => 'First name field is required',
+            'lname_admin.required' => 'Last name field is required',
         ];
     }
 }

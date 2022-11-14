@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use App\Models\Clinic;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Schedule;
+use App\Models\Services;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AppointmentStoreRequest;
 use App\Http\Requests\AppointmentUpdateRequest;
-use App\Models\Services;
 
 class AppointmentController extends Controller
 {
@@ -23,7 +24,7 @@ class AppointmentController extends Controller
 
     public function create()
     {
-        $patients = Patient::where('status', '1')->get()->pluck('full_name', 'id');
+        $patients = User::where('type', '0')->where('status', '1')->get()->pluck('full_name', 'id');
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
         return view('admin.appointment.create', compact('clinic', 'patients'));
     }
@@ -55,9 +56,9 @@ class AppointmentController extends Controller
     public function edit($id)
     {
         $appointment = Appointment::findOrFail($id);
-        $patients = Patient::where('status', '1')->get()->pluck('full_name', 'id');
+        $patients = User::where('type', '0')->where('status', '1')->get()->pluck('full_name', 'id');
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
-        $doctor = Doctor::where('status', '1')->where('clinic_id', $appointment->clinic_id)->get()->pluck('fullname', 'id');
+        $doctor = User::where('type', '2')->where('status', '1')->where('clinic_id', $appointment->clinic_id)->get()->pluck('fullname', 'id');
         $service = Services::where('status', '1')->where('doctor_id', $appointment->doctor_id)->pluck('name');
         $schedule = Schedule::where('doctor_id', $appointment->doctor_id)->pluck('day', 'id');
         return view('admin.appointment.edit', compact('patients', 'clinic', 'appointment', 'doctor', 'service', 'schedule'));

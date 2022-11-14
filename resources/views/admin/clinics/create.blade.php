@@ -128,47 +128,70 @@
                                     <div class="form-group col-sm-4">
                                         <label for="">First Name</label>
                                         <span class="text-danger">*</span>
-                                        <input type="text" name="fname" class="form-control"
-                                            placeholder="Enter first name">
+                                        <input type="text" name="fname_admin" class="form-control"
+                                            placeholder="Enter first name" value="{{ old('fname_admin') }}">
+                                        @if ($errors->has('fname_admin'))
+                                            <span class="text-danger text-left">{{ $errors->first('fname_admin') }}</span>
+                                        @endif
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="">Last Name</label>
                                         <span class="text-danger">*</span>
-                                        <input type="text" name="lname" class="form-control"
-                                            placeholder="Enter last name">
+                                        <input type="text" name="lname_admin" class="form-control"
+                                            placeholder="Enter last name" value="{{ old('lname_admin') }}">
+                                        @if ($errors->has('lname_admin'))
+                                            <span class="text-danger text-left">{{ $errors->first('lname_admin') }}</span>
+                                        @endif
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="">Email</label>
                                         <span class="text-danger">*</span>
                                         <input type="email" name="email_admin" class="form-control"
-                                            placeholder="Enter email address">
+                                            placeholder="Enter email address" value="{{ old('email') }}">
+                                        @if ($errors->has('email_admin'))
+                                            <span class="text-danger text-left">{{ $errors->first('email_admin') }}</span>
+                                        @endif
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="">Contact No.</label>
                                         <span class="text-danger">*</span>
                                         <input type="text" name="contact_admin" class="form-control js-phone"
-                                            placeholder="Enter contact number">
+                                            placeholder="Enter contact number" value="{{ old('contact') }}">
+                                        @if ($errors->has('contact_admin'))
+                                            <span
+                                                class="text-danger text-left">{{ $errors->first('contact_admin') }}</span>
+                                        @endif
                                     </div>
                                     <div class="form-group col-sm-4">
-                                        <label>Date</label>
+                                        <label>Birthday</label>
                                         <span class="text-danger">*</span>
                                         <div class="input-group date" id="dob" data-target-input="nearest">
                                             <input name="dob" type="text"
-                                                class="form-control datetimepicker-input" data-target="#dob" />
+                                                class="form-control datetimepicker-input" data-target="#dob"
+                                                value="{{ old('dob') }}" placeholder="mm/dd/yyyy" />
                                             <div class="input-group-append" data-target="#dob"
                                                 data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                             </div>
                                         </div>
+                                        @if ($errors->has('dob'))
+                                            <span class="text-danger text-left">{{ $errors->first('dob') }}</span>
+                                        @endif
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label>Gender</label>
                                         <span class="text-danger">*</span>
-                                        <select name="gender" class="form-control">
-                                            <option>Male</option>
-                                            <option>Female</option>
-                                            <option>Others</option>
+                                        <select name="gender" class="custom-select">
+                                            <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male
+                                            </option>
+                                            <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>
+                                                Female</option>
+                                            <option value="Others" {{ old('gender') == 'Others' ? 'selected' : '' }}>
+                                                Others</option>
                                         </select>
+                                        @if ($errors->has('gender'))
+                                            <span class="text-danger text-left">{{ $errors->first('gender') }}</span>
+                                        @endif
                                     </div>
                                 </div>
                                 <button class="btn btn-primary" type="submit">Save</button>

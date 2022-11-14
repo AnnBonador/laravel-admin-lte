@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use App\Models\Clinic;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class DoctorController extends Controller
 {
     public function index()
     {
-        $doctor = Doctor::all();
+        $doctor = User::where('type', '2')->get();
         return view('admin.doctor.index', compact('doctor'));
     }
 
@@ -29,7 +30,7 @@ class DoctorController extends Controller
     public function store(DoctorStoreRequest $request)
     {
         $validatedData = $request->validated();
-        $doctor = new Doctor;
+        $doctor = new User;
         $doctor->fname = $validatedData['fname'];
         $doctor->lname = $validatedData['lname'];
         $doctor->email = $validatedData['email'];
@@ -43,6 +44,7 @@ class DoctorController extends Controller
         $doctor->country = $validatedData['country'];
         $doctor->city = $validatedData['city'];
         $doctor->status = $validatedData['status'];
+        $doctor->type = 2;
 
         if ($request->hasfile('image')) {
             $file = $request->file('image');
@@ -51,7 +53,7 @@ class DoctorController extends Controller
             $doctor->image = $filename;
         }
 
-        $pw = Doctor::generatePassword();
+        $pw = User::generatePassword();
         $doctor->password = $pw;
 
         $doctor->save();
@@ -61,7 +63,7 @@ class DoctorController extends Controller
 
     public function edit($id)
     {
-        $doctor = Doctor::findOrFail($id);
+        $doctor = User::findOrFail($id);
         $specialize = Specialization::pluck('name', 'id');
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
         return view('admin.doctor.edit', compact('doctor', 'clinic', 'specialize'));
@@ -70,7 +72,7 @@ class DoctorController extends Controller
     public function update(DoctorUpdateRequest $request, $id)
     {
         $validatedData = $request->validated();
-        $doctor = Doctor::find($id);
+        $doctor = User::find($id);
         $doctor->fname = $validatedData['fname'];
         $doctor->lname = $validatedData['lname'];
         $doctor->email = $validatedData['email'];
@@ -108,7 +110,7 @@ class DoctorController extends Controller
 
     public function destroy(Request $request)
     {
-        $doctor = Doctor::find($request->delete_id);
+        $doctor = User::find($request->delete_id);
         if ($doctor->image) {
             $path = 'uploads/doctor/' . $doctor->image;
             if (File::exists($path)) {

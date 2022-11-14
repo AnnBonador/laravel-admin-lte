@@ -39,7 +39,6 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Clinic Admin Email</th>
-                                        <th>Contact No.</th>
                                         <th>Specialization</th>
                                         <th>Registered ON</th>
                                         <th>Status</th>
@@ -51,8 +50,11 @@
                                         <tr>
                                             <td>{{ $data->name }}</td>
                                             <td>{{ $data->email }}</td>
-                                            <td></td>
-                                            <td>{{ $data->contact }}</td>
+                                            <td>
+                                                @if ($data->users()->exists())
+                                                    {{ $data->users->email }}
+                                                @endif
+                                            </td>
                                             <td>
                                                 {{ implode(', ', $data->specialization_id) }}
                                             </td>
@@ -60,14 +62,23 @@
                                             <td>
                                                 @if ($data->status == '1')
                                                     <small class="badge badge-primary">Active</small>
+                                                @else
+                                                    <small class="badge badge-warning">Inactive</small>
                                                 @endif
                                             </td>
                                             <td>
                                                 <a href="{{ route('clinics.edit', $data->id) }}"
-                                                    class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
+                                                    class="btn btn-sm btn-success" data-toggle="tooltip"
+                                                    data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
+                                                <a href="{{ route('doctors.edit', $data->id) }}"
+                                                    class="btn btn-sm btn-primary"><i class="fas fa-paper-plane"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Send credentials"></i></a>
 
                                                 <button type="button" class="btn btn-sm btn-danger deleteRecordbtn"
+                                                    data-toggle="tooltip" data-placement="top" title="Delete"
                                                     value="{{ $data->id }}"><i class="fa fa-trash"></i></button>
+
                                             </td>
                                         </tr>
                                     @endforeach
@@ -78,7 +89,44 @@
                 </div>
             </div>
         </div>
-
     </div>
     <!-- /.row (main row) -->
+    <div class="modal" tabindex="-1" id="deleteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Record</h5>
+                    <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('clinics.delete') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete the clinic and clinic admin?</p>
+                        <input type="hidden" name="delete_id" id="delete_id">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger" name="delete">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            $('.deleteRecordbtn').click(function(e) {
+                e.preventDefault();
+
+                var delete_id = $(this).val();
+                $('#delete_id').val(delete_id)
+                $('#deleteModal').modal('show');
+
+            });
+        });
+    </script>
 @endsection

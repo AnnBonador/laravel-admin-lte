@@ -16,6 +16,7 @@ class CreateReviewRatingsTable extends Migration
         Schema::create('review_ratings', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('patient_id');
+            $table->unsignedBigInteger('doctor_id');
             $table->unsignedBigInteger('appointment_id');
             $table->longText('comments')->nullable();
             $table->integer('star_rating');

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ServiceStoreRequest;
+use App\Models\User;
 use App\Models\Doctor;
-use App\Models\ServiceCategory;
 use App\Models\Services;
 use Illuminate\Http\Request;
+use App\Models\ServiceCategory;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ServiceStoreRequest;
 
 class ServicesController extends Controller
 {
@@ -19,7 +20,7 @@ class ServicesController extends Controller
 
     public function create()
     {
-        $doctor = Doctor::where('status', '1')->get()->pluck('full_name', 'id');
+        $doctor = User::where('type', '2')->where('status', '1')->get()->pluck('full_name', 'id');
         $service_cat = ServiceCategory::pluck('name', 'id');
         return view('admin.service.create', compact('doctor', 'service_cat'));
     }
@@ -34,7 +35,7 @@ class ServicesController extends Controller
     public function edit($id)
     {
         $service = Services::findOrFail($id);
-        $doctor = Doctor::where('status', '1')->get()->pluck('full_name', 'id');
+        $doctor = User::where('type', '2')->where('status', '1')->get()->pluck('full_name', 'id');
         $service_cat = ServiceCategory::pluck('name', 'id');
         return view('admin.service.edit', compact('service', 'doctor', 'service_cat'));
     }

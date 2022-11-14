@@ -18,9 +18,6 @@
     <!-- Tempusdominus Bootstrap 4 -->
     <link rel="stylesheet"
         href="{{ asset('admin-assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
-    {{-- <link
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.42/css/bootstrap-datetimepicker.min.css"
-        rel="stylesheet"> --}}
     <!-- iCheck -->
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
     <!-- JQVMap -->
@@ -65,22 +62,27 @@
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
 
-                <!-- Messages Dropdown Menu -->
                 <li class="nav-item dropdow user-menu">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                        <img src="{{ asset('admin-assets/dist/img/user2-160x160.jpg') }}"
-                            class="user-image img-circle elevation-2" alt="User Image">
-                        <span class="d-none d-md-inline">{{ Auth::user()->fname }}</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <a href="{{ route('logout') }}" class="dropdown-item"
-                            onclick="event.preventDefault();
-                        document.getElementById('logout-form').submit();">
-                            Logout
+                    <!-- Messages Dropdown Menu -->
+                    <div class="btn-group">
+
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static"
+                            aria-expanded="false">
+                            <img src="{{ asset('admin-assets/dist/img/user2-160x160.jpg') }}"
+                                class="user-image img-circle elevation-2" alt="User Image">
+                            {{ Auth::user()->fname }}
                         </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
+                        <ul class="dropdown-menu dropdown-menu-lg-end">
+                            <li><a href="" class="dropdown-item">Profile</a></li>
+                            <li><a href="" class="dropdown-item">Change Password</a></li>
+                            <li><a href="{{ route('logout') }}" class="dropdown-item"
+                                    onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">Logout</a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </li>
+                        </ul>
                     </div>
                 </li>
 

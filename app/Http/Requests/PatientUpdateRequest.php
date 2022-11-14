@@ -26,9 +26,9 @@ class PatientUpdateRequest extends FormRequest
         return [
             'fname' => 'required|max:255',
             'lname' => 'required|max:255',
-            'email' => 'required|email:rfc,dns|unique:patients,email,' . $this->id,
+            'email' => 'required|email:rfc,dns|unique:users,email,' . $this->id,
             'clinic_id' => 'required',
-            'contact' => 'required',
+            'contact' => ['required', 'regex:/^(09|\+639)\d{9}$/'],
             'dob' => 'required|date_format:m/d/Y|before:today',
             'gender' => 'required',
             'address' => 'nullable|max:255',

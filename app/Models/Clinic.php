@@ -24,4 +24,9 @@ class Clinic extends Model
     {
         return json_decode($value);
     }
+
+    public function users()
+    {
+        return $this->hasOne(User::class, 'clinic_id', 'id');
+    }
 }

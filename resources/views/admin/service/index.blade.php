@@ -48,7 +48,7 @@
                                     @foreach ($service as $data)
                                         <tr>
                                             <td>{{ $data->name }}</td>
-                                            <td>{{ $data->doctor->full_name }}</td>
+                                            <td>{{ $data->doctors->full_name }}</td>
                                             <td>{{ $data->charges }}</td>
                                             <td>{{ $data->service_category->name }}</td>
                                             <td>

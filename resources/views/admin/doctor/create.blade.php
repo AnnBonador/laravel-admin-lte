@@ -111,9 +111,9 @@
                                                     {{ $item }}</option>
                                             @endforeach
                                         </select>
-                                        @if ($errors->has('specialization'))
+                                        @if ($errors->has('specialization_id'))
                                             <span
-                                                class="text-danger text-left">{{ $errors->first('specialization') }}</span>
+                                                class="text-danger text-left">{{ $errors->first('specialization_id') }}</span>
                                         @endif
                                     </div>
                                     <div class="form-group col-sm-4">

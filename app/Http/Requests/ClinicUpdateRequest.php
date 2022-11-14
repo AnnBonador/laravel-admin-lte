@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ClinicUpdateRequest extends FormRequest
@@ -31,7 +32,14 @@ class ClinicUpdateRequest extends FormRequest
             'status' => 'required',
             'address' => 'required',
             'country' => 'required',
-            'city' => 'required'
+            'city' => 'required',
+
+            'fname_admin' => 'required',
+            'lname_admin' => 'required',
+            'dob' => 'required',
+            'email_admin' => 'required|email:rfc,dns',
+            'gender' => 'required',
+            'contact_admin' => ['required', 'regex:/^(09|\+639)\d{9}$/']
 
         ];
     }
@@ -39,7 +47,8 @@ class ClinicUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'specialization_id.required' => 'The specialization field is required'
+            'specialization_id.required' => 'The specialization field is required',
+            'email_admin.unique' => 'Email already exist'
         ];
     }
 }
