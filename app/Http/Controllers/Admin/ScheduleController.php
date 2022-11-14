@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ScheduleStoreRequest;
 use App\Http\Requests\ScheduleUpdateRequest;
+use App\Models\Appointment;
 
 class ScheduleController extends Controller
 {
@@ -37,28 +38,21 @@ class ScheduleController extends Controller
     {
         $id = $request->doctor_id;
         $services = Services::where('doctor_id', $id)->where('status', '1')->pluck('name', 'id');
-
-        $dates = Schedule::where('day', '>=', date('m/d/Y'))
+        $date_id = Schedule::where('day', '>=', date('m/d/Y'))
             ->where('day', '!=', date('m/d/Y'))
             ->where('day', '!=',  date("m/d/Y", strtotime('tomorrow')))
             ->where('doctor_id', $id)
-            ->pluck('day')->toArray();
-
-        $user_id = Schedule::select('doctor_id')->where('doctor_id', $id)->distinct()->pluck('doctor_id')->all();
-
-        $user[] = [
-            'user_id' => $user_id,
-            'dates' => $dates
-        ];
-
-        return response()->json(["services" => $services, "user" => $user]);
+            ->pluck('day', 'id');
+        return response()->json(['services' => $services, 'date_id' => $date_id]);
     }
 
     public function getSlots(Request $request)
     {
         $id = $request->slots;
         $doctor_id = $request->doctor_id;
-        $slot = Schedule::where('day', $id)->where('doctor_id', $doctor_id)->first();
+
+        $slot = Schedule::where('id', $id)->where('doctor_id', $doctor_id)->first();
+        $appointments = Appointment::where('doctor_id', $doctor_id)->get();
 
         if (!empty($slot->start_time)) {
             $starttime = $slot->start_time;  // your start time
@@ -77,9 +71,32 @@ class ScheduleController extends Controller
                 $start_time += $add_mins; // to check endtie=me
             }
 
+            // Here I am getting the indexes of the time slot which has appointment
+            $indexes_to_be_skipped = array();
+            foreach ($appointments as $appointment) {
+                for ($i = 0; $i < count($array_of_time); $i++) {
+                    if ($array_of_time[$i] == date("h:i A", strtotime($appointment['start_time']))) {
+                        $indexes_to_be_skipped[$i] = $i;
+                    }
+                }
+            }
+
             $new_array_of_time = array();
             for ($i = 0; $i < count($array_of_time) - 1; $i++) {
                 $new_array_of_time[] = '' . $array_of_time[$i] . ' - ' . $array_of_time[$i + 1];
+
+                // check if current time slot has already appointment
+                if (isset($indexes_to_be_skipped[$i])) {
+                    // then remove it
+                    unset($new_array_of_time[$i]);
+                }
+            }
+
+            // resetting index
+            $narray_of_time = $new_array_of_time;
+            $new_array_of_time = array();
+            foreach ($narray_of_time as $item) {
+                $new_array_of_time[] = $item;
             }
         } else {
             return response(['message' => 'not found'], 404);
@@ -112,7 +129,7 @@ class ScheduleController extends Controller
     {
         $schedule = Schedule::findOrFail($id);
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
-        $doctor = Doctor::where('clinic_id', $schedule->clinic_id)->where('status', '1')->get();
+        $doctor = Doctor::where('status', '1')->where('clinic_id', $schedule->clinic_id)->get()->pluck('full_name', 'id');
         return view("admin.schedule.edit", compact('schedule', 'doctor', 'clinic'));
     }
 

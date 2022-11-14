@@ -13,6 +13,7 @@ $(function () {
 
     $('#apptDay').datetimepicker({
         format: 'L',
+        minDate: new Date()
     });
     $('#schedDay').datetimepicker({
         format: 'L',

@@ -25,12 +25,13 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-primary card-outline">
-                        <div class="card-header">Appointment Create
+                        <div class="card-header">Appointment Edit
                             <a href="{{ route('appointments.index') }}" class="btn btn-sm btn-danger float-right"> Back</a>
                         </div>
                         <div class="card-body">
                             @include('layouts.partials.messages')
-                            <form action="{{ route('appointments.store') }}" method="POST">
+                            <form action="{{ route('appointments.update', $appointment->id) }}" method="POST">
+                                @method('PUT')
                                 @csrf
                                 <div class="row mb-2">
                                     <div class="col-sm-5">
@@ -42,7 +43,7 @@
                                                 <option selected="selected"></option>
                                                 @foreach ($clinic as $id => $item)
                                                     <option value="{{ $id }}"
-                                                        {{ old('clinic_id') == $id ? 'selected' : '' }}>
+                                                        {{ $appointment->clinic_id == $id ? 'selected' : '' }}>
                                                         {{ $item }}</option>
                                                 @endforeach
                                             </select>
@@ -53,12 +54,18 @@
                                         <div class="form-group">
                                             <label for="">Select Doctor</label>
                                             <span class="text-danger">*</span>
-                                            <input type="hidden" id="get_doctor_id">
+                                            <input type="hidden" id="get_doctor_id" value="{{ $appointment->doctor_id }}">
                                             <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
                                                 class="form-control select2bs4" style="width: 100%;" id="load_doctor">
+                                                @foreach ($doctor as $id => $item)
+                                                    <option value="{{ $id }}"
+                                                        {{ $appointment->doctor_id == $id ? 'selected' : '' }}>
+                                                        {{ $item }}</option>
+                                                @endforeach
                                             </select>
                                             @if ($errors->has('doctor_id'))
-                                                <span class="text-danger text-left">{{ $errors->first('doctor_id') }}</span>
+                                                <span
+                                                    class="text-danger text-left">{{ $errors->first('doctor_id') }}</span>
                                             @endif
                                         </div>
                                         <div class="form-group">
@@ -69,6 +76,11 @@
                                             <select name="service[]" multiple="multiple" data-placeholder="Search"
                                                 data-allow-clear="true" class="form-control select2bs4" style="width: 100%;"
                                                 id="load_service">
+                                                @foreach ($service as $item)
+                                                    <option value="{{ $item }}"
+                                                        {{ in_array($item, $appointment->service ?: []) ? 'selected' : '' }}>
+                                                        {{ $item }}</option>
+                                                @endforeach
                                             </select>
                                             @if ($errors->has('service'))
                                                 <span class="text-danger text-left">{{ $errors->first('service') }}</span>
@@ -79,6 +91,11 @@
                                             <span class="text-danger">*</span>
                                             <select name="schedule_id" data-placeholder="Search" data-allow-clear="true"
                                                 class="form-control select2bs4" style="width: 100%;" id="load_date">
+                                                @foreach ($schedule as $id => $item)
+                                                    <option value="{{ $id }}"
+                                                        {{ $appointment->schedule_id == $id ? 'selected' : '' }}>
+                                                        {{ $item }}</option>
+                                                @endforeach
                                             </select>
                                             @if ($errors->has('schedule_id'))
                                                 <span
@@ -95,7 +112,7 @@
                                                 <option selected="selected"></option>
                                                 @foreach ($patients as $id => $item)
                                                     <option value="{{ $id }}"
-                                                        {{ old('patient_id') == $id ? 'selected' : '' }}>
+                                                        {{ $appointment->patient_id == $id ? 'selected' : '' }}>
                                                         {{ $item }}</option>
                                                 @endforeach
                                             </select>
@@ -108,19 +125,21 @@
                                             <label>Status</label>
                                             <span class="text-danger">*</span>
                                             <select name="status" class="custom-select">
-                                                <option value="Booked" {{ old('status') == 'Booked' ? 'selected' : '' }}>
+                                                <option value="Booked"
+                                                    {{ $appointment->status == 'Booked' ? 'selected' : '' }}>
                                                     Booked
                                                 </option>
                                                 <option value="Check in"
-                                                    {{ old('status') == 'Check in' ? 'selected' : '' }}>Check in
+                                                    {{ $appointment->status == 'Check in' ? 'selected' : '' }}>Check in
                                                 </option>
                                                 <option value="Check out"
-                                                    {{ old('status') == 'Check out' ? 'selected' : '' }}>Check out
+                                                    {{ $appointment->status == 'Check out' ? 'selected' : '' }}>Check out
                                                 </option>
                                                 <option value="Cancelled"
-                                                    {{ old('status') == 'Cancelled' ? 'selected' : '' }}>Cancelled
+                                                    {{ $appointment->status == 'Cancelled' ? 'selected' : '' }}>Cancelled
                                                 </option>
-                                                <option value="Treated" {{ old('status') == 'Treated' ? 'selected' : '' }}>
+                                                <option value="Treated"
+                                                    {{ $appointment->status == 'Treated' ? 'selected' : '' }}>
                                                     Treated
                                                 </option>
                                             </select>
@@ -136,30 +155,37 @@
                                             <input type="hidden" id="get_time_value" name="time">
                                             <div class="text-center" id="load_slots">
                                                 <span class="fw-lighter d-none" id="no"></span>
+                                                <input type="radio" class="btn-check" name="booking_id" id=""
+                                                    value="" autocomplete="off">
+                                                <label class="btn btn-outline-primary fw-normal m-2"
+                                                    for="">{{ $appointment->start_time . ' - ' . $appointment->end_time }}</label>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="">Description</label>
-                                            <textarea name="description" class="form-control" rows="2" placeholder="Enter appointment description"></textarea>
+                                            <textarea name="description" class="form-control" rows="2" placeholder="Enter appointment description">{{ $appointment->description }}</textarea>
                                         </div>
                                         <div class="form-group">
                                             <label>Payment</label>
                                             <span class="text-danger">*</span>
                                             <select name="payment_option" class="custom-select">
                                                 <option value="Cash"
-                                                    {{ old('payment_status') == 'Cash' ? 'selected' : '' }}>
+                                                    {{ $appointment->payment_option == 'Cash' ? 'selected' : '' }}>
                                                     Cash
                                                 </option>
                                                 <option value="Paypal"
-                                                    {{ old('payment_status') == 'Paypal' ? 'selected' : '' }}>Paypal
+                                                    {{ $appointment->payment_option == 'Paypal' ? 'selected' : '' }}>
+                                                    Paypal
                                                 </option>
                                             </select>
-                                            @if ($errors->has('status'))
-                                                <span class="text-danger text-left">{{ $errors->first('name') }}</span>
+                                            @if ($errors->has('payment_option'))
+                                                <span
+                                                    class="text-danger text-left">{{ $errors->first('payment_option') }}</span>
                                             @endif
                                         </div>
                                     </div>
                                 </div>
+
                                 <button class="btn btn-primary" type="submit">Save</button>
                             </form>
                         </div>

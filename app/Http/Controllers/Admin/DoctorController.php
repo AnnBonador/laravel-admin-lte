@@ -50,6 +50,10 @@ class DoctorController extends Controller
             $file->move('uploads/doctor', $filename);
             $doctor->image = $filename;
         }
+
+        $pw = Doctor::generatePassword();
+        $doctor->password = $pw;
+
         $doctor->save();
 
         return redirect()->route('doctors.index')->with('success', 'Doctor added successfully');

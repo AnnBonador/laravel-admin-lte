@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Doctor;
+use App\Models\Patient;
+use App\Models\Appointment;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class HomeController extends Controller
 {
@@ -33,7 +39,11 @@ class HomeController extends Controller
      */
     public function adminHome()
     {
-        return view('admin.dashboard');
+        $total_patients = Patient::count();
+        $total_doctors = Doctor::count();
+        $total_appointments = Appointment::count();
+        $appt_today = Appointment::all();
+        return view('admin.dashboard', compact('total_patients', 'total_doctors', 'total_appointments', 'appt_today'));
     }
 
     /**

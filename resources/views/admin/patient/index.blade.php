@@ -88,7 +88,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Delete Record</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -99,7 +99,7 @@
                         <input type="hidden" name="delete_id" id="delete_id">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-danger" name="delete">Delete</button>
                     </div>
                 </form>

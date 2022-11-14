@@ -37,22 +37,41 @@
                                 <thead class="bg-light">
                                     <tr>
                                         <th>Patient Name</th>
+                                        <th>Time</th>
                                         <th>Services</th>
-                                        <th>Charges</th>
+                                        <th>Date</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                {{-- <tbody>
-                                    @foreach ($schedule as $data)
+                                <tbody>
+                                    @foreach ($appointments as $data)
                                         <tr>
-                                            <td>{{ $data->doctor->full_name }}</td>
-                                            <td>{{ $data->clinic->name }}</td>
-                                            <td>{{ $data->day }}</td>
-                                            <td>{{ $data->start_time . ' to ' . $data->end_time }}</td>
-                                            <td>{{ $data->duration }}</td>
                                             <td>
-                                                <a href="{{ route('schedules.edit', $data->id) }}"
+                                                <b>{{ $data->patient->full_name }}</b><br>
+                                                Doctor: {{ $data->doctor->full_name }}<br>
+                                                Clinic: <span class="text-primary">{{ $data->clinic->name }}</span>
+                                            </td>
+                                            <td>{{ $data->start_time . ' - ' . $data->end_time }}</td>
+                                            <td>
+                                                {{ implode(', ', $data->service) }}
+                                            </td>
+                                            <td>{{ $data->schedule->day }}</td>
+                                            <td>
+                                                @if ($data->status == 'Booked')
+                                                    <span class="badge badge-light">{{ $data->status }}</span>
+                                                @elseif($data->status == 'Check in')
+                                                    <span class="badge badge-success">{{ $data->status }}</span>
+                                                @elseif($data->status == 'Check out')
+                                                    <span class="badge badge-secondary">{{ $data->status }}</span>
+                                                @elseif($data->status == 'Cancelled')
+                                                    <span class="badge badge-danger">{{ $data->status }}</span>
+                                                @elseif($data->status == 'Treated')
+                                                    <span class="badge badge-primary">{{ $data->status }}</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('appointments.edit', $data->id) }}"
                                                     class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
 
                                                 <button type="button" class="btn btn-sm btn-danger deleteRecordbtn"
@@ -60,7 +79,7 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                </tbody> --}}
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -75,18 +94,18 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Delete Record</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('schedules.delete') }}" method="POST">
+                <form action="{{ route('appointments.delete') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <p>Are you sure you want to delete the record?</p>
                         <input type="hidden" name="delete_id" id="delete_id">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-danger" name="delete">Delete</button>
                     </div>
                 </form>

@@ -55,10 +55,10 @@
                                         <span class="text-danger">*</span>
                                         <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
                                             class="form-control select2bs4" style="width: 100%;" id="load_doctor">
-                                            @foreach ($doctor as $item)
-                                                <option value="{{ $item->id }}"
+                                            @foreach ($doctor as $id => $item)
+                                                <option value="{{ $id }}"
                                                     {{ $schedule->doctor_id == $id ? 'selected' : '' }}>
-                                                    {{ $item->full_name }}</option>
+                                                    {{ $item }}</option>
                                             @endforeach
                                         </select>
                                         @if ($errors->has('doctor_id'))

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AppointmentStoreRequest extends FormRequest
+class AppointmentUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,7 +28,6 @@ class AppointmentStoreRequest extends FormRequest
             'doctor_id' => 'required',
             'patient_id' => 'required',
             'schedule_id' => 'required',
-            'time' => 'required',
             'service' => 'required|array|min:1',
             'description' => 'nullable',
             'status' => 'required',
@@ -43,7 +42,6 @@ class AppointmentStoreRequest extends FormRequest
             'doctor_id.required' => 'The doctor field is required',
             'patient_id.required' => 'The patient field is required',
             'schedule_id.required' => 'The schedule field is required',
-            'time.required' => 'Select a time slot'
         ];
     }
 }

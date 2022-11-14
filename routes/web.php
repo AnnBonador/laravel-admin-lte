@@ -41,7 +41,9 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
         Route::get('/appointment',  'index')->name('appointments.index');
         Route::get('/appointment/create', 'create')->name('appointments.create');
         Route::post('/appointment', 'store')->name('appointments.store');
-        // Route::post('/clinics', 'store')->name('clinics.store');
+        Route::get('/appointment/{id}/edit', 'edit')->name('appointments.edit');
+        Route::put('/appointment/{id}', 'update')->name('appointments.update');
+        Route::post('/appointment/delete', 'destroy')->name('appointments.delete');
     });
 
     Route::controller(App\Http\Controllers\Admin\DoctorController::class)->group(function () {
@@ -117,3 +119,11 @@ Route::middleware(['auth', 'user-access:doctor'])->group(function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/', [UserAuthController::class, 'index'])
+    ->name('user.home')
+    ->middleware('auth:web');
+
+Route::get('admin/', [AdminAuthController::class, 'index'])
+    ->name('admin.home')
+    ->middleware('auth:webadmin');

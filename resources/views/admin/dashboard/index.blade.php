@@ -30,7 +30,11 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text text-uppercase">total patients</span>
-                            <span class="info-box-number">{{ $total_patients }}</span>
+                            <span class="info-box-number">{{ $total_patient }}</span>
+
+                            <span class="progress-description">
+                                70% Increase in 30 Days
+                            </span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -43,7 +47,11 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text text-uppercase">total doctors</span>
-                            <span class="info-box-number">{{ $total_doctors }}</span>
+                            <span class="info-box-number">41,410</span>
+
+                            <span class="progress-description">
+                                70% Increase in 30 Days
+                            </span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -56,7 +64,11 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text text-uppercase">total appointments</span>
-                            <span class="info-box-number">{{ $total_appointments }}</span>
+                            <span class="info-box-number">41,410</span>
+
+                            <span class="progress-description">
+                                70% Increase in 30 Days
+                            </span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -93,25 +105,20 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            @foreach ($appt_today as $data)
-                                @if ($data->schedule->day == Carbon\Carbon::now()->format('m/d/Y'))
-                                    <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
-                                        <p class="d-flex flex-column">
-                                            <span class="font-weight-bold">
-                                                {{ $data->schedule->day }}
-                                                {{ $data->patient->full_name }} <span class="fw-light">
-                                                    ({{ $data->start_time . ' -  ' . $data->end_time }})
-                                                </span>
-                                            </span>
-                                            <span class="text-primary text-uppercase">{{ $data->clinic->name }}</span>
-                                            <span class="fw-lighter">{{ $data->doctor->full_name }}</span>
-                                        </p>
-                                        <p class="text-success text-right">
-                                            <span class="right badge badge-light">{{ $data->status }}</span>
-                                        </p>
-                                    </div>
-                                @endif
-                            @endforeach
+                            <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                                <p class="d-flex flex-column">
+                                    <span class="font-weight-bold">
+                                        roseannbonador5@gmail.com <span class="fw-light">(8:00 AM - 9:00
+                                            PM)</span>
+                                    </span>
+                                    <span class="text-muted">VALLEY CLINIC</span>
+                                    <span class="fw-lighter">Dr. Faraah</span>
+                                </p>
+                                <p class="text-success text-right">
+                                    <span class="right badge badge-light">Booked</span>
+                                </p>
+                            </div>
+
                         </div>
                     </div>
                 </div>
