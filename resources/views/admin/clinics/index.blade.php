@@ -1,4 +1,4 @@
-@extends('admin.main-layout')
+@extends('layouts.admin')
 
 @section('content-header')
     <div class="content-header">
@@ -40,7 +40,7 @@
                                         <th>Email</th>
                                         <th>Clinic Admin Email</th>
                                         <th>Specialization</th>
-                                        <th>Registered ON</th>
+                                        <th>Clinic Address</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -58,7 +58,7 @@
                                             <td>
                                                 {{ implode(', ', $data->specialization_id) }}
                                             </td>
-                                            <td>{{ date_format($data->created_at, 'Y-m-d') }}</td>
+                                            <td>{{ $data->address }}</td>
                                             <td>
                                                 @if ($data->status == '1')
                                                     <small class="badge badge-primary">Active</small>
@@ -70,10 +70,10 @@
                                                 <a href="{{ route('clinics.edit', $data->id) }}"
                                                     class="btn btn-sm btn-success" data-toggle="tooltip"
                                                     data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
-                                                <a href="{{ route('doctors.edit', $data->id) }}"
+                                                <a href="{{ route('clinicCredentials', $data->users->id) }}"
                                                     class="btn btn-sm btn-primary"><i class="fas fa-paper-plane"
                                                         data-toggle="tooltip" data-placement="top"
-                                                        title="Send credentials"></i></a>
+                                                        title="Resend credentials"></i></a>
 
                                                 <button type="button" class="btn btn-sm btn-danger deleteRecordbtn"
                                                     data-toggle="tooltip" data-placement="top" title="Delete"

@@ -1,4 +1,4 @@
-@extends('admin.main-layout')
+@extends('layouts.admin')
 
 @section('content-header')
     <div class="content-header">
@@ -31,6 +31,9 @@
                         <div class="info-box-content">
                             <span class="info-box-text text-uppercase">total patients</span>
                             <span class="info-box-number">{{ $total_patients }}</span>
+                            <span class="progress-description">
+                                Total visited patients
+                            </span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -44,6 +47,9 @@
                         <div class="info-box-content">
                             <span class="info-box-text text-uppercase">total doctors</span>
                             <span class="info-box-number">{{ $total_doctors }}</span>
+                            <span class="progress-description">
+                                Total clinic doctors
+                            </span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -57,6 +63,9 @@
                         <div class="info-box-content">
                             <span class="info-box-text text-uppercase">total appointments</span>
                             <span class="info-box-number">{{ $total_appointments }}</span>
+                            <span class="progress-description">
+                                Total clinic appointments
+                            </span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -69,11 +78,8 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text text-uppercase">total revenue</span>
-                            <span class="info-box-number">41,410</span>
+                            <span class="info-box-number">{{ $total_earnings }}</span>
 
-                            <span class="progress-description">
-                                70% Increase in 30 Days
-                            </span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>

@@ -1,4 +1,4 @@
-@extends('admin.main-layout')
+@extends('layouts.admin')
 
 @section('content-header')
     <div class="content-header">
@@ -156,7 +156,7 @@
                                         <label for="">Contact No.</label>
                                         <span class="text-danger">*</span>
                                         <input type="text" name="contact_admin" class="form-control js-phone"
-                                            placeholder="Enter contact number" value="{{ old('contact') }}">
+                                            placeholder="Enter contact number" value="{{ substr(old('contact'), 3) }}">
                                         @if ($errors->has('contact_admin'))
                                             <span
                                                 class="text-danger text-left">{{ $errors->first('contact_admin') }}</span>

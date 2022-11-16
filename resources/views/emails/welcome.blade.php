@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Test Email</title>
+    <title>Welcome</title>
 </head>
 
 <body>
-    <h1>Test EMAIL</h1>
+    <p>Welcome to Clinic,</p>
+    <p>Your registration process with {{ $mailData['email'] }} is successfully completed, and your temporary password is
+        {{ $mailData['password'] }}.
+    </p>
+    <p>Thank you.</p>
 
 </body>
 

@@ -15,10 +15,12 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $fillable = ['fname', 'lname', 'email', 'contact', 'dob', 'gender', 'status', 'type', 'password'];
     public function getFullNameAttribute()
     {
         return "{$this->fname} {$this->lname}";
     }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -59,23 +61,5 @@ class User extends Authenticatable
         return new Attribute(
             get: fn ($value) =>  ["user", "admin", "doctor", "receptionist"][$value],
         );
-    }
-    public static function generatePassword()
-    {
-        // Generate random string and encrypt it.
-        return bcrypt(Str::random(35));
-    }
-
-    public static function sendWelcomeEmail($clinic_admin)
-    {
-        // Generate a new reset password token
-        $token = app('auth.password.broker')->createToken($clinic_admin);
-
-        // Send email
-        Mail::send('emails.welcome', ['user' => $clinic_admin, 'token' => $token], function ($m) use ($clinic_admin) {
-            $m->from('hello@appsite.com', 'Your App Name');
-
-            $m->to($clinic_admin->email, $clinic_admin->full_name)->subject('Welcome to APP');
-        });
     }
 }

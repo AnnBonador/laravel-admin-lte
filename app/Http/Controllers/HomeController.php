@@ -7,6 +7,7 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Appointment;
 use App\Models\Schedule;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 
@@ -41,9 +42,11 @@ class HomeController extends Controller
     {
         $total_patients = Patient::count();
         $total_doctors = Doctor::count();
-        $total_appointments = Appointment::count();
+        $total_appointments = Appointment::where('status', '!=', 'Completed')->count();
         $appt_today = Appointment::all();
-        return view('admin.dashboard', compact('total_patients', 'total_doctors', 'total_appointments', 'appt_today'));
+        $revenue = Transaction::all();
+        $total_earnings = $revenue->sum('amount');
+        return view('admin.dashboard', compact('total_patients', 'total_doctors', 'total_appointments', 'appt_today', 'total_earnings'));
     }
 
     /**

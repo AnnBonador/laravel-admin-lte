@@ -32,7 +32,6 @@ class AppointmentStoreRequest extends FormRequest
             'service' => 'required|array|min:1',
             'description' => 'nullable',
             'status' => 'required',
-            'payment_option' => 'required',
         ];
     }
 

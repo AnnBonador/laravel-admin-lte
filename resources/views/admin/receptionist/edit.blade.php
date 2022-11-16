@@ -1,4 +1,4 @@
-@extends('admin.main-layout')
+@extends('layouts.admin')
 
 @section('content-header')
     <div class="content-header">
@@ -64,7 +64,6 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="">Select Clinic</label>
-                                        <span class="text-danger">*</span>
                                         <select name="clinic_id" data-placeholder="Search" data-allow-clear="true"
                                             class="form-control select2bs4" style="width: 100%;">
                                             <option selected="selected"></option>
@@ -122,9 +121,8 @@
                                         <label>Gender</label>
                                         <span class="text-danger">*</span>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" value="Male"
-                                                id="male" name="gender"
-                                                {{ $receptionist->gender == 'Male' ? 'checked' : '' }}>
+                                            <input class="custom-control-input" type="radio" value="Male" id="male"
+                                                name="gender" {{ $receptionist->gender == 'Male' ? 'checked' : '' }}>
                                             <label class="custom-control-label" for="male">Male</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
@@ -145,7 +143,6 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label>Profile Image</label>
-                                        <span class="text-danger">*</span>
                                         <input type="file" name="image">
                                         <input type="hidden" value="{{ $receptionist->image }}" name="old_image">
                                         @if ($errors->has('image'))

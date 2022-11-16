@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
+use Carbon\Carbon;
 use App\Models\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -29,7 +31,19 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    public function redirectTo()
+    {
+        $role = Auth::user()->type;
+        switch ($role) {
+            case 'user':
+                return '/user/dashboard';
+                break;
+
+            default:
+                return '/home';
+                break;
+        }
+    }
 
     /**
      * Create a new controller instance.
@@ -50,9 +64,14 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|email:rfc,dns|unique:users,email',
+            'contact' => ['required', 'regex:/^(09|\+639)\d{9}$/'],
+            'birthday' => 'required|before:today',
+            'gender' => 'required',
+            'password' => 'required|min:8',
+            'password_confirmation' => 'required|same:password',
         ]);
     }
 
@@ -65,9 +84,15 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
+            'fname' => $data['first_name'],
+            'lname' => $data['last_name'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'contact' => $data['contact'],
+            'dob' => $data['birthday'],
+            'gender' => $data['gender'],
+            'status' => 1,
+            'type' => 0,
+            'password' => bcrypt($data['password']),
         ]);
     }
 }

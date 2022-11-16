@@ -1,4 +1,4 @@
-@extends('admin.main-layout')
+@extends('layouts.admin')
 
 @section('content-header')
     <div class="content-header">
@@ -39,7 +39,8 @@
                                             <label for="">Select Clinic</label>
                                             <span class="text-danger">*</span>
                                             <select name="clinic_id" data-placeholder="Search" data-allow-clear="true"
-                                                class="form-control select2bs4" style="width: 100%;" id="load_clinic">
+                                                class="form-control select2bs4" style="width: 100%;" id="load_clinic"
+                                                disabled="disabled">
                                                 <option selected="selected"></option>
                                                 @foreach ($clinic as $id => $item)
                                                     <option value="{{ $id }}"
@@ -56,7 +57,8 @@
                                             <span class="text-danger">*</span>
                                             <input type="hidden" id="get_doctor_id" value="{{ $appointment->doctor_id }}">
                                             <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
-                                                class="form-control select2bs4" style="width: 100%;" id="load_doctor">
+                                                class="form-control select2bs4" style="width: 100%;" id="load_doctor"
+                                                disabled="disabled">
                                                 @foreach ($doctor as $id => $item)
                                                     <option value="{{ $id }}"
                                                         {{ $appointment->doctor_id == $id ? 'selected' : '' }}>
@@ -75,7 +77,7 @@
                                                 service</a>
                                             <select name="service[]" multiple="multiple" data-placeholder="Search"
                                                 data-allow-clear="true" class="form-control select2bs4" style="width: 100%;"
-                                                id="load_service">
+                                                id="load_service" disabled="disabled">
                                                 @foreach ($service as $item)
                                                     <option value="{{ $item }}"
                                                         {{ in_array($item, $appointment->service ?: []) ? 'selected' : '' }}>
@@ -108,7 +110,7 @@
                                             <a href="{{ route('patients.create') }}" class="float-right text-sm">Add
                                                 patient</a>
                                             <select name="patient_id" data-placeholder="Search" data-allow-clear="true"
-                                                class="form-control select2bs4" style="width: 100%;">
+                                                class="form-control select2bs4" style="width: 100%;" disabled="disabled">
                                                 <option selected="selected"></option>
                                                 @foreach ($patients as $id => $item)
                                                     <option value="{{ $id }}"
@@ -138,9 +140,9 @@
                                                 <option value="Cancelled"
                                                     {{ $appointment->status == 'Cancelled' ? 'selected' : '' }}>Cancelled
                                                 </option>
-                                                <option value="Treated"
-                                                    {{ $appointment->status == 'Treated' ? 'selected' : '' }}>
-                                                    Treated
+                                                <option value="Completed"
+                                                    {{ $appointment->status == 'Completed' ? 'selected' : '' }}>
+                                                    Completed
                                                 </option>
                                             </select>
                                             @if ($errors->has('status'))
@@ -164,24 +166,6 @@
                                         <div class="form-group">
                                             <label for="">Description</label>
                                             <textarea name="description" class="form-control" rows="2" placeholder="Enter appointment description">{{ $appointment->description }}</textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Payment</label>
-                                            <span class="text-danger">*</span>
-                                            <select name="payment_option" class="custom-select">
-                                                <option value="Cash"
-                                                    {{ $appointment->payment_option == 'Cash' ? 'selected' : '' }}>
-                                                    Cash
-                                                </option>
-                                                <option value="Paypal"
-                                                    {{ $appointment->payment_option == 'Paypal' ? 'selected' : '' }}>
-                                                    Paypal
-                                                </option>
-                                            </select>
-                                            @if ($errors->has('payment_option'))
-                                                <span
-                                                    class="text-danger text-left">{{ $errors->first('payment_option') }}</span>
-                                            @endif
                                         </div>
                                     </div>
                                 </div>

@@ -1,4 +1,4 @@
-@extends('admin.main-layout')
+@extends('layouts.admin')
 
 @section('content-header')
     <div class="content-header">
@@ -141,7 +141,6 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label>Profile Image</label>
-                                        <span class="text-danger">*</span>
                                         <input type="file" name="image">
                                         <input type="hidden" value="{{ $patient->image }}" name="old_image">
                                         @if ($errors->has('image'))

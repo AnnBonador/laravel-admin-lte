@@ -1,4 +1,4 @@
-@extends('admin.main-layout')
+@extends('layouts.admin')
 
 @section('content-header')
     <div class="content-header">
@@ -122,7 +122,8 @@
                                         <label for="">Experience</label>
                                         <span class="text-danger">*</span>
                                         <input type="text" name="experience" value="{{ $doctor->experience }}"
-                                            class="form-control" placeholder="Enter year(s) of experience">
+                                            class="form-control" placeholder="Enter year(s) of experience"
+                                            id="num">
                                         @if ($errors->has('experience'))
                                             <span class="text-danger text-left">{{ $errors->first('experience') }}</span>
                                         @endif
@@ -164,7 +165,6 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label>Profile Image</label>
-                                        <span class="text-danger">*</span>
                                         <input type="file" name="image">
                                         <input type="hidden" value="{{ $doctor->image }}" name="old_image">
                                         @if ($errors->has('image'))

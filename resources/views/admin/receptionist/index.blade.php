@@ -1,4 +1,4 @@
-@extends('admin.main-layout')
+@extends('layouts.admin')
 
 @section('content-header')
     <div class="content-header">
@@ -48,8 +48,13 @@
                                     @foreach ($receptionists as $data)
                                         <tr>
                                             <td>
-                                                <img alt="Avatar" class="user-image img-circle"
-                                                    width="50"src="{{ asset('uploads/receptionist/' . $data->image) }}">
+                                                @if (!empty($data->image))
+                                                    <img alt="Avatar" class="user-image img-circle"
+                                                        width="50"src="{{ asset('uploads/receptionist/' . $data->image) }}">
+                                                @else
+                                                    <img alt="Avatar" class="user-image img-circle"
+                                                        width="50"src="{{ asset('admin-assets/dist/img/default.png') }}">
+                                                @endif
                                                 {{ $data->full_name }}
                                             </td>
                                             <td>
@@ -68,9 +73,16 @@
                                             </td>
                                             <td>
                                                 <a href="{{ route('receptionist.edit', $data->id) }}"
-                                                    class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
+                                                    class="btn btn-sm btn-success" data-toggle="tooltip"
+                                                    data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
+
+                                                <a href="{{ route('receptionistCredentials', $data->id) }}"
+                                                    class="btn btn-sm btn-primary"><i class="fas fa-paper-plane"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Resend credentials"></i></a>
 
                                                 <button type="button" class="btn btn-sm btn-danger deleteRecordbtn"
+                                                    data-toggle="tooltip" data-placement="top" title="Delete"
                                                     value="{{ $data->id }}"><i class="fa fa-trash"></i></button>
                                             </td>
                                         </tr>

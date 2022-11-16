@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
+use App\Models\Clinic;
+use App\Mail\SendPassword;
+use App\Models\Receptionist;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\ReceptionistStoreRequest;
 use App\Http\Requests\ReceptionistUpdateRequest;
-use App\Models\Clinic;
-use App\Models\Receptionist;
-use App\Models\User;
-use Illuminate\Http\Request;
 
 class ReceptionistController extends Controller
 {
@@ -94,5 +97,21 @@ class ReceptionistController extends Controller
         $receptionist->image = $final_image;
         $receptionist->save();
         return redirect()->route('receptionist.index')->with('success', 'Receptionist updated successfully.');
+    }
+
+    public function resendCredentials($id)
+    {
+        $resend = User::find($id);
+        $pw = generatePass();
+        $resend->password = Hash::make($pw);
+        $resend->save();
+
+        $mailData = [
+            'email' => $resend->email,
+            'password' => $pw
+        ];
+
+        Mail::to($resend->email)->send(new SendPassword($mailData));
+        return redirect()->back()->with('success', 'Receptionist credential send successfully');
     }
 }

@@ -28,8 +28,6 @@
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
     <!-- Daterange picker -->
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/daterangepicker/daterangepicker.css') }}">
-    <!-- summernote -->
-    <link rel="stylesheet" href="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.css') }}">
     {{-- datatable --}}
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet"
@@ -42,55 +40,22 @@
         href="{{ asset('admin-assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     {{-- toast --}}
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/toastr/toastr.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin-assets/dist/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin-assets/dist/css/user-custom.css') }}">
+    {{-- calendar --}}
+    <link rel="stylesheet" href="{{ asset('admin-assets/plugins/fullcalendar/fullcalendar-5.11.3.css') }}">
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-            <!-- Left navbar links -->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
-                            class="fas fa-bars"></i></a>
-                </li>
-
-            </ul>
-
-            <!-- Right navbar links -->
-            <ul class="navbar-nav ml-auto">
-
-                <li class="nav-item dropdow user-menu">
-                    <!-- Messages Dropdown Menu -->
-                    <div class="btn-group">
-
-                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static"
-                            aria-expanded="false">
-                            <img src="{{ asset('admin-assets/dist/img/user2-160x160.jpg') }}"
-                                class="user-image img-circle elevation-2" alt="User Image">
-                            {{ Auth::user()->fname }}
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-lg-end">
-                            <li><a href="" class="dropdown-item">Profile</a></li>
-                            <li><a href="" class="dropdown-item">Change Password</a></li>
-                            <li><a href="{{ route('logout') }}" class="dropdown-item"
-                                    onclick="event.preventDefault();
-                                document.getElementById('logout-form').submit();">Logout</a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-
-            </ul>
-        </nav>
+        @include('layouts.inc.user.navbar')
         <!-- /.navbar -->
 
-        @include('admin.partials.left-sidebar')
+        {{-- Sidebar --}}
+        @include('layouts.inc.user.sidebar')
+        {{-- /.Sidebar --}}
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -109,13 +74,9 @@
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-        <footer class="main-footer">
-            <strong>Copyright &copy; 2014-2021 <a href="#">Admin Panel</a>.</strong>
-            All rights reserved.
-            <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 3.1.0
-            </div>
-        </footer>
+        {{-- Footer --}}
+        @include('layouts.inc.user.footer')
+
 
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
@@ -175,6 +136,8 @@
     <script src="{{ asset('admin-assets/plugins/inputmask/jquery.inputmask.bundle.min.js') }}"></script>
     <!-- Toastr -->
     <script src="{{ asset('admin-assets/plugins/toastr/toastr.min.js') }}"></script>
+    {{-- Calendar --}}
+    <script src="{{ asset('admin-assets/plugins/fullcalendar/fullcalendar-5.11.3.js') }}"></script>
     <script>
         $(document).ready(function() {
             toastr.options.timeOut = 40000;

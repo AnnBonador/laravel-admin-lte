@@ -1,4 +1,4 @@
-@extends('admin.main-layout')
+@extends('layouts.admin')
 
 @section('content-header')
     <div class="content-header">
@@ -49,8 +49,13 @@
                                     @foreach ($patient as $data)
                                         <tr>
                                             <td>
-                                                <img alt="Avatar" class="user-image img-circle"
-                                                    width="50"src="{{ asset('uploads/patient/' . $data->image) }}">
+                                                @if (!empty($data->image))
+                                                    <img alt="Avatar" class="user-image img-circle"
+                                                        width="50"src="{{ asset('uploads/patient/' . $data->image) }}">
+                                                @else
+                                                    <img alt="Avatar" class="user-image img-circle"
+                                                        width="50"src="{{ asset('admin-assets/dist/img/default.png') }}">
+                                                @endif
                                                 {{ $data->full_name }}
                                             </td>
                                             <td>
@@ -72,10 +77,10 @@
                                                 <a href="{{ route('patients.edit', $data->id) }}"
                                                     class="btn btn-sm btn-success" data-toggle="tooltip"
                                                     data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
-                                                <a href="{{ route('doctors.edit', $data->id) }}"
+                                                <a href="{{ route('patientCredentials', $data->id) }}"
                                                     class="btn btn-sm btn-primary"><i class="fas fa-paper-plane"
                                                         data-toggle="tooltip" data-placement="top"
-                                                        title="Send credentials"></i></a>
+                                                        title="Resend credentials"></i></a>
 
                                                 <button type="button" class="btn btn-sm btn-danger deleteRecordbtn"
                                                     data-toggle="tooltip" data-placement="top" title="Delete"

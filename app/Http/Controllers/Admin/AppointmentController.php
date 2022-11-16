@@ -11,8 +11,10 @@ use App\Models\Services;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\AppointmentStoreRequest;
 use App\Http\Requests\AppointmentUpdateRequest;
+use App\Mail\Appointment as MailAppointment;
 
 class AppointmentController extends Controller
 {
@@ -41,7 +43,7 @@ class AppointmentController extends Controller
         $appointment->service = $validatedData['service'];
         $appointment->description = $validatedData['description'];
         $appointment->status = $validatedData['status'];
-        $appointment->payment_option = $validatedData['payment_option'];
+        $appointment->payment_option = 'Cash';
 
         $selectedTime = $request->time;
         $preferredTime = explode(" - ", $selectedTime);
@@ -50,6 +52,14 @@ class AppointmentController extends Controller
 
         $appointment->save();
 
+        $mailData = [
+            'name' => $appointment->patients->full_name,
+            'day' => $appointment->schedule->day,
+            'start_time' => $appointment->start_time,
+            'end_time' => $appointment->end_time,
+            'status' => $appointment->status
+        ];
+        Mail::to($appointment->patients->email)->send(new MailAppointment($mailData));
         return redirect()->route('appointments.index')->with('success', 'Appointment added successfully');
     }
 
@@ -76,14 +86,9 @@ class AppointmentController extends Controller
         $validatedData = $request->validated();
         $appointment = Appointment::findOrFail($id);
 
-        $appointment->clinic_id = $validatedData['clinic_id'];
-        $appointment->doctor_id = $validatedData['doctor_id'];
-        $appointment->patient_id = $validatedData['patient_id'];
         $appointment->schedule_id = $validatedData['schedule_id'];
-        $appointment->service = $validatedData['service'];
         $appointment->description = $validatedData['description'];
         $appointment->status = $validatedData['status'];
-        $appointment->payment_option = $validatedData['payment_option'];
 
         if (!empty($request->time)) {
             $selectedTime = $request->time;
@@ -93,6 +98,20 @@ class AppointmentController extends Controller
         }
 
         $appointment->save();
+        if ($appointment->wasChanged()) {
+
+            if ($validatedData['status'] == 'Booked' || $validatedData['status'] == 'Cancelled') {
+                $mailData = [
+                    'name' => $appointment->patients->full_name,
+                    'day' => $appointment->schedule->day,
+                    'start_time' => $appointment->start_time,
+                    'end_time' => $appointment->end_time,
+                    'status' => $appointment->status
+                ];
+                Mail::to($appointment->patients->email)->send(new MailAppointment($mailData));
+            }
+        }
+
 
         return redirect()->route('appointments.index')->with('success', 'Appointment updated successfully');
     }

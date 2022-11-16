@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use App\Models\Clinic;
+use App\Mail\SendPassword;
 use Illuminate\Http\Request;
 use App\Models\Specialization;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\ClinicCreateRequest;
 use App\Http\Requests\ClinicUpdateRequest;
 
@@ -29,7 +32,6 @@ class ClinicsController extends Controller
         $clinic = Clinic::create($request->all());
         $lastid = $clinic->id;
 
-        $pw = User::generatePassword();
         $validatedData = $request->validated();
         $clinic_admin = new User();
         $clinic_admin->clinic_id = $lastid;
@@ -41,10 +43,17 @@ class ClinicsController extends Controller
         $clinic_admin->gender = $validatedData['gender'];
         $clinic_admin->type = 1;
         $clinic_admin->status = 1;
-        $clinic_admin->password = $pw;
+        $pw = generatePass();
+        $clinic_admin->password = Hash::make($pw);
         $clinic_admin->save();
 
-        User::sendWelcomeEmail($clinic_admin);
+        $mailData = [
+            'email' => $clinic_admin->email,
+            'password' => $pw
+        ];
+
+        Mail::to($clinic_admin->email)->send(new SendPassword($mailData));
+
         return redirect()->route('clinics.index')->with('success', 'Clinic added successfully');
     }
 
@@ -86,5 +95,21 @@ class ClinicsController extends Controller
         $clinic = Clinic::find($request->delete_id);
         $clinic->delete();
         return redirect()->route('clinics.index')->with('success', 'Clinic and clinic admin panel deleted successfully');
+    }
+
+    public function resendCredentials($id)
+    {
+        $resend = User::find($id);
+        $pw = generatePass();
+        $resend->password = Hash::make($pw);
+        $resend->save();
+
+        $mailData = [
+            'email' => $resend->email,
+            'password' => $pw
+        ];
+
+        Mail::to($resend->email)->send(new SendPassword($mailData));
+        return redirect()->back()->with('success', 'Clinic admin credential send successfully');
     }
 }

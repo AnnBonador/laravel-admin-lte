@@ -1,4 +1,4 @@
-@extends('admin.main-layout')
+@extends('layouts.admin')
 
 @section('content-header')
     <div class="content-header">
@@ -35,7 +35,7 @@
                                 <div class="row mb-2">
                                     <div class="col-sm-5">
                                         <div class="form-group">
-                                            <label for="">Select Clinic</label>
+                                            <label for="">Clinic</label>
                                             <span class="text-danger">*</span>
                                             <select name="clinic_id" data-placeholder="Search" data-allow-clear="true"
                                                 class="form-control select2bs4" style="width: 100%;" id="load_clinic">
@@ -51,7 +51,7 @@
                                             @endif
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Select Doctor</label>
+                                            <label for="">Doctor</label>
                                             <span class="text-danger">*</span>
                                             <input type="hidden" id="get_doctor_id">
                                             <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
@@ -62,7 +62,7 @@
                                             @endif
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Select Service</label>
+                                            <label for="">Service</label>
                                             <span class="text-danger">*</span>
                                             <a href="{{ route('services.create') }}" class="float-right text-sm">Add
                                                 service</a>
@@ -75,7 +75,7 @@
                                             @endif
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Select Schedule</label>
+                                            <label for="">Appointment Date</label>
                                             <span class="text-danger">*</span>
                                             <select name="schedule_id" data-placeholder="Search" data-allow-clear="true"
                                                 class="form-control select2bs4" style="width: 100%;" id="load_date">
@@ -86,7 +86,7 @@
                                             @endif
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Select Patient</label>
+                                            <label for="">Patient</label>
                                             <span class="text-danger">*</span>
                                             <a href="{{ route('patients.create') }}" class="float-right text-sm">Add
                                                 patient</a>
@@ -117,12 +117,6 @@
                                                 <option value="Check out"
                                                     {{ old('status') == 'Check out' ? 'selected' : '' }}>Check out
                                                 </option>
-                                                <option value="Cancelled"
-                                                    {{ old('status') == 'Cancelled' ? 'selected' : '' }}>Cancelled
-                                                </option>
-                                                <option value="Treated" {{ old('status') == 'Treated' ? 'selected' : '' }}>
-                                                    Treated
-                                                </option>
                                             </select>
                                             @if ($errors->has('status'))
                                                 <span class="text-danger text-left">{{ $errors->first('name') }}</span>
@@ -137,26 +131,13 @@
                                             <div class="text-center" id="load_slots">
                                                 <span class="fw-lighter d-none" id="no"></span>
                                             </div>
+                                            @if ($errors->has('time'))
+                                                <span class="text-danger text-left">{{ $errors->first('time') }}</span>
+                                            @endif
                                         </div>
                                         <div class="form-group">
                                             <label for="">Description</label>
                                             <textarea name="description" class="form-control" rows="2" placeholder="Enter appointment description"></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Payment</label>
-                                            <span class="text-danger">*</span>
-                                            <select name="payment_option" class="custom-select">
-                                                <option value="Cash"
-                                                    {{ old('payment_status') == 'Cash' ? 'selected' : '' }}>
-                                                    Cash
-                                                </option>
-                                                <option value="Paypal"
-                                                    {{ old('payment_status') == 'Paypal' ? 'selected' : '' }}>Paypal
-                                                </option>
-                                            </select>
-                                            @if ($errors->has('status'))
-                                                <span class="text-danger text-left">{{ $errors->first('name') }}</span>
-                                            @endif
                                         </div>
                                     </div>
                                 </div>

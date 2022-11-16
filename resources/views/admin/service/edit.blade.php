@@ -1,4 +1,4 @@
-@extends('admin.main-layout')
+@extends('layouts.admin')
 
 @section('content-header')
     <div class="content-header">
@@ -67,7 +67,7 @@
                                                 <span class="input-group-text">₱</span>
                                             </div>
                                             <input type="text" name="charges" value="{{ $service->charges }}"
-                                                class="form-control">
+                                                class="form-control" id="num">
                                             <div class="input-group-append">
                                                 <span class="input-group-text">.00</span>
                                             </div>

@@ -1,4 +1,4 @@
-@extends('admin.main-layout')
+@extends('layouts.admin')
 
 @section('content-header')
     <div class="content-header">
@@ -48,25 +48,36 @@
                                     @foreach ($appointments as $data)
                                         <tr>
                                             <td>
-                                                <b>{{ $data->patients->full_name }}</b><br>
-                                                Doctor: {{ $data->doctors->full_name }}<br>
-                                                Clinic: <span class="text-primary">{{ $data->clinic->name }}</span>
+                                                @if ($data->patients()->exists())
+                                                    <b>{{ $data->patients->full_name }}
+                                                        ({{ $data->patients->email }})</b><br>
+                                                @endif
+                                                @if ($data->doctors()->exists())
+                                                    Doctor: {{ $data->doctors->full_name }}<br>
+                                                @endif
+                                                @if ($data->clinic()->exists())
+                                                    Clinic: <span class="text-primary">{{ $data->clinic->name }}</span>
+                                                @endif
                                             </td>
                                             <td>{{ $data->start_time . ' - ' . $data->end_time }}</td>
                                             <td>
                                                 {{ implode(', ', $data->service) }}
                                             </td>
-                                            <td>{{ $data->schedule->day }}</td>
+                                            <td>
+                                                @if ($data->schedule()->exists())
+                                                    {{ $data->schedule->day }}
+                                                @endif
+                                            </td>
                                             <td>
                                                 @if ($data->status == 'Booked')
                                                     <span class="badge badge-light">{{ $data->status }}</span>
                                                 @elseif($data->status == 'Check in')
                                                     <span class="badge badge-success">{{ $data->status }}</span>
                                                 @elseif($data->status == 'Check out')
-                                                    <span class="badge badge-secondary">{{ $data->status }}</span>
+                                                    <span class="badge badge-info">{{ $data->status }}</span>
                                                 @elseif($data->status == 'Cancelled')
                                                     <span class="badge badge-danger">{{ $data->status }}</span>
-                                                @elseif($data->status == 'Treated')
+                                                @elseif($data->status == 'Completed')
                                                     <span class="badge badge-primary">{{ $data->status }}</span>
                                                 @endif
                                             </td>

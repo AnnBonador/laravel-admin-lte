@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Models\Clinic;
 use App\Models\Doctor;
+use App\Mail\SendPassword;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Specialization;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\DoctorStoreRequest;
 use App\Http\Requests\DoctorUpdateRequest;
 
@@ -53,12 +57,35 @@ class DoctorController extends Controller
             $doctor->image = $filename;
         }
 
-        $pw = User::generatePassword();
-        $doctor->password = $pw;
+        $pw = generatePass();
+        $doctor->password = Hash::make($pw);
 
         $doctor->save();
 
+        $mailData = [
+            'email' => $doctor->email,
+            'password' => $pw
+        ];
+
+        Mail::to($doctor->email)->send(new SendPassword($mailData));
+
         return redirect()->route('doctors.index')->with('success', 'Doctor added successfully');
+    }
+
+    public function resendCredentials($id)
+    {
+        $resend = User::find($id);
+        $pw = generatePass();
+        $resend->password = Hash::make($pw);
+        $resend->save();
+
+        $mailData = [
+            'email' => $resend->email,
+            'password' => $pw
+        ];
+
+        Mail::to($resend->email)->send(new SendPassword($mailData));
+        return redirect()->back()->with('success', 'Doctor credential send successfully');
     }
 
     public function edit($id)

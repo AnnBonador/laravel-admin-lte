@@ -1,4 +1,4 @@
-@extends('admin.main-layout')
+@extends('layouts.admin')
 
 @section('content-header')
     <div class="content-header">
@@ -49,8 +49,13 @@
                                     @foreach ($doctor as $data)
                                         <tr>
                                             <td>
-                                                <img alt="Avatar" class="user-image img-circle"
-                                                    width="50"src="{{ asset('uploads/doctor/' . $data->image) }}">
+                                                @if (!empty($data->image))
+                                                    <img alt="Avatar" class="user-image img-circle"
+                                                        width="50"src="{{ asset('uploads/doctor/' . $data->image) }}">
+                                                @else
+                                                    <img alt="Avatar" class="user-image img-circle"
+                                                        width="50"src="{{ asset('admin-assets/dist/img/default.png') }}">
+                                                @endif
                                                 {{ $data->full_name }}
                                             </td>
                                             <td>
@@ -76,10 +81,10 @@
                                                 <a href="{{ route('doctors.edit', $data->id) }}"
                                                     class="btn btn-sm btn-success"><i class="fa fa-edit"
                                                         data-toggle="tooltip" data-placement="top" title="Edit"></i></a>
-                                                <a href="{{ route('doctors.edit', $data->id) }}"
+                                                <a href="{{ route('doctorCredentials', $data->id) }}"
                                                     class="btn btn-sm btn-primary"><i class="fas fa-paper-plane"
                                                         data-toggle="tooltip" data-placement="top"
-                                                        title="Send credentials"></i></a>
+                                                        title="Resend credentials"></i></a>
                                                 <a href="{{ route('ratings.index', $data->id) }}"
                                                     class="btn btn-sm btn-warning" data-toggle="tooltip"
                                                     data-placement="top" title="Patient Ratings"><i

@@ -1,16 +1,31 @@
-@extends('layouts.app')
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+@extends('layouts.user')
 
-                <div class="card-body">
-                    You are User.
-                </div>
-            </div>
-        </div>
+@section('content-header')
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Dashboard</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
     </div>
-</div>
+    <!-- /.content-header -->
+@endsection
+@section('body')
+    <!-- Main row -->
+    <div class="content">
+        <div class="container-fluid">
+
+
+        </div>
+
+    </div>
+    <!-- /.row (main row) -->
 @endsection

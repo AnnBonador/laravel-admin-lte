@@ -1,4 +1,4 @@
-@extends('admin.main-layout')
+@extends('layouts.admin')
 
 @section('content-header')
     <div class="content-header">
@@ -26,7 +26,7 @@
                 <div class="col-md-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">Patient Create
-                            <a href="{{ route('doctors.index') }}" class="btn btn-sm btn-danger float-right"> Back</a>
+                            <a href="{{ route('patients.index') }}" class="btn btn-sm btn-danger float-right"> Back</a>
                         </div>
                         <div class="card-body">
                             @include('layouts.partials.messages')
@@ -117,17 +117,20 @@
                                         <span class="text-danger">*</span>
                                         <div class="custom-control custom-radio custom-control-inline">
                                             <input class="custom-control-input" type="radio" value="Male"
-                                                id="male" name="gender">
+                                                id="male" name="gender"
+                                                {{ old('gender') == 'Male' ? 'checked' : '' }}>
                                             <label class="custom-control-label" for="male">Male</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
                                             <input class="custom-control-input" type="radio" value="Female"
-                                                id="female" name="gender">
+                                                id="female" name="gender"
+                                                {{ old('gender') == 'Female' ? 'checked' : '' }}>
                                             <label class="custom-control-label" for="female">Female</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
                                             <input class="custom-control-input" type="radio" value="Others"
-                                                id="others" name="gender">
+                                                id="others" name="gender"
+                                                {{ old('gender') == 'Others' ? 'checked' : '' }}>
                                             <label class="custom-control-label" for="others">Others</label>
                                         </div>
                                         @if ($errors->has('gender'))
@@ -136,7 +139,6 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label>Profile Image</label>
-                                        <span class="text-danger">*</span>
                                         <input type="file" name="image">
                                         @if ($errors->has('image'))
                                             <span class="text-danger">{{ $errors->first('image') }}</span>

@@ -1,4 +1,4 @@
-@extends('admin.main-layout')
+@extends('layouts.admin')
 
 @section('content-header')
     <div class="content-header">
@@ -25,8 +25,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Ratings</h3>
+                        <div class="card-header border-0">
+                            <h3 class="card-title"></h3>
                             <div class="card-tools">
                                 <a href="{{ route('doctors.index') }}" class="btn btn-sm btn-danger float-right"> Back</a>
                             </div>
@@ -40,20 +40,23 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <h4>Reviews</h4>
-                                            @foreach ($rating as $data)
+                                            @foreach ($ratings as $data)
                                                 <div class="post">
                                                     <div class="user-block">
                                                         <img class="img-circle img-bordered-sm"
-                                                            src="{{ asset('uploads/doctor/1668149876.jpg') }}">
+                                                            src="{{ asset('uploads/patient/' . $data->patients->image) }}">
                                                         <span class="username">
-                                                            <a href="#">{{ $data->patient_id }}</a>
+                                                            <a href="#">{{ $data->patients->full_name }}</a>
                                                         </span>
-                                                        <span class="description">{{ $data->created_at }}</span>
+                                                        <span class="description">
+                                                            {{ \Carbon\Carbon::parse($data->created_at)->diffForHumans() }}
+                                                        </span>
                                                     </div>
 
                                                     <div class="rated">
                                                         @for ($i = 1; $i <= $data->star_rating; $i++)
-                                                            {{-- <input type="radio" id="star{{$i}}" class="rate" name="rating" value="5"/> --}}
+                                                            <input type="radio" id="star{{ $i }}"
+                                                                class="rate" name="rating" value="5" />
                                                             <label class="star-rating-complete"
                                                                 title="text">{{ $i }} stars</label>
                                                         @endfor
@@ -70,41 +73,41 @@
                                 <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
                                     <p class="">
                                         <strong class="text-left">Rating Breakdown</strong>
-                                        <span class="float-right text-muted">12 reviews</span>
+                                        <span class="float-right text-muted">{{ $ratings->count() }} reviews</span>
                                     </p>
-                                    <div class="progress-group">Excellent
-                                        <span class="float-right"><b>160</b></span>
+                                    <div class="progress-group">Excellent (5)
+                                        <span class="float-right"><b>{{ $five_stars }}</b></span>
                                         <div class="progress progress-sm">
                                             <div class="progress-bar bg-primary" style="width: 80%"></div>
                                         </div>
                                     </div>
 
                                     <div class="progress-group">
-                                        Good
-                                        <span class="float-right"><b>310</b></span>
+                                        Good (4)
+                                        <span class="float-right"><b>{{ $four_stars }}</b></span>
                                         <div class="progress progress-sm">
                                             <div class="progress-bar bg-success" style="width: 75%"></div>
                                         </div>
                                     </div>
 
                                     <div class="progress-group">
-                                        <span class="progress-text">Average</span>
-                                        <span class="float-right"><b>480</b></span>
+                                        <span class="progress-text">Average (3)</span>
+                                        <span class="float-right"><b>{{ $three_stars }}</b></span>
                                         <div class="progress progress-sm">
-                                            <div class="progress-bar bg-info" style="width: 60%"></div>
+                                            <div class="progress-bar bg-info" style="width: 1%"></div>
                                         </div>
                                     </div>
 
                                     <div class="progress-group">
-                                        Poor
-                                        <span class="float-right"><b>250</b></span>
+                                        Poor (2)
+                                        <span class="float-right"><b>{{ $two_stars }}</b></span>
                                         <div class="progress progress-sm">
                                             <div class="progress-bar bg-warning" style="width: 50%"></div>
                                         </div>
                                     </div>
                                     <div class="progress-group mb-4">
-                                        Terrible
-                                        <span class="float-right"><b>250</span>
+                                        Terrible (1)
+                                        <span class="float-right"><b>{{ $one_star }}</span>
                                         <div class="progress progress-sm">
                                             <div class="progress-bar bg-danger" style="width: 50%"></div>
                                         </div>

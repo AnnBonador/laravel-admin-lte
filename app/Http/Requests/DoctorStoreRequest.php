@@ -37,7 +37,7 @@ class DoctorStoreRequest extends FormRequest
             'country' => 'nullable|max:255',
             'city' => 'nullable|max:255',
             'status' => 'required',
-            'image' => 'required|image|mimes:jpeg,gif,png,jpg|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,gif,png,jpg|max:2048'
         ];
     }
 
