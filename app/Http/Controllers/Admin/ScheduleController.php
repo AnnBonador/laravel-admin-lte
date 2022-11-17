@@ -31,8 +31,9 @@ class ScheduleController extends Controller
     public function getDoctor(Request $request)
     {
         $id = $request->clinic_id;
-        $doctor = User::where('type', '2')->where('clinic_id', $id)->where('status', '1')->get()->pluck('full_name', 'id');
-        return response()->json($doctor);
+        $doctors = User::where('type', '2')->where('clinic_id', $id)->where('status', '1')->get()->pluck('full_name', 'id');
+        $patients = User::where('type', '0')->where('clinic_id', $id)->where('status', '1')->get()->pluck('full_name', 'id');
+        return response()->json(["doctors" => $doctors, "patients" => $patients]);
     }
 
     public function getService(Request $request)

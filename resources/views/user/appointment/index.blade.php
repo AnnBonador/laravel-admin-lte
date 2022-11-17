@@ -78,6 +78,8 @@
                                                 @endif
                                             </td>
                                             <td>
+                                                <a href="{{ route('user.calendar.show', $data->id) }}"
+                                                    class="btn btn-sm btn-secondary"><i class="fa fa-eye"></i></a>
                                                 @if ($data->status == 'Booked')
                                                     <a href="{{ route('user.appointments.edit', $data->id) }}"
                                                         class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>

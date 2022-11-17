@@ -55,17 +55,10 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
 
     Route::controller(App\Http\Controllers\Admin\RatingsController::class)->group(function () {
         Route::get('/doctor/{id}/ratings',  'ratings')->name('ratings.index');
-        // Route::get('/clinics/create', 'create')->name('clinics.create');
-        // Route::post('/clinics', 'store')->name('clinics.store');
-        // Route::get('/clinics/{id}/edit', 'edit')->name('clinics.edit');
-        // Route::put('/clinics/{id}', 'update')->name('clinics.update');
     });
     Route::controller(App\Http\Controllers\Admin\SettingsController::class)->group(function () {
         Route::get('/settings',  'index')->name('settings.index');
-        Route::post('/settings', 'store')->name('settings.store');
-        // Route::post('/clinics', 'store')->name('clinics.store');
-        // Route::get('/clinics/{id}/edit', 'edit')->name('clinics.edit');
-        // Route::put('/clinics/{id}', 'update')->name('clinics.update');
+        Route::put('/settings/{id}', 'update')->name('settings.update');
     });
     Route::controller(App\Http\Controllers\Admin\AppointmentController::class)->group(function () {
         Route::get('/appointment',  'index')->name('appointments.index');
@@ -74,6 +67,8 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
         Route::get('/appointment/{id}/edit', 'edit')->name('appointments.edit');
         Route::put('/appointment/{id}', 'update')->name('appointments.update');
         Route::post('/appointment/delete', 'destroy')->name('appointments.delete');
+        Route::get('/appointment/all', 'all')->name('appointments.all');
+        Route::get('/appointment/past', 'past')->name('appointments.past');
     });
 
     Route::controller(App\Http\Controllers\Admin\DoctorController::class)->group(function () {
@@ -113,6 +108,22 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
         Route::get('/service/{id}/edit', 'edit')->name('services.edit');
         Route::put('/service/{id}', 'update')->name('services.update');
         Route::post('/service/delete', 'destroy')->name('services.delete');
+    });
+    Route::controller(App\Http\Controllers\Admin\PrescriptionController::class)->group(function () {
+        Route::get('/prescription', 'index')->name('prescription.index');
+        Route::get('/prescription/create', 'create')->name('prescription.create');
+        Route::post('/prescription', 'store')->name('prescription.store');
+        Route::get('/prescription/{id}/edit', 'edit')->name('prescription.edit');
+        Route::put('/prescription/{id}', 'update')->name('prescription.update');
+        Route::post('/prescription/delete', 'destroy')->name('prescription.delete');
+    });
+    Route::controller(App\Http\Controllers\Admin\TreatedController::class)->group(function () {
+        Route::get('/treated', 'index')->name('treated.index');
+        Route::get('/treated/create', 'create')->name('treated.create');
+        Route::post('/treated', 'store')->name('treated.store');
+        Route::get('/treated/{id}/edit', 'edit')->name('treated.edit');
+        Route::put('/treated/{id}', 'update')->name('treated.update');
+        Route::post('/treated/delete', 'destroy')->name('treated.delete');
     });
     Route::controller(App\Http\Controllers\Admin\ScheduleController::class)->group(function () {
         Route::get('/schedule', 'index')->name('schedules.index');
@@ -159,6 +170,10 @@ Route::prefix('user')->middleware(['auth', 'user-access:user'])->group(function 
     });
     Route::controller(App\Http\Controllers\User\DoctorRatingsController::class)->group(function () {
         Route::post('/doctor/rating', 'store')->name('user.review.store');
+    });
+    Route::controller(App\Http\Controllers\User\ClinicController::class)->group(function () {
+        Route::get('/clinic', 'index')->name('user.clinic.index');
+        Route::put('/clinic', 'update')->name('user.clinic.update');
     });
 });
 

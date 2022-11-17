@@ -26,16 +26,12 @@
                 <div class="col-md-12">
                     <div class="form-group mb-2">
                         <a href="{{ route('appointments.all') }}" class="btn btn-info">All</a>
-                        <a href="{{ route('appointments.index') }}" class="btn btn-info active">Upcoming</a>
-                        <a href="{{ route('appointments.past') }}" class="btn btn-info">Past</a>
+                        <a href="{{ route('appointments.index') }}" class="btn btn-info">Upcoming</a>
+                        <a href="{{ route('appointments.past') }}" class="btn btn-info active">Past</a>
                     </div>
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h3 class="card-title">Upcoming Appointments</h3>
-                            <a href="{{ route('appointments.create') }}" class="btn btn-sm btn-primary float-right"><i
-                                    class="fa fa-plus"></i>
-                                &nbsp;&nbsp;Add
-                                Appointment</a>
+                            <h3 class="card-title">Past Appointments</h3>
                         </div>
                         <div class="card-body">
                             <table id="table1" class="table table-borderless table-hover" style="width:100%;">
@@ -50,8 +46,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($appointments->sortBy('schedule_id') as $data)
-                                        @if ($data->schedule->day >= Carbon\Carbon::now()->format('m/d/Y'))
+                                    @foreach ($appointments as $data)
+                                        @if ($data->schedule->day < Carbon\Carbon::now()->format('m/d/Y'))
                                             <tr>
                                                 <td>
                                                     @if ($data->patients()->exists())
@@ -90,8 +86,10 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('appointments.edit', $data->id) }}"
-                                                        class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
+                                                    @if ($data->status != 'Completed')
+                                                        <a href="{{ route('appointments.edit', $data->id) }}"
+                                                            class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
+                                                    @endif
 
                                                     <button type="button" class="btn btn-sm btn-danger deleteRecordbtn"
                                                         value="{{ $data->id }}"><i class="fa fa-trash"></i></button>

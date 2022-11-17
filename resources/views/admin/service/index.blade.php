@@ -33,7 +33,7 @@
                                 Service</a>
                         </div>
                         <div class="card-body">
-                            <table id="dataTable" class="table table-borderless table-hover" style="width:100%;">
+                            <table id="table1" class="table table-borderless table-hover" style="width:100%;">
                                 <thead class="bg-light">
                                     <tr>
                                         <th>Name</th>

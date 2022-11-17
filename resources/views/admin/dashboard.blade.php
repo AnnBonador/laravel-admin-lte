@@ -79,6 +79,9 @@
                         <div class="info-box-content">
                             <span class="info-box-text text-uppercase">total revenue</span>
                             <span class="info-box-number">{{ $total_earnings }}</span>
+                            <span class="progress-description">
+                                Total clinic earnings
+                            </span>
 
                         </div>
                         <!-- /.info-box-content -->
@@ -88,29 +91,24 @@
                 <!-- /.col -->
             </div>
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-7">
                     <div class="card">
                         <div class="card-header border-0">
                             <h3 class="card-title">Today's Appointment List</h3>
-                            <div class="card-tools">
-                                <a href="#" class="btn btn-sm btn-primary">
-                                    <i class="fas fa-eye"></i> &nbsp;All upcoming appointments
-                                </a>
-                            </div>
                         </div>
                         <div class="card-body">
-                            @foreach ($appt_today as $data)
+                            @foreach ($appointment as $data)
                                 @if ($data->schedule->day == Carbon\Carbon::now()->format('m/d/Y'))
                                     <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
                                         <p class="d-flex flex-column">
                                             <span class="font-weight-bold">
                                                 {{ $data->schedule->day }}
-                                                {{ $data->patient->full_name }} <span class="fw-light">
+                                                {{ $data->patients->full_name }} <span class="fw-light">
                                                     ({{ $data->start_time . ' -  ' . $data->end_time }})
                                                 </span>
                                             </span>
                                             <span class="text-primary text-uppercase">{{ $data->clinic->name }}</span>
-                                            <span class="fw-lighter">{{ $data->doctor->full_name }}</span>
+                                            <span class="fw-lighter">{{ $data->doctors->full_name }}</span>
                                         </p>
                                         <p class="text-success text-right">
                                             <span class="right badge badge-light">{{ $data->status }}</span>
@@ -121,10 +119,45 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-5">
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <h3 class="card-title">Upcoming Appointments</h3>
+                        </div>
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-striped table-valign-middle">
+                                <tbody>
+                                    @foreach ($appointment->take(5) as $data)
+                                        @if ($data->schedule->day > Carbon\Carbon::now()->format('m/d/Y'))
+                                            <tr>
+                                                <td>
+                                                    @if (!empty($data->patients->image))
+                                                        <img src="{{ asset('uploads/patient/' . $data->patients->image) }}"
+                                                            alt="img" class="img-circle img-size-32 mr-2">
+                                                    @else
+                                                        <img alt="Avatar" class="img-circle img-size-32 mr-2"
+                                                            alt="img"
+                                                            src="{{ asset('admin-assets/dist/img/default.png') }}">
+                                                    @endif
+                                                    <b>{{ $data->patients->full_name }}</b>
+                                                </td>
+                                                <td>{{ $data->start_time }}</td>
+                                                <td>{{ $data->schedule->day }}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
+                </div>
             </div>
-            <!-- /.row -->
+
         </div>
+
+        <!-- /.row -->
+    </div>
 
     </div>
     <!-- /.row (main row) -->

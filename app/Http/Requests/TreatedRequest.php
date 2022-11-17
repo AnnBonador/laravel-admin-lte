@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SettingsRequest extends FormRequest
+class TreatedRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,12 @@ class SettingsRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'title' => 'required',
-            'footer' => 'required',
-            'email' => 'required|email:rfc,dns',
-            'logo' => 'sometimes|nullable|image|mimes:jpeg,gif,png,jpg',
-            'favicon' => 'sometimes|nullable|image|mimes:jpeg,gif,png,jpg|max:2048'
+            'teeth' => 'required',
+            'problem' => 'required',
+            'fee' => 'required',
+            'remarks' => 'required',
+            'status' => 'required',
+            'file' => 'sometimes|mimes:csv,txt,xlx,xls,pdf|max:2048'
         ];
     }
 }

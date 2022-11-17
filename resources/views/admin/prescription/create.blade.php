@@ -5,12 +5,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Doctor Schedule</h1>
+                    <h1 class="m-0">Prescription</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Doctor Schedule</li>
+                        <li class="breadcrumb-item active">Prescription</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -25,16 +25,16 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-primary card-outline">
-                        <div class="card-header">Schedule Create
-                            <a href="{{ route('schedules.index') }}" class="btn btn-sm btn-danger float-right"> Back</a>
+                        <div class="card-header">Create Prescription
+                            <a href="{{ route('prescription.index') }}" class="btn btn-sm btn-danger float-right"> Back</a>
                         </div>
                         <div class="card-body">
                             @include('layouts.partials.messages')
-                            <form action="{{ route('schedules.store') }}" method="POST">
+                            <form action="{{ route('prescription.store') }}" method="POST">
                                 @csrf
                                 <div class="row mb-4">
                                     <div class="form-group col-sm-4">
-                                        <label for="">Select Clinic</label>
+                                        <label for="">Clinic</label>
                                         <span class="text-danger">*</span>
                                         <select name="clinic_id" data-placeholder="Search" data-allow-clear="true"
                                             class="form-control select2bs4" style="width: 100%;" id="load_clinic">
@@ -50,7 +50,7 @@
                                         @endif
                                     </div>
                                     <div class="form-group col-sm-4">
-                                        <label for="">Select Doctor</label>
+                                        <label for="">Doctor</label>
                                         <span class="text-danger">*</span>
                                         <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
                                             class="form-control select2bs4" style="width: 100%;" id="load_doctor">
@@ -60,70 +60,64 @@
                                         @endif
                                     </div>
                                     <div class="form-group col-sm-4">
-                                        <label>Duration (in minutes)</label>
+                                        <label for="">Patient</label>
                                         <span class="text-danger">*</span>
-                                        <select name="duration" class="form-control">
-                                            <option value="10" {{ old('duration') == '10' ? 'selected' : '' }}>10
-                                            </option>
-                                            <option value="20" {{ old('duration') == '20' ? 'selected' : '' }}>20
-                                            </option>
-                                            <option value="30" {{ old('duration') == '30' ? 'selected' : '' }}>30
-                                            </option>
-                                            <option value="40" {{ old('duration') == '40' ? 'selected' : '' }}>40
-                                            </option>
-                                            <option value="50" {{ old('duration') == '50' ? 'selected' : '' }}>50
-                                            </option>
-                                            <option value="60" {{ old('duration') == '60' ? 'selected' : '' }}>60
-                                            </option>
+                                        <select name="patient_id" data-placeholder="Search" data-allow-clear="true"
+                                            class="form-control select2bs4" style="width: 100%;" id="load_patient">
                                         </select>
-                                        @if ($errors->has('status'))
-                                            <span class="text-danger text-left">{{ $errors->first('name') }}</span>
+                                        @if ($errors->has('patient_id'))
+                                            <span class="text-danger text-left">{{ $errors->first('patient_id') }}</span>
                                         @endif
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label>Date</label>
                                         <span class="text-danger">*</span>
-                                        <div class="input-group date" id="apptDay" data-target-input="nearest">
-                                            <input name="day" type="text" class="form-control datetimepicker-input"
-                                                data-target="#apptDay" placeholder="mm/dd/yyyy"
-                                                value="{{ old('day') }}" />
-                                            <div class="input-group-append" data-target="#apptDay"
+                                        <div class="input-group date" id="pres_date" data-target-input="nearest">
+                                            <input name="date" type="text" class="form-control datetimepicker-input"
+                                                data-target="#pres_date" placeholder="mm/dd/yyyy"
+                                                value="{{ old('date') }}" />
+                                            <div class="input-group-append" data-target="#pres_date"
                                                 data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                             </div>
                                         </div>
-                                        @if ($errors->has('day'))
-                                            <span class="text-danger text-left">{{ $errors->first('day') }}</span>
+                                        @if ($errors->has('date'))
+                                            <span class="text-danger text-left">{{ $errors->first('date') }}</span>
                                         @endif
                                     </div>
                                     <div class="form-group col-sm-4">
-                                        <label for="">Start Time</label>
+                                        <label for="">Medicine</label>
                                         <span class="text-danger">*</span>
-                                        <div class="input-group date" id="startTime" data-target-input="nearest">
-                                            <input type="text" name="start_time" value="{{ old('start_time') }}"
-                                                class="form-control datetimepicker-input" data-target="#startTime" />
-                                            <div class="input-group-append" data-target="#startTime"
-                                                data-toggle="datetimepicker">
-                                                <div class="input-group-text"><i class="far fa-clock"></i></div>
-                                            </div>
-                                        </div>
-                                        @if ($errors->has('start_time'))
-                                            <span class="text-danger text-left">{{ $errors->first('start_time') }}</span>
+                                        <input type="text" name="medicine_name" value="{{ old('medicine_name') }}"
+                                            class="form-control" placeholder="Enter medicine name">
+                                        @if ($errors->has('medicine_name'))
+                                            <span
+                                                class="text-danger text-left">{{ $errors->first('medicine_name') }}</span>
                                         @endif
                                     </div>
                                     <div class="form-group col-sm-4">
-                                        <label for="">End Time</label>
+                                        <label for="">Frequency</label>
                                         <span class="text-danger">*</span>
-                                        <div class="input-group date" id="endTime" data-target-input="nearest">
-                                            <input type="text" name="end_time" class="form-control datetimepicker-input"
-                                                data-target="#endTime" value="{{ old('end_time') }}" />
-                                            <div class="input-group-append" data-target="#endTime"
-                                                data-toggle="datetimepicker">
-                                                <div class="input-group-text"><i class="far fa-clock"></i></div>
-                                            </div>
-                                        </div>
-                                        @if ($errors->has('end_time'))
-                                            <span class="text-danger text-left">{{ $errors->first('end_time') }}</span>
+                                        <input type="text" name="frequency" value="{{ old('frequency') }}"
+                                            class="form-control" placeholder="Enter frequency">
+                                        @if ($errors->has('frequency'))
+                                            <span class="text-danger text-left">{{ $errors->first('frequency') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label for="">Duration</label>
+                                        <span class="text-danger">*</span>
+                                        <input type="text" name="duration" value="{{ old('duration') }}"
+                                            class="form-control" placeholder="Enter duration" id="num">
+                                        @if ($errors->has('duration'))
+                                            <span class="text-danger text-left">{{ $errors->first('duration') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-sm-8">
+                                        <label for="">Instruction</label>
+                                        <textarea name="instruction" class="form-control" rows="3"></textarea>
+                                        @if ($errors->has('instruction'))
+                                            <span class="text-danger text-left">{{ $errors->first('instruction') }}</span>
                                         @endif
                                     </div>
                                 </div>
@@ -154,25 +148,33 @@
                                 _token: "{{ csrf_token() }}"
                             },
                             success: function(data) {
-                                if (data) {
-                                    $('#load_doctor').empty();
-                                    $('#load_doctor').append(
-                                        '<option value=""> Select Doctor</option>');
-                                    $.each(data.doctors, function(key, value) {
-                                        $('#load_doctor').append($(
-                                            "<option/>", {
-                                                value: key,
-                                                text: value
-                                            }));
+                                $('#load_doctor').empty();
+                                $('#load_doctor').append(
+                                    '<option value=""> Select Doctor</option>');
+                                $.each(data.doctors, function(key, value) {
+                                    $('#load_doctor').append($(
+                                        "<option/>", {
+                                            value: key,
+                                            text: value
+                                        }));
 
-                                    });
-                                } else {
-                                    $('#load_doctor').empty();
-                                }
+                                });
+                                $('#load_patient').empty();
+                                $('#load_patient').append(
+                                    '<option value=""> Select Patient</option>');
+                                $.each(data.patients, function(key, value) {
+                                    $('#load_patient').append($(
+                                        "<option/>", {
+                                            value: key,
+                                            text: value
+                                        }));
+
+                                });
                             }
                         })
                     } else {
                         $('#load_doctor').empty();
+                        $('#load_patient').empty();
                     }
                 });
             });

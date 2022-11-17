@@ -2,9 +2,9 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="index3.html" class="brand-link">
-          <img src="{{ asset('admin-assets/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
+          <img src="{{ asset('uploads/setting/' . getLogo()) }}" alt="logo"
               class="brand-image img-circle elevation-3" style="opacity: .8">
-          <span class="brand-text font-weight-light">Admin Panel</span>
+          <span class="brand-text font-weight-light">{{ title() }}</span>
       </a>
 
       <!-- Sidebar -->
@@ -90,6 +90,24 @@
                       </a>
                   </li>
                   <li class="nav-item">
+                      <a href="{{ route('prescription.index') }}"
+                          class="nav-link {{ request()->routeIs('prescription.*') ? 'active' : '' }}">
+                          <i class="nav-icon fas fa-prescription"></i>
+                          <p>
+                              Prescriptions
+                          </p>
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a href="{{ route('treated.index') }}"
+                          class="nav-link {{ request()->routeIs('treated.*') ? 'active' : '' }}">
+                          <i class="nav-icon fas fa-file-pdf "></i>
+                          <p>
+                              Treated
+                          </p>
+                      </a>
+                  </li>
+                  <li class="nav-item">
                       <a href="" class="nav-link">
                           <i class="nav-icon fas fa-file-pdf "></i>
                           <p>
@@ -115,8 +133,8 @@
 
                       </ul>
                   </li>
-                  <li class="nav-item">
-                      <a href="#" class="nav-link">
+                  <li class="nav-item {{ request()->routeIs('settings.*') ? 'menu-open' : '' }}">
+                      <a href="#" class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}">
                           <i class="nav-icon fas fa-users"></i>
                           <p>
                               Settings

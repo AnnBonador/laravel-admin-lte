@@ -15,20 +15,32 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\AppointmentStoreRequest;
 use App\Http\Requests\AppointmentUpdateRequest;
 use App\Mail\Appointment as MailAppointment;
+use App\Models\Treated;
 
 class AppointmentController extends Controller
 {
+    public function all()
+    {
+        $appointments = Appointment::orderBy('schedule_id', 'desc')->get();
+        return view('admin.appointment.all', compact('appointments'));
+    }
+
+    public function past()
+    {
+        $appointments = Appointment::orderBy('schedule_id', 'desc')->get();
+        return view('admin.appointment.past', compact('appointments'));
+    }
+
     public function index()
     {
-        $appointments = Appointment::all();
+        $appointments = Appointment::orderBy('schedule_id', 'desc')->get();
         return view('admin.appointment.index', compact('appointments'));
     }
 
     public function create()
     {
-        $patients = User::where('type', '0')->where('status', '1')->get()->pluck('full_name', 'id');
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
-        return view('admin.appointment.create', compact('clinic', 'patients'));
+        return view('admin.appointment.create', compact('clinic'));
     }
 
     public function store(AppointmentStoreRequest $request)
@@ -98,6 +110,13 @@ class AppointmentController extends Controller
         }
 
         $appointment->save();
+
+        if ($validatedData['status'] == 'Completed') {
+            $treated = new Treated();
+            $treated->app_id = $id;
+            $treated->save();
+        }
+
         if ($appointment->wasChanged()) {
 
             if ($validatedData['status'] == 'Booked' || $validatedData['status'] == 'Cancelled') {

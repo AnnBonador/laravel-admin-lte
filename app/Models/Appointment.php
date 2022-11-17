@@ -47,8 +47,4 @@ class Appointment extends Model
         return $this->belongsTo(Schedule::class, 'schedule_id', 'id');
     }
 
-    // public function schedules()
-    // {
-    //     return $this->belongsTo(Schedule::class);
-    // }
 }

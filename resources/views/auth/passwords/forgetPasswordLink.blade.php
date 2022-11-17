@@ -3,7 +3,7 @@
     <div class=" login-page">
         <div class="login-box">
             <div class="login-logo">
-                <a href="../../index2.html"><b>Admin</b>LTE</a>
+                <a href="../../index2.html"><b>{{ title() }}</b></a>
             </div>
             <!-- /.login-logo -->
             <div class="card">
@@ -57,7 +57,7 @@
                     </form>
 
                     <p class="mt-3 mb-1">
-                        <a href="login.html">Login</a>
+                        <a href="{{ route('login') }}">Login</a>
                     </p>
                 </div>
                 <!-- /.login-card-body -->

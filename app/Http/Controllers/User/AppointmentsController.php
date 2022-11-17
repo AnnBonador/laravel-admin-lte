@@ -26,9 +26,8 @@ class AppointmentsController extends Controller
 
     public function create()
     {
-        $patients = User::where('type', '0')->where('status', '1')->get()->pluck('full_name', 'id');
-        $clinic = Clinic::where('status', '1')->pluck('name', 'id');
-        return view('user.appointment.create', compact('clinic', 'patients'));
+        $clinic = Clinic::where('id', Auth::user()->clinic_id)->where('status', '1')->pluck('name', 'id');
+        return view('user.appointment.create', compact('clinic'));
     }
 
     public function store(AppointmentStoreRequest $request)

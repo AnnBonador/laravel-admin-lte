@@ -163,7 +163,7 @@
                                 $('#load_doctor').empty();
                                 $('#load_doctor').append(
                                     '<option value=""> Select Doctor</option>');
-                                $.each(data, function(key, value) {
+                                $.each(data.doctors, function(key, value) {
                                     $('#load_doctor').append($(
                                         "<option/>", {
                                             value: key,

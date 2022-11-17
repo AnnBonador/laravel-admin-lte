@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Doctor;
 use App\Models\Patient;
-use App\Models\Appointment;
 use App\Models\Schedule;
+use App\Models\Appointment;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -40,13 +41,13 @@ class HomeController extends Controller
      */
     public function adminHome()
     {
-        $total_patients = Patient::count();
-        $total_doctors = Doctor::count();
+        $total_patients = User::where('type', '0')->count();
+        $total_doctors = User::where('type', '2')->count();
         $total_appointments = Appointment::where('status', '!=', 'Completed')->count();
-        $appt_today = Appointment::all();
+        $appointment = Appointment::orderBy('schedule_id', 'desc')->get();
         $revenue = Transaction::all();
         $total_earnings = $revenue->sum('amount');
-        return view('admin.dashboard', compact('total_patients', 'total_doctors', 'total_appointments', 'appt_today', 'total_earnings'));
+        return view('admin.dashboard', compact('total_patients', 'total_doctors', 'total_appointments', 'appointment', 'total_earnings'));
     }
 
     /**

@@ -91,13 +91,7 @@
                                             <a href="{{ route('patients.create') }}" class="float-right text-sm">Add
                                                 patient</a>
                                             <select name="patient_id" data-placeholder="Search" data-allow-clear="true"
-                                                class="form-control select2bs4" style="width: 100%;">
-                                                <option selected="selected"></option>
-                                                @foreach ($patients as $id => $item)
-                                                    <option value="{{ $id }}"
-                                                        {{ old('patient_id') == $id ? 'selected' : '' }}>
-                                                        {{ $item }}</option>
-                                                @endforeach
+                                                class="form-control select2bs4" style="width: 100%;" id="load_patient">
                                             </select>
                                             @if ($errors->has('patient_id'))
                                                 <span
@@ -163,9 +157,6 @@
         $(document).ready(function() {
             $('#load_clinic').on('change', function(e) {
                 var clinic_id = e.target.value;
-                $('#load_slots').empty();
-                $('#load_date').empty();
-                $("#load_service").val([]).change();
                 if (clinic_id) {
                     $.ajax({
                         url: "{{ route('getDoctor') }}",
@@ -178,8 +169,19 @@
                             $('#load_doctor').empty();
                             $('#load_doctor').append(
                                 '<option value=""> Select Doctor</option>');
-                            $.each(data, function(key, value) {
+                            $.each(data.doctors, function(key, value) {
                                 $('#load_doctor').append($(
+                                    "<option/>", {
+                                        value: key,
+                                        text: value
+                                    }));
+
+                            });
+                            $('#load_patient').empty();
+                            $('#load_patient').append(
+                                '<option value=""> Select Patient</option>');
+                            $.each(data.patients, function(key, value) {
+                                $('#load_patient').append($(
                                     "<option/>", {
                                         value: key,
                                         text: value
@@ -190,17 +192,16 @@
                     })
                 } else {
                     $('#load_doctor').empty();
-                    $("#load_service").val([]).change();
+                    $('#load_patient').empty();
                     $('#load_slots').empty();
+                    $('#load_date').empty();
+                    $("#load_service").val([]).change();
                 }
             });
 
             //getting service
             $('#load_doctor').on('change', function(e) {
                 var doctor_id = e.target.value;
-                $('#load_slots').empty();
-                $('#load_date').empty();
-                $("#load_service").val([]).change();
                 if (doctor_id) {
                     $.ajax({
                         url: "{{ route('getService') }}",
@@ -238,6 +239,7 @@
                 } else {
                     $("#load_service").val([]).change();
                     $('#load_slots').empty();
+                    $('#load_date').empty();
 
                 }
             });

@@ -40,7 +40,8 @@
                                             <label for="">Clinic</label>
                                             <span class="text-danger">*</span>
                                             <select name="clinic_id" data-placeholder="Search" data-allow-clear="true"
-                                                class="form-control select2bs4" style="width: 100%;" id="load_clinic">
+                                                class="form-control select2bs4" style="width: 100%;" id="load_clinic"
+                                                disabled="disabled">
                                                 <option selected="selected"></option>
                                                 @foreach ($clinic as $id => $item)
                                                     <option value="{{ $id }}"
@@ -57,7 +58,8 @@
                                             <span class="text-danger">*</span>
                                             <input type="hidden" id="get_doctor_id" value="{{ $appointment->doctor_id }}">
                                             <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
-                                                class="form-control select2bs4" style="width: 100%;" id="load_doctor">
+                                                class="form-control select2bs4" style="width: 100%;" id="load_doctor"
+                                                disabled="disabled">
                                                 @foreach ($doctor as $id => $item)
                                                     <option value="{{ $id }}"
                                                         {{ $appointment->doctor_id == $id ? 'selected' : '' }}>
@@ -74,7 +76,7 @@
                                             <span class="text-danger">*</span>
                                             <select name="service[]" multiple="multiple" data-placeholder="Search"
                                                 data-allow-clear="true" class="form-control select2bs4" style="width: 100%;"
-                                                id="load_service">
+                                                id="load_service" disabled="disabled">
                                                 @foreach ($service as $item)
                                                     <option value="{{ $item }}"
                                                         {{ in_array($item, $appointment->service ?: []) ? 'selected' : '' }}>

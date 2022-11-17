@@ -4,7 +4,7 @@
     <div class="register-page">
         <div class="register-box">
             <div class="register-logo">
-                <a href="../../index2.html"><b>Admin</b>LTE</a>
+                <a href="../../index2.html"><b>{{ title() }}</b></a>
             </div>
 
             <div class="card">
@@ -102,7 +102,7 @@
                         </div>
                     </form>
 
-                    <a href="login.html" class="text-center">I already have a membership</a>
+                    <a href="{{ route('login') }}" class="text-center">I already have an account</a>
                 </div>
                 <!-- /.form-box -->
             </div><!-- /.card -->

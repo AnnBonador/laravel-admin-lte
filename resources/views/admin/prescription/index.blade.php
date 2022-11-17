@@ -5,12 +5,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Receptionist</h1>
+                    <h1 class="m-0">Prescription</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Receptionist</li>
+                        <li class="breadcrumb-item active">Prescription</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -26,63 +26,53 @@
                 <div class="col-md-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h3 class="card-title">Receptionists List</h3>
-                            <a href="{{ route('receptionist.create') }}" class="btn btn-sm btn-primary float-right"><i
+                            <h3 class="card-title">Prescription</h3>
+                            <a href="{{ route('prescription.create') }}" class="btn btn-sm btn-primary float-right"><i
                                     class="fa fa-plus"></i>
                                 &nbsp;&nbsp;Add
-                                Receptionist</a>
+                                Prescription</a>
                         </div>
                         <div class="card-body">
                             <table id="table1" class="table table-borderless table-hover" style="width:100%;">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th>Name</th>
                                         <th>Clinic Name</th>
-                                        <th>Email</th>
-                                        <th>Mobile</th>
-                                        <th>Status</th>
+                                        <th>Doctor Name</th>
+                                        <th>Patient Name</th>
+                                        <th>Medicine</th>
+                                        <th>Date</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($receptionists as $data)
+                                    @foreach ($prescriptions as $data)
                                         <tr>
-                                            <td>
-                                                @if (!empty($data->image))
-                                                    <img alt="Avatar" class="user-image img-circle"
-                                                        width="50"src="{{ asset('uploads/receptionist/' . $data->image) }}">
-                                                @else
-                                                    <img alt="Avatar" class="user-image img-circle"
-                                                        width="50"src="{{ asset('admin-assets/dist/img/default.png') }}">
-                                                @endif
-                                                {{ $data->full_name }}
-                                            </td>
                                             <td>
                                                 @if ($data->clinic()->exists())
                                                     {{ $data->clinic->name }}
                                                 @endif
                                             </td>
-                                            <td>{{ $data->email }}</td>
-                                            <td>{{ $data->contact }}</td>
                                             <td>
-                                                @if ($data->status == '1')
-                                                    <small class="badge badge-primary">Active</small>
-                                                @else
-                                                    <small class="badge badge-warning">Inactive</small>
+                                                @if ($data->doctors()->exists())
+                                                    {{ $data->doctors->full_name }}
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="{{ route('receptionist.edit', $data->id) }}"
-                                                    class="btn btn-sm btn-success" data-toggle="tooltip"
-                                                    data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
-
-                                                <a href="{{ route('receptionistCredentials', $data->id) }}"
-                                                    class="btn btn-sm btn-primary"><i class="fas fa-paper-plane"
-                                                        data-toggle="tooltip" data-placement="top"
-                                                        title="Resend credentials"></i></a>
+                                                @if ($data->patients()->exists())
+                                                    {{ $data->patients->full_name }}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                {{ $data->medicine_name }}<br>
+                                                <strong>{{ $data->frequency . ' ' . $data->duration }} days</strong><br>
+                                                {{ $data->instruction }}
+                                            </td>
+                                            <td>{{ $data->date }}</td>
+                                            <td>
+                                                <a href="{{ route('prescription.edit', $data->id) }}"
+                                                    class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
 
                                                 <button type="button" class="btn btn-sm btn-danger deleteRecordbtn"
-                                                    data-toggle="tooltip" data-placement="top" title="Delete"
                                                     value="{{ $data->id }}"><i class="fa fa-trash"></i></button>
                                             </td>
                                         </tr>
@@ -106,7 +96,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('receptionist.delete') }}" method="POST">
+                <form action="{{ route('prescription.delete') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <p>Are you sure you want to delete the record?</p>
