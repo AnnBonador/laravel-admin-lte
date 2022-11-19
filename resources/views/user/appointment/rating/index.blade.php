@@ -23,7 +23,11 @@
     <div class="content">
         <div class="container-fluid">
             @if (!empty($review->star_rating))
-                <div class="card shadow">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <a href="{{ route('user.appointments.index') }}" class="btn btn-sm btn-danger float-right">
+                            Back</a>
+                    </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col mt-4">
@@ -51,12 +55,27 @@
                     </div>
                 </div>
             @else
-                <div class="card shadow">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="">
+                            <div class="user-block">
+                                <img class="img-circle img-bordered-sm"
+                                    src="{{ asset('uploads/doctor/' . $appointment->doctors->image) }}">
+                                <span class="username">
+                                    <a href="#">{{ $appointment->doctors->full_name }}</a>
+                                </span>
+                                <span class="description">{{ $appointment->doctors->specialty->name }}</span>
+                            </div>
+
+                            <a href="{{ route('user.appointments.index') }}" class="btn btn-sm btn-danger float-right">
+                                Back</a>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col mt-4">
-                                <form class="py-2 px-4" action="{{ route('user.review.store') }}" method="POST"
-                                    autocomplete="off">
+                                @include('layouts.partials.messages')
+                                <form action="{{ route('user.review.store') }}" method="POST" autocomplete="off">
                                     @csrf
                                     <p class="font-weight-bold ">Review</p>
                                     <div class="form-group row">
@@ -89,7 +108,7 @@
                                         </div>
                                     </div>
                                     <div class="mt-3 text-right">
-                                        <button class="btn btn-sm py-2 px-3 btn-info">Submit
+                                        <button class="btn btn-sm btn-primary">Submit
                                         </button>
                                     </div>
                                 </form>

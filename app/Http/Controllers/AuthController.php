@@ -6,27 +6,50 @@ use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\RegistrationRequest;
 use Symfony\Component\Console\Input\Input;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 
 class AuthController extends Controller
 {
+    use AuthenticatesUsers;
+
+
+    public function RedirectsUsers()
+    {
+        if (Auth::user()->type == '1') {
+            return redirect()->route('admin.dashboard');
+        } else if (auth()->user()->type == '2') {
+            return redirect()->route('doctor.dashboard');
+        } else if (auth()->user()->type == '3') {
+            return redirect()->route('receptionist.dashboard');
+        } else {
+            return redirect()->route('user.dashboard');
+        }
+    }
+
     public function index()
     {
         return view('auth.login');
     }
+
+
+    /**
+     * Where to redirect users after login.
+     *
+     * @var string
+     */
+    // protected $redirectTo = RouteServiceProvider::HOME;
+
 
     /**
      * Write code on Method
      *
      * @return response()
      */
-    public function registration()
-    {
-        return view('auth.register1');
-    }
 
     // /**
     //  * Write code on Method
@@ -61,16 +84,11 @@ class AuthController extends Controller
         }
     }
 
-    // /**
-    //  * Write code on Method
-    //  *
-    //  * @return response()
-    //  */
+    public function logout(Request $request)
+    {
+        Session::flush();
+        Auth::logout();
 
-
-    // /**
-    //  * Write code on Method
-    //  *
-    //  * @return response()
-    //  */
+        return Redirect('login');
+    }
 }

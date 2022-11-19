@@ -33,7 +33,7 @@
                                 Appointment</a>
                         </div>
                         <div class="card-body">
-                            <table id="dataTable" class="table table-borderless table-hover" style="width:100%;">
+                            <table id="table1" class="table table-borderless table-hover" style="width:100%;">
                                 <thead class="bg-light">
                                     <tr>
                                         <th>Patient Name</th>
@@ -78,8 +78,8 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="{{ route('user.calendar.show', $data->id) }}"
-                                                    class="btn btn-sm btn-secondary"><i class="fa fa-eye"></i></a>
+                                                <button type="button" class='btn btn-sm btn-secondary viewdetails'
+                                                    data-id='{{ $data->id }}'><i class="fa fa-eye"></i></button>
                                                 @if ($data->status == 'Booked')
                                                     <a href="{{ route('user.appointments.edit', $data->id) }}"
                                                         class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
@@ -105,29 +105,7 @@
 
     </div>
 
-    <div class="modal" tabindex="-1" id="deleteModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Delete Record</h5>
-                    <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="{{ route('user.appointments.delete') }}" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete the record?</p>
-                        <input type="hidden" name="delete_id" id="delete_id">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-danger" name="delete">Delete</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    @include('user.appointment.modal')
     <!-- /.row (main row) -->
 @endsection
 
@@ -141,6 +119,28 @@
                 $('#delete_id').val(delete_id)
                 $('#deleteModal').modal('show');
 
+            });
+
+            $('.viewdetails').click(function() {
+                var app_id = $(this).attr('data-id');
+
+                if (app_id > 0) {
+
+                    var url = "{{ route('usergetAppointmentDetails', [':app_id']) }}";
+                    url = url.replace(':app_id', app_id);
+
+                    $('#tblappinfo tbody').empty();
+
+                    $.ajax({
+                        url: url,
+                        dataType: 'json',
+                        success: function(response) {
+
+                            $('#tblappinfo tbody').html(response.html);
+                            $('#appModal').modal('show');
+                        }
+                    });
+                }
             });
         });
     </script>

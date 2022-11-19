@@ -51,12 +51,12 @@
                                             <td>{{ $data->doctors->full_name }}</td>
                                             <td>{{ $data->charges }}</td>
                                             <td>{{ $data->service_category->name }}</td>
-                                            <td>
-                                                @if ($data->status == '1')
-                                                    <small class="badge badge-primary">Active</small>
-                                                @else
-                                                    <small class="badge badge-warning">Inactive</small>
-                                                @endif
+                                            <td class="text-center">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input switch-status"
+                                                        data-id="{{ $data->id }}" name="status" type="checkbox"
+                                                        {{ $data->status == 1 ? 'checked' : '' }}>
+                                                </div>
                                             </td>
                                             <td>
                                                 <a href="{{ route('services.edit', $data->id) }}"
@@ -106,13 +106,30 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $('.deleteRecordbtn').click(function(e) {
+            $('#table1').on('click', '.deleteRecordbtn', function(e) {
                 e.preventDefault();
 
                 var delete_id = $(this).val();
                 $('#delete_id').val(delete_id)
                 $('#deleteModal').modal('show');
 
+            });
+
+            $('.switch-status').change(function() {
+                let status = $(this).prop('checked') === true ? 1 : 0;
+                let serviceId = $(this).data('id');
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: '{{ route('services.status.update') }}',
+                    data: {
+                        'status': status,
+                        'service_id': serviceId
+                    },
+                    success: function(data) {
+                        toastr.success(data.success);
+                    }
+                });
             });
         });
     </script>

@@ -116,7 +116,7 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $('.deleteRecordbtn').click(function(e) {
+            $('#table1').on('click', '.deleteRecordbtn', function(e) {
                 e.preventDefault();
 
                 var delete_id = $(this).val();

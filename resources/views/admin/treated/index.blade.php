@@ -35,6 +35,7 @@
                                         <th>Appointment ID</th>
                                         <th>Teeth</th>
                                         <th>Fee</th>
+                                        <th>Problem</th>
                                         <th>Remarks</th>
                                         <th>File</th>
                                         <th>Status</th>
@@ -57,10 +58,14 @@
                                                 {{ $data->fee }}
                                             </td>
                                             <td>
+                                                {{ $data->problem }}
+                                            </td>
+                                            <td>
                                                 {{ $data->remarks }}
                                             </td>
                                             <td>
-                                                <a href="{{ asset($data->file_path) }}">{{ $data->name }}</a>
+                                                <a href="{{ asset($data->file_path) }}"
+                                                    class="btn-link text-muted">{{ $data->name }}</a>
                                             </td>
                                             <td>
                                                 @if ($data->status == 'active')
@@ -117,7 +122,7 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $('.deleteRecordbtn').click(function(e) {
+            $('#table1').on('click', '.deleteRecordbtn', function(e) {
                 e.preventDefault();
 
                 var delete_id = $(this).val();

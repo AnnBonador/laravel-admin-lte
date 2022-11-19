@@ -145,6 +145,8 @@
     <script src="{{ asset('admin-assets/plugins/toastr/toastr.min.js') }}"></script>
     <script>
         $(document).ready(function() {
+            toastr.options.closeMethod = 'fadeOut';
+            toastr.options.closeDuration = 100;
             toastr.options.timeOut = 40000;
             @if (Session::has('success'))
                 toastr.options = {

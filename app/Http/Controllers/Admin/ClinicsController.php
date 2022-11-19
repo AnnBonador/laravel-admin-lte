@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\ClinicCreateRequest;
 use App\Http\Requests\ClinicUpdateRequest;
+use App\Mail\SendPasswordAdmin;
 
 class ClinicsController extends Controller
 {
@@ -43,6 +44,7 @@ class ClinicsController extends Controller
         $clinic_admin->gender = $validatedData['gender'];
         $clinic_admin->type = 1;
         $clinic_admin->status = 1;
+        $clinic_admin->isClinicAdmin = $lastid;
         $pw = generatePass();
         $clinic_admin->password = Hash::make($pw);
         $clinic_admin->save();
@@ -52,7 +54,7 @@ class ClinicsController extends Controller
             'password' => $pw
         ];
 
-        Mail::to($clinic_admin->email)->send(new SendPassword($mailData));
+        Mail::to($clinic_admin->email)->send(new SendPasswordAdmin($mailData));
 
         return redirect()->route('clinics.index')->with('success', 'Clinic added successfully');
     }
@@ -111,5 +113,14 @@ class ClinicsController extends Controller
 
         Mail::to($resend->email)->send(new SendPassword($mailData));
         return redirect()->back()->with('success', 'Clinic admin credential send successfully');
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $user = Clinic::findOrFail($request->clinic_id);
+        $user->status = $request->status;
+        $user->save();
+
+        return response()->json(['success' => 'Clinic status updated successfully.']);
     }
 }

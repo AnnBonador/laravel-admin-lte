@@ -54,4 +54,13 @@ class ServicesController extends Controller
         $service->delete();
         return redirect()->route('services.index')->with('success', 'Service deleted successfully');
     }
+
+    public function updateStatus(Request $request)
+    {
+        $user = Services::findOrFail($request->service_id);
+        $user->status = $request->status;
+        $user->save();
+
+        return response()->json(['success' => 'Service status updated successfully.']);
+    }
 }

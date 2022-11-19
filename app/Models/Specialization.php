@@ -10,6 +10,8 @@ class Specialization extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name'];
+
     public function clinic()
     {
         return $this->hasManyJson(Clinic::class, 'specialization_id');

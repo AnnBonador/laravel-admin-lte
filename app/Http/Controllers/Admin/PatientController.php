@@ -138,4 +138,13 @@ class PatientController extends Controller
         Mail::to($resend->email)->send(new SendPassword($mailData));
         return redirect()->back()->with('success', 'Patient credential send successfully');
     }
+
+    public function updateStatus(Request $request)
+    {
+        $user = User::findOrFail($request->patient_id);
+        $user->status = $request->status;
+        $user->save();
+
+        return response()->json(['success' => 'Patient status updated successfully.']);
+    }
 }

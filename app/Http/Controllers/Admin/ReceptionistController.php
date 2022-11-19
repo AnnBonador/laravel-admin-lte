@@ -114,4 +114,13 @@ class ReceptionistController extends Controller
         Mail::to($resend->email)->send(new SendPassword($mailData));
         return redirect()->back()->with('success', 'Receptionist credential send successfully');
     }
+
+    public function updateStatus(Request $request)
+    {
+        $user = User::findOrFail($request->receptionist_id);
+        $user->status = $request->status;
+        $user->save();
+
+        return response()->json(['success' => 'Receptionist status updated successfully.']);
+    }
 }

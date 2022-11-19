@@ -22,7 +22,7 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-lg-end">
                     <li><a href="" class="dropdown-item">Profile</a></li>
-                    <li><a href="" class="dropdown-item">Change Password</a></li>
+                    <li><a href="{{ route('change.password.index') }}" class="dropdown-item">Change Password</a></li>
                     <li><a href="{{ route('logout') }}" class="dropdown-item"
                             onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">Logout</a>

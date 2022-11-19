@@ -14,15 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'redirectUser'])->name('home');
 
 Route::controller(App\Http\Controllers\AuthController::class)->group(function () {
     Route::get('login', 'index')->name('login');
     Route::post('post-login', 'postLogin')->name('login.post');
+    Route::post('logout',  'logout')->name('logout');
 });
 Route::controller(App\Http\Controllers\ForgotPasswordController::class)->group(function () {
     Route::get('forget-password',  'showForgetPasswordForm')->name('forget.password.get');
@@ -30,9 +30,6 @@ Route::controller(App\Http\Controllers\ForgotPasswordController::class)->group(f
     Route::get('reset-password/{token}',  'showResetPasswordForm')->name('reset.password.get');
     Route::post('reset-password',  'submitResetPasswordForm')->name('reset.password.post');
 });
-
-// Route::get('reset-password/{token}', [App\Http\Controllers\ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
-
 
 /*------------------------------------------
 --------------------------------------------
@@ -51,6 +48,7 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
         Route::put('/clinics/{id}', 'update')->name('clinics.update');
         Route::post('/clinics/delete', 'destroy')->name('clinics.delete');
         Route::get('/clinics-send/{id}', 'resendCredentials')->name('clinicCredentials');
+        Route::get('/clinic-status/update', 'updateStatus')->name('clinics.status.update');
     });
 
     Route::controller(App\Http\Controllers\Admin\RatingsController::class)->group(function () {
@@ -69,6 +67,7 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
         Route::post('/appointment/delete', 'destroy')->name('appointments.delete');
         Route::get('/appointment/all', 'all')->name('appointments.all');
         Route::get('/appointment/past', 'past')->name('appointments.past');
+        Route::get('/appointment/{id}/show', 'getAppointmentDetails')->name('getAppointmentDetails');
     });
 
     Route::controller(App\Http\Controllers\Admin\DoctorController::class)->group(function () {
@@ -79,6 +78,7 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
         Route::get('/doctor-send/{id}', 'resendCredentials')->name('doctorCredentials');
         Route::put('/doctor/{id}', 'update')->name('doctors.update');
         Route::post('/doctor/delete', 'destroy')->name('doctors.delete');
+        Route::get('/doctor-status/update', 'updateStatus')->name('doctors.status.update');
     });
 
     Route::controller(App\Http\Controllers\Admin\ReceptionistController::class)->group(function () {
@@ -89,6 +89,7 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
         Route::put('/receptionist/{id}', 'update')->name('receptionist.update');
         Route::post('/receptionist/delete', 'destroy')->name('receptionist.delete');
         Route::get('/receptionist-send/{id}', 'resendCredentials')->name('receptionistCredentials');
+        Route::get('/receptionist-status/update', 'updateStatus')->name('receptionist.status.update');
     });
 
     Route::controller(App\Http\Controllers\Admin\PatientController::class)->group(function () {
@@ -99,6 +100,7 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
         Route::put('/patient/{id}', 'update')->name('patients.update');
         Route::post('/patient/delete', 'destroy')->name('patients.delete');
         Route::get('/patient-send/{id}', 'resendCredentials')->name('patientCredentials');
+        Route::get('/patient-status/update', 'updateStatus')->name('patients.status.update');
     });
 
     Route::controller(App\Http\Controllers\Admin\ServicesController::class)->group(function () {
@@ -108,6 +110,7 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
         Route::get('/service/{id}/edit', 'edit')->name('services.edit');
         Route::put('/service/{id}', 'update')->name('services.update');
         Route::post('/service/delete', 'destroy')->name('services.delete');
+        Route::get('/services-status/update', 'updateStatus')->name('services.status.update');
     });
     Route::controller(App\Http\Controllers\Admin\PrescriptionController::class)->group(function () {
         Route::get('/prescription', 'index')->name('prescription.index');
@@ -137,6 +140,35 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
         Route::put('/schedule/{id}', 'update')->name('schedules.update');
         Route::post('/schedule/delete', 'destroy')->name('schedules.delete');
     });
+    Route::controller(App\Http\Controllers\Admin\SpecializationController::class)->group(function () {
+        Route::get('/specialization', 'index')->name('specialization.index');
+        Route::get('/specialization/create', 'create')->name('specialization.create');
+        Route::post('/specialization', 'store')->name('specialization.store');
+        Route::get('/specialization/{id}/edit', 'edit')->name('specialization.edit');
+        Route::put('/specialization/{id}', 'update')->name('specialization.update');
+        Route::post('/specialization/delete', 'destroy')->name('specialization.delete');
+    });
+
+    Route::controller(App\Http\Controllers\Admin\ChangePasswordController::class)->group(function () {
+        Route::get('change-password', 'index')->name('change.password.index');
+        Route::post('change-password', 'store')->name('change.password');
+    });
+    Route::controller(App\Http\Controllers\Admin\UserController::class)->group(function () {
+        Route::get('/users', 'index')->name('users.index');
+        Route::get('/users/create', 'create')->name('users.create');
+        Route::post('/users', 'store')->name('users.store');
+        Route::get('/users/{id}/edit', 'edit')->name('users.edit');
+        Route::put('/users/{id}', 'update')->name('users.update');
+        Route::post('/users/delete', 'destroy')->name('users.delete');
+    });
+    Route::controller(App\Http\Controllers\Admin\RoleController::class)->group(function () {
+        Route::get('/roles', 'index')->name('roles.index');
+        Route::get('/roles/create', 'create')->name('roles.create');
+        Route::post('/roles', 'store')->name('roles.store');
+        Route::get('/roles/{id}/edit', 'edit')->name('roles.edit');
+        Route::put('/roles/{id}', 'update')->name('roles.update');
+        Route::post('/roles/delete', 'destroy')->name('roles.delete');
+    });
 });
 
 /*------------------------------------------
@@ -146,7 +178,10 @@ All Normal Users Routes List
 --------------------------------------------*/
 Route::prefix('user')->middleware(['auth', 'user-access:user'])->group(function () {
 
-    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('user.dashboard');
+    Route::controller(App\Http\Controllers\HomeController::class)->group(function () {
+        Route::get('/dashboard', 'index')->name('user.dashboard');
+        Route::get('/dashboard/{id}', 'userShow')->name('user.dashboard.show');
+    });
     Route::controller(App\Http\Controllers\User\AppointmentsController::class)->group(function () {
         Route::get('/appointment',  'index')->name('user.appointments.index');
         Route::get('/appointment/create', 'create')->name('user.appointments.create');
@@ -157,6 +192,7 @@ Route::prefix('user')->middleware(['auth', 'user-access:user'])->group(function 
         Route::get('/appointment/cancel-payment', 'paymentCancel')->name('cancel.payment');
         Route::get('/appointment/payment-success', 'paymentSuccess')->name('success.payment');
         Route::get('appointment/rating/{id}', 'rateDoctor')->name('user.ratings');
+        Route::get('/appointment/{id}/show', 'usergetAppointmentDetails')->name('usergetAppointmentDetails');
     });
     Route::controller(App\Http\Controllers\User\FetchController::class)->group(function () {
         Route::post('/getDoctor', 'getDoctor')->name('user.getDoctor');
@@ -164,16 +200,19 @@ Route::prefix('user')->middleware(['auth', 'user-access:user'])->group(function 
         Route::get('/viewDoctor', 'getDoctor')->name('user.viewDoctor');
         Route::post('/getSlots', 'getSlots')->name('user.getSlots');
     });
-    Route::controller(App\Http\Controllers\User\CalendarController::class)->group(function () {
-        Route::get('/calendar', 'index')->name('user.calendar.index');
-        Route::get('/calendar/{id}', 'show')->name('user.calendar.show');
-    });
     Route::controller(App\Http\Controllers\User\DoctorRatingsController::class)->group(function () {
         Route::post('/doctor/rating', 'store')->name('user.review.store');
     });
     Route::controller(App\Http\Controllers\User\ClinicController::class)->group(function () {
         Route::get('/clinic', 'index')->name('user.clinic.index');
         Route::put('/clinic', 'update')->name('user.clinic.update');
+    });
+    Route::controller(App\Http\Controllers\User\TreatedController::class)->group(function () {
+        Route::get('/treated', 'index')->name('user.treated.index');
+        Route::get('/treated/{id}', 'show')->name('user.treated.show');
+    });
+    Route::controller(App\Http\Controllers\User\PrescriptionController::class)->group(function () {
+        Route::get('/prescription', 'index')->name('user.prescription.index');
     });
 });
 
@@ -187,4 +226,10 @@ Route::prefix('doctor')->middleware(['auth', 'user-access:doctor'])->group(funct
 Route::prefix('receptionist')->middleware(['auth', 'user-access:receptionist'])->group(function () {
 
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'receptionistHome'])->name('receptionist.dashboard');
+});
+
+Route::controller(App\Http\Controllers\Front\FrontEndController::class)->group(function () {
+    Route::get('/', 'homepage')->name('home.page');
+    Route::get('/dentist', 'dentist')->name('dentist.page');
+    Route::get('/clinics', 'clinics')->name('clinics.page');
 });

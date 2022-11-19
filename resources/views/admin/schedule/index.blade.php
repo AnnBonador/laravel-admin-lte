@@ -52,7 +52,11 @@
                                                     {{ $data->doctors->full_name }}
                                                 @endif
                                             </td>
-                                            <td>{{ $data->clinic->name }}</td>
+                                            <td>
+                                                @if ($data->clinic()->exists())
+                                                    {{ $data->clinic->name }}
+                                                @endif
+                                            </td>
                                             <td>{{ $data->day }}</td>
                                             <td>{{ $data->start_time . ' to ' . $data->end_time }}</td>
                                             <td>{{ $data->duration }}</td>
@@ -104,7 +108,7 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $('.deleteRecordbtn').click(function(e) {
+            $('#table1').on('click', '.deleteRecordbtn', function(e) {
                 e.preventDefault();
 
                 var delete_id = $(this).val();

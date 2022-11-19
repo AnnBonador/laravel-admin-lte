@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Clinic;
 use App\Models\Doctor;
 use App\Models\Patient;
+use App\Models\Treated;
 use App\Models\Schedule;
 use App\Models\Services;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\Appointment as MailAppointment;
 use App\Http\Requests\AppointmentStoreRequest;
 use App\Http\Requests\AppointmentUpdateRequest;
-use App\Mail\Appointment as MailAppointment;
-use App\Models\Treated;
 
 class AppointmentController extends Controller
 {
@@ -133,5 +134,50 @@ class AppointmentController extends Controller
 
 
         return redirect()->route('appointments.index')->with('success', 'Appointment updated successfully');
+    }
+
+    public function getAppointmentDetails($id = 0)
+    {
+
+        $appointment = Appointment::find($id);
+
+        $html = "";
+        if (!empty($appointment)) {
+            $html = "<tr>
+                <td width='30%'><b>Date:</b></td>
+                <td width='70%'> " . Carbon::parse($appointment->schedule->day)->toFormattedDateString() . "</td>
+             </tr>
+             <tr>
+                <td width='30%'><b>Time:</b></td>
+                <td width='70%'> " . $appointment->start_time . ' - ' . $appointment->end_time . "</td>
+             </tr>
+             <tr>
+                <td width='30%'><b>Doctor:</b></td>
+                <td width='70%'> " . $appointment->doctors->full_name . "</td>
+             </tr>
+             <tr>
+                <td width='30%'><b>Patient:</b></td>
+                <td width='70%'> " . $appointment->patients->full_name  . "</td>
+             </tr>
+             <tr>
+                <td width='30%'><b>Clinic:</b></td>
+                <td width='70%'> " . $appointment->clinic->name  . "</td>
+             </tr>
+             <tr>
+                <td width='30%'><b>Description:</b></td>
+                <td width='70%'> " . $appointment->description  . "</td>
+             </tr>
+             <tr>
+                <td width='30%'><b>Service:</b></td>
+                <td width='70%'> " . implode(',', $appointment->service)  . "</td>
+             </tr>
+             <tr>
+                <td width='30%'><b>Status:</b></td>
+                <td width='70%'> " . $appointment->status . "</td>
+             </tr>";
+        }
+        $response['html'] = $html;
+
+        return response()->json($response);
     }
 }

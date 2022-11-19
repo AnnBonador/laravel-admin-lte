@@ -29,7 +29,9 @@ class SettingsRequest extends FormRequest
             'footer' => 'required',
             'email' => 'required|email:rfc,dns',
             'logo' => 'sometimes|nullable|image|mimes:jpeg,gif,png,jpg',
-            'favicon' => 'sometimes|nullable|image|mimes:jpeg,gif,png,jpg|max:2048'
+            'favicon' => 'sometimes|nullable|image|mimes:jpeg,gif,png,jpg|max:2048',
+            'fb' => 'nullable',
+            'contact' => 'nullable'
         ];
     }
 }

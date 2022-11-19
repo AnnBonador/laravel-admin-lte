@@ -89,6 +89,8 @@
                                                 @endif
                                             </td>
                                             <td>
+                                                <button type="button" class='btn btn-sm btn-secondary viewdetails'
+                                                    data-id='{{ $data->id }}'><i class="fa fa-eye"></i></button>
                                                 @if ($data->status != 'Completed')
                                                     <a href="{{ route('appointments.edit', $data->id) }}"
                                                         class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
@@ -109,36 +111,14 @@
 
     </div>
 
-    <div class="modal" tabindex="-1" id="deleteModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Delete Record</h5>
-                    <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="{{ route('appointments.delete') }}" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete the record?</p>
-                        <input type="hidden" name="delete_id" id="delete_id">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-danger" name="delete">Delete</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    @include('admin.appointment.modal')
     <!-- /.row (main row) -->
 @endsection
 
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $('.deleteRecordbtn').click(function(e) {
+            $('#table1').on('click', '.deleteRecordbtn', function(e) {
                 e.preventDefault();
 
                 var delete_id = $(this).val();
@@ -146,6 +126,28 @@
                 $('#deleteModal').modal('show');
 
             });
+            $('#table1').on('click', '.viewdetails', function() {
+                var app_id = $(this).attr('data-id');
+
+                if (app_id > 0) {
+
+                    var url = "{{ route('getAppointmentDetails', [':app_id']) }}";
+                    url = url.replace(':app_id', app_id);
+
+                    $('#tblappinfo tbody').empty();
+
+                    $.ajax({
+                        url: url,
+                        dataType: 'json',
+                        success: function(response) {
+
+                            $('#tblappinfo tbody').html(response.html);
+                            $('#appModal').modal('show');
+                        }
+                    });
+                }
+            });
+
         });
     </script>
 @endsection

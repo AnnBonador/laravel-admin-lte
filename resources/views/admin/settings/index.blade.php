@@ -73,6 +73,23 @@
                                         @endif
                                     </div>
                                     <div class="form-group col-sm-6">
+                                        <label for="">Contact</label>
+                                        <span class="text-danger">*</span>
+                                        <input type="text" name="contact" value="{{ substr($settings->contact, 3) }}"
+                                            class="form-control js-phone" placeholder="Enter contact">
+                                        @if ($errors->has('contact'))
+                                            <span class="text-danger text-left">{{ $errors->first('contact') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="">Facebook</label>
+                                        <input type="text" name="fb" value="{{ $settings->fb }}"
+                                            class="form-control" placeholder="Enter facebook link">
+                                        @if ($errors->has('fb'))
+                                            <span class="text-danger text-left">{{ $errors->first('fb') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-sm-6">
                                         <label for="">Logo</label>
                                         <div class="col-lg-12">
                                             <div class="mb-3">

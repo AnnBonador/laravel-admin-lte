@@ -23,6 +23,8 @@ class SettingsController extends Controller
         $setting->title = $validatedData['title'];
         $setting->footer = $validatedData['footer'];
         $setting->email = $validatedData['email'];
+        $setting->fb = $validatedData['fb'];
+        $setting->contact = $validatedData['contact'];
 
         $old_logo = $request->old_logo;
         if ($request->hasfile('logo')) {

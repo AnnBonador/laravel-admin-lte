@@ -16,8 +16,13 @@
 
                 <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static"
                     aria-expanded="false">
-                    <img src="{{ asset('uploads/patient/' . Auth::user()->image) }}"
-                        class="user-image img-circle elevation-2" alt="User Image">
+                    @if (!empty(Auth::user()->image))
+                        <img alt="Avatar" class="user-image img-circle elevation-2"
+                            src="{{ asset('uploads/patient/' . Auth::user()->image) }}">
+                    @else
+                        <img alt="Avatar" class="user-image img-circle elevation-2"
+                            src="{{ asset('admin-assets/dist/img/default.png') }}">
+                    @endif
                     {{ Auth::user()->fname }}
                 </a>
                 <ul class="dropdown-menu dropdown-menu-lg-end">

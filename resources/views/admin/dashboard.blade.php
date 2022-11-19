@@ -98,22 +98,26 @@
                         </div>
                         <div class="card-body">
                             @foreach ($appointment as $data)
-                                @if ($data->schedule->day == Carbon\Carbon::now()->format('m/d/Y'))
-                                    <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
-                                        <p class="d-flex flex-column">
-                                            <span class="font-weight-bold">
-                                                {{ $data->schedule->day }}
-                                                {{ $data->patients->full_name }} <span class="fw-light">
-                                                    ({{ $data->start_time . ' -  ' . $data->end_time }})
+                                @if ($data->schedule()->exists())
+                                    @if ($data->schedule->day == Carbon\Carbon::now()->format('m/d/Y'))
+                                        <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                                            <p class="d-flex flex-column">
+                                                <span class="font-weight-bold">
+
+                                                    {{ $data->schedule->day }}
+
+                                                    {{ $data->patients->full_name }} <span class="fw-light">
+                                                        ({{ $data->start_time . ' -  ' . $data->end_time }})
+                                                    </span>
                                                 </span>
-                                            </span>
-                                            <span class="text-primary text-uppercase">{{ $data->clinic->name }}</span>
-                                            <span class="fw-lighter">{{ $data->doctors->full_name }}</span>
-                                        </p>
-                                        <p class="text-success text-right">
-                                            <span class="right badge badge-light">{{ $data->status }}</span>
-                                        </p>
-                                    </div>
+                                                <span class="text-primary text-uppercase">{{ $data->clinic->name }}</span>
+                                                <span class="fw-lighter">{{ $data->doctors->full_name }}</span>
+                                            </p>
+                                            <p class="text-success text-right">
+                                                <span class="right badge badge-light">{{ $data->status }}</span>
+                                            </p>
+                                        </div>
+                                    @endif
                                 @endif
                             @endforeach
                         </div>
@@ -128,22 +132,24 @@
                             <table class="table table-striped table-valign-middle">
                                 <tbody>
                                     @foreach ($appointment->take(5) as $data)
-                                        @if ($data->schedule->day > Carbon\Carbon::now()->format('m/d/Y'))
-                                            <tr>
-                                                <td>
-                                                    @if (!empty($data->patients->image))
-                                                        <img src="{{ asset('uploads/patient/' . $data->patients->image) }}"
-                                                            alt="img" class="img-circle img-size-32 mr-2">
-                                                    @else
-                                                        <img alt="Avatar" class="img-circle img-size-32 mr-2"
-                                                            alt="img"
-                                                            src="{{ asset('admin-assets/dist/img/default.png') }}">
-                                                    @endif
-                                                    <b>{{ $data->patients->full_name }}</b>
-                                                </td>
-                                                <td>{{ $data->start_time }}</td>
-                                                <td>{{ $data->schedule->day }}</td>
-                                            </tr>
+                                        @if ($data->schedule()->exists())
+                                            @if ($data->schedule->day > Carbon\Carbon::now()->format('m/d/Y'))
+                                                <tr>
+                                                    <td>
+                                                        @if (!empty($data->patients->image))
+                                                            <img src="{{ asset('uploads/patient/' . $data->patients->image) }}"
+                                                                alt="img" class="img-circle img-size-32 mr-2">
+                                                        @else
+                                                            <img alt="Avatar" class="img-circle img-size-32 mr-2"
+                                                                alt="img"
+                                                                src="{{ asset('admin-assets/dist/img/default.png') }}">
+                                                        @endif
+                                                        <b>{{ $data->patients->full_name }}</b>
+                                                    </td>
+                                                    <td>{{ $data->start_time }}</td>
+                                                    <td>{{ $data->schedule->day }}</td>
+                                                </tr>
+                                            @endif
                                         @endif
                                     @endforeach
                                 </tbody>

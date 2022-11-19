@@ -13,4 +13,9 @@ class ReviewRating extends Model
     {
         return $this->belongsTo(User::class, 'patient_id', 'id');
     }
+
+    public function appointment()
+    {
+        return $this->belongsTo(Appointment::class, 'appointment_id', 'id');
+    }
 }

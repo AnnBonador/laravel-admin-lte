@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\User;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Clinic;
 use App\Models\Schedule;
 use App\Models\Services;
 use App\Models\Appointment;
+use App\Models\Transaction;
+use App\Models\ReviewRating;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Srmklive\PayPal\Services\ExpressCheckout;
 use App\Http\Requests\User\AppointmentStoreRequest;
 use App\Http\Requests\User\AppointmentUpdateRequest;
-use App\Models\ReviewRating;
-use App\Models\Transaction;
-use Srmklive\PayPal\Services\ExpressCheckout;
 
 class AppointmentsController extends Controller
 {
@@ -126,10 +127,9 @@ class AppointmentsController extends Controller
         return redirect()->route('user.appointments.index')->with('success', 'Appointment updated successfully');
     }
 
-
     public function paymentCancel()
     {
-        dd('Your payment has been declend. The payment cancelation page goes here!');
+        return redirect()->route('user.appointments.index')->with('Your payment has been declend. The payment cancelation page goes here!');
     }
 
     public function paymentSuccess(Request $request)
@@ -138,7 +138,6 @@ class AppointmentsController extends Controller
         $response = $provider->getExpressCheckoutDetails($request->token);
 
         if (in_array(strtoupper($response['ACK']), ['SUCCESS', 'SUCCESSWITHWARNING'])) {
-            // dd('Payment was successfull. The payment success page goes here!');
             return redirect()->route('user.appointments.index')->with('success', 'Payment Successfull');
         }
 
@@ -150,5 +149,50 @@ class AppointmentsController extends Controller
         $appointment = Appointment::find($id);
         $review = ReviewRating::where('appointment_id', $id)->first();
         return view('user.appointment.rating.index', compact('appointment', 'review'));
+    }
+
+    public function usergetAppointmentDetails($id = 0)
+    {
+
+        $appointment = Appointment::find($id);
+
+        $html = "";
+        if (!empty($appointment)) {
+            $html = "<tr>
+                <td width='30%'><b>Date:</b></td>
+                <td width='70%'> " . Carbon::parse($appointment->schedule->day)->toFormattedDateString() . "</td>
+             </tr>
+             <tr>
+                <td width='30%'><b>Time:</b></td>
+                <td width='70%'> " . $appointment->start_time . ' - ' . $appointment->end_time . "</td>
+             </tr>
+             <tr>
+                <td width='30%'><b>Doctor:</b></td>
+                <td width='70%'> " . $appointment->doctors->full_name . "</td>
+             </tr>
+             <tr>
+                <td width='30%'><b>Patient:</b></td>
+                <td width='70%'> " . $appointment->patients->full_name  . "</td>
+             </tr>
+             <tr>
+                <td width='30%'><b>Clinic:</b></td>
+                <td width='70%'> " . $appointment->clinic->name  . "</td>
+             </tr>
+             <tr>
+                <td width='30%'><b>Description:</b></td>
+                <td width='70%'> " . $appointment->description  . "</td>
+             </tr>
+             <tr>
+                <td width='30%'><b>Service:</b></td>
+                <td width='70%'> " . implode(',', $appointment->service)  . "</td>
+             </tr>
+             <tr>
+                <td width='30%'><b>Status:</b></td>
+                <td width='70%'> " . $appointment->status . "</td>
+             </tr>";
+        }
+        $response['html'] = $html;
+
+        return response()->json($response);
     }
 }

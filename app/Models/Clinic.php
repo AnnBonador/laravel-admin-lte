@@ -27,6 +27,6 @@ class Clinic extends Model
 
     public function users()
     {
-        return $this->hasOne(User::class, 'clinic_id', 'id');
+        return $this->hasOne(User::class, 'isClinicAdmin', 'id');
     }
 }

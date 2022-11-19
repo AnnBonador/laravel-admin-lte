@@ -147,4 +147,13 @@ class DoctorController extends Controller
         $doctor->delete();
         return redirect()->route('doctors.index')->with('success', 'Doctor deleted successfully');
     }
+
+    public function updateStatus(Request $request)
+    {
+        $user = User::findOrFail($request->doctor_id);
+        $user->status = $request->status;
+        $user->save();
+
+        return response()->json(['success' => 'Doctor status updated successfully.']);
+    }
 }

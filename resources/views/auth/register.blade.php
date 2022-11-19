@@ -4,12 +4,12 @@
     <div class="register-page">
         <div class="register-box">
             <div class="register-logo">
-                <a href="../../index2.html"><b>{{ title() }}</b></a>
+                <a href="{{ route('home.page') }}"><b>{{ title() }}</b></a>
             </div>
 
             <div class="card">
                 <div class="card-body register-card-body">
-                    <p class="login-box-msg">Register a new membership</p>
+                    <p class="login-box-msg">Register</p>
 
                     @include('layouts.partials.messages')
 
