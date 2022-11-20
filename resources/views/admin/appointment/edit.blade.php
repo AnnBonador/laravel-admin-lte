@@ -35,23 +35,25 @@
                                 @csrf
                                 <div class="row mb-2">
                                     <div class="col-sm-5">
-                                        <div class="form-group">
-                                            <label for="">Select Clinic</label>
-                                            <span class="text-danger">*</span>
-                                            <select name="clinic_id" data-placeholder="Search" data-allow-clear="true"
-                                                class="form-control select2bs4" style="width: 100%;" id="load_clinic"
-                                                disabled="disabled">
-                                                <option selected="selected"></option>
-                                                @foreach ($clinic as $id => $item)
-                                                    <option value="{{ $id }}"
-                                                        {{ $appointment->clinic_id == $id ? 'selected' : '' }}>
-                                                        {{ $item }}</option>
-                                                @endforeach
-                                            </select>
-                                            @if ($errors->has('clinic_id'))
-                                                <span class="text-danger text-left">{{ $errors->first('clinic_id') }}</span>
-                                            @endif
-                                        </div>
+                                        @role('Super-Admin')
+                                            <div class="form-group">
+                                                <label for="">Select Clinic</label>
+                                                <span class="text-danger">*</span>
+                                                <select name="clinic_id" data-placeholder="Search" data-allow-clear="true"
+                                                    class="form-control select2bs4" style="width: 100%;" id="load_clinic"
+                                                    disabled="disabled">
+                                                    <option selected="selected"></option>
+                                                    @foreach ($clinic as $id => $item)
+                                                        <option value="{{ $id }}"
+                                                            {{ $appointment->clinic_id == $id ? 'selected' : '' }}>
+                                                            {{ $item }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @if ($errors->has('clinic_id'))
+                                                    <span class="text-danger text-left">{{ $errors->first('clinic_id') }}</span>
+                                                @endif
+                                            </div>
+                                        @endrole
                                         <div class="form-group">
                                             <label for="">Select Doctor</label>
                                             <span class="text-danger">*</span>

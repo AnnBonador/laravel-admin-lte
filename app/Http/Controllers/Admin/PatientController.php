@@ -17,7 +17,11 @@ class PatientController extends Controller
 {
     public function index()
     {
-        $patient = User::where('type', '0')->get();
+        if (auth()->user()->hasRole('Super-Admin')) {
+            $patient = User::where('type', '0')->get();
+        } else if (auth()->user()->hasRole('Clinic Admin')) {
+            $patient = User::where('type', '0')->where('clinic_id', auth()->user()->isClinicAdmin)->get();
+        }
         return view('admin.patient.index', compact('patient'));
     }
 

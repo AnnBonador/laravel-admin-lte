@@ -19,8 +19,16 @@ class PrescriptionController extends Controller
 
     public function create()
     {
+        $doctors = User::where('type', '2')->where('clinic_id', auth()->user()->isClinicAdmin)
+            ->where('status', '1')
+            ->get()
+            ->pluck('full_name', 'id');
+        $patients = User::where('type', '0')->where('clinic_id', auth()->user()->isClinicAdmin)
+            ->where('status', '1')
+            ->get()
+            ->pluck('full_name', 'id');
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
-        return view('admin.prescription.create', compact('clinic'));
+        return view('admin.prescription.create', compact('clinic', 'doctors', 'patients', 'doctors'));
     }
 
     public function store(PrescriptionStoreRequest $request)

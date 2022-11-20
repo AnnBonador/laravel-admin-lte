@@ -1,9 +1,10 @@
 <?php
 
+use App\Models\User;
 use App\Models\Doctor;
 use App\Models\Setting;
-use App\Models\User;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 function title()
 {
@@ -46,4 +47,9 @@ function viewDoctors()
 {
     $doctors = User::where('type', '2')->where('status', '1')->get();
     return $doctors;
+}
+
+function doctorHelper()
+{
+    return User::where('type', '2')->where('status', '1')->get()->pluck('full_name', 'id');
 }

@@ -34,31 +34,45 @@
                                 @csrf
                                 <div class="row mb-2">
                                     <div class="col-sm-5">
-                                        <div class="form-group">
-                                            <label for="">Clinic</label>
-                                            <span class="text-danger">*</span>
-                                            <select name="clinic_id" data-placeholder="Search" data-allow-clear="true"
-                                                class="form-control select2bs4" style="width: 100%;" id="load_clinic">
-                                                <option selected="selected"></option>
-                                                @foreach ($clinic as $id => $item)
-                                                    <option value="{{ $id }}"
-                                                        {{ old('clinic_id') == $id ? 'selected' : '' }}>
-                                                        {{ $item }}</option>
-                                                @endforeach
-                                            </select>
-                                            @if ($errors->has('clinic_id'))
-                                                <span class="text-danger text-left">{{ $errors->first('clinic_id') }}</span>
-                                            @endif
-                                        </div>
+                                        @role('Clinic Admin')
+                                            <input type="hidden" name="clinic_id" value="{{ Auth::user()->isClinicAdmin }}">
+                                        @endrole
+                                        @role('Super-Admin')
+                                            <div class="form-group">
+                                                <label for="">Clinic</label>
+                                                <span class="text-danger">*</span>
+                                                <select name="clinic_id" data-placeholder="Search" data-allow-clear="true"
+                                                    class="form-control select2bs4" style="width: 100%;" id="load_clinic">
+                                                    <option selected="selected"></option>
+                                                    @foreach ($clinic as $id => $item)
+                                                        <option value="{{ $id }}"
+                                                            {{ old('clinic_id') == $id ? 'selected' : '' }}>
+                                                            {{ $item }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @if ($errors->has('clinic_id'))
+                                                    <span class="text-danger text-left">{{ $errors->first('clinic_id') }}</span>
+                                                @endif
+                                            </div>
+                                        @endrole
                                         <div class="form-group">
                                             <label for="">Doctor</label>
                                             <span class="text-danger">*</span>
                                             <input type="hidden" id="get_doctor_id">
                                             <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
                                                 class="form-control select2bs4" style="width: 100%;" id="load_doctor">
+                                                @role('Clinic Admin')
+                                                    <option value=""></option>
+                                                    @foreach ($doctors as $id => $item)
+                                                        <option value="{{ $id }}"
+                                                            {{ old('doctor_id') == $id ? 'selected' : '' }}>
+                                                            {{ $item }}</option>
+                                                    @endforeach
+                                                @endrole
                                             </select>
                                             @if ($errors->has('doctor_id'))
-                                                <span class="text-danger text-left">{{ $errors->first('doctor_id') }}</span>
+                                                <span
+                                                    class="text-danger text-left">{{ $errors->first('doctor_id') }}</span>
                                             @endif
                                         </div>
                                         <div class="form-group">
@@ -92,6 +106,14 @@
                                                 patient</a>
                                             <select name="patient_id" data-placeholder="Search" data-allow-clear="true"
                                                 class="form-control select2bs4" style="width: 100%;" id="load_patient">
+                                                @role('Clinic Admin')
+                                                    <option value=""></option>
+                                                    @foreach ($patients as $id => $item)
+                                                        <option value="{{ $id }}"
+                                                            {{ old('patient_id') == $id ? 'selected' : '' }}>
+                                                            {{ $item }}</option>
+                                                    @endforeach
+                                                @endrole
                                             </select>
                                             @if ($errors->has('patient_id'))
                                                 <span

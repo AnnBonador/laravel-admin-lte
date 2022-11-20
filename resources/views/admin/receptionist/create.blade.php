@@ -26,7 +26,7 @@
                 <div class="col-md-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">Receptionist Create
-                            <a href="{{ route('doctors.index') }}" class="btn btn-sm btn-danger float-right"> Back</a>
+                            <a href="{{ route('receptionist.index') }}" class="btn btn-sm btn-danger float-right"> Back</a>
                         </div>
                         <div class="card-body">
                             @include('layouts.partials.messages')
@@ -60,22 +60,27 @@
                                             <span class="text-danger text-left">{{ $errors->first('email') }}</span>
                                         @endif
                                     </div>
-                                    <div class="form-group col-sm-4">
-                                        <label for="">Select Clinic</label>
-                                        <span class="text-danger">*</span>
-                                        <select name="clinic_id" data-placeholder="Search" data-allow-clear="true"
-                                            class="form-control select2bs4" style="width: 100%;">
-                                            <option selected="selected"></option>
-                                            @foreach ($clinic as $id => $item)
-                                                <option value="{{ $id }}"
-                                                    {{ old('clinic_id') == $id ? 'selected' : '' }}>
-                                                    {{ $item }}</option>
-                                            @endforeach
-                                        </select>
-                                        @if ($errors->has('clinic_id'))
-                                            <span class="text-danger text-left">{{ $errors->first('clinic_id') }}</span>
-                                        @endif
-                                    </div>
+                                    @role('Clinic Admin')
+                                        <input type="hidden" name="clinic_id" value="{{ Auth::user()->isClinicAdmin }}">
+                                    @endrole
+                                    @role('Super-Admin')
+                                        <div class="form-group col-sm-4">
+                                            <label for="">Select Clinic</label>
+                                            <span class="text-danger">*</span>
+                                            <select name="clinic_id" data-placeholder="Search" data-allow-clear="true"
+                                                class="form-control select2bs4" style="width: 100%;">
+                                                <option selected="selected"></option>
+                                                @foreach ($clinic as $id => $item)
+                                                    <option value="{{ $id }}"
+                                                        {{ old('clinic_id') == $id ? 'selected' : '' }}>
+                                                        {{ $item }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('clinic_id'))
+                                                <span class="text-danger text-left">{{ $errors->first('clinic_id') }}</span>
+                                            @endif
+                                        </div>
+                                    @endrole
                                     <div class="form-group col-sm-4">
                                         <label for="">Contact No.</label>
                                         <span class="text-danger">*</span>

@@ -33,27 +33,40 @@
                             <form action="{{ route('schedules.store') }}" method="POST">
                                 @csrf
                                 <div class="row mb-4">
-                                    <div class="form-group col-sm-4">
-                                        <label for="">Select Clinic</label>
-                                        <span class="text-danger">*</span>
-                                        <select name="clinic_id" data-placeholder="Search" data-allow-clear="true"
-                                            class="form-control select2bs4" style="width: 100%;" id="load_clinic">
-                                            <option selected="selected"></option>
-                                            @foreach ($clinic as $id => $item)
-                                                <option value="{{ $id }}"
-                                                    {{ old('clinic_id') == $id ? 'selected' : '' }}>
-                                                    {{ $item }}</option>
-                                            @endforeach
-                                        </select>
-                                        @if ($errors->has('clinic_id'))
-                                            <span class="text-danger text-left">{{ $errors->first('clinic_id') }}</span>
-                                        @endif
-                                    </div>
+                                    @role('Clinic Admin')
+                                        <input type="hidden" name="clinic_id" value="{{ Auth::user()->isClinicAdmin }}">
+                                    @endrole
+                                    @role('Super-Admin')
+                                        <div class="form-group col-sm-4">
+                                            <label for="">Select Clinic</label>
+                                            <span class="text-danger">*</span>
+                                            <select name="clinic_id" data-placeholder="Search" data-allow-clear="true"
+                                                class="form-control select2bs4" style="width: 100%;" id="load_clinic">
+                                                <option selected="selected"></option>
+                                                @foreach ($clinic as $id => $item)
+                                                    <option value="{{ $id }}"
+                                                        {{ old('clinic_id') == $id ? 'selected' : '' }}>
+                                                        {{ $item }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('clinic_id'))
+                                                <span class="text-danger text-left">{{ $errors->first('clinic_id') }}</span>
+                                            @endif
+                                        </div>
+                                    @endrole
                                     <div class="form-group col-sm-4">
                                         <label for="">Select Doctor</label>
                                         <span class="text-danger">*</span>
                                         <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
                                             class="form-control select2bs4" style="width: 100%;" id="load_doctor">
+                                            @role('Clinic Admin')
+                                                <option value=""></option>
+                                                @foreach ($doctors as $id => $item)
+                                                    <option value="{{ $id }}"
+                                                        {{ old('doctor_id') == $id ? 'selected' : '' }}>
+                                                        {{ $item }}</option>
+                                                @endforeach
+                                            @endrole
                                         </select>
                                         @if ($errors->has('doctor_id'))
                                             <span class="text-danger text-left">{{ $errors->first('doctor_id') }}</span>
@@ -115,8 +128,9 @@
                                         <label for="">End Time</label>
                                         <span class="text-danger">*</span>
                                         <div class="input-group date" id="endTime" data-target-input="nearest">
-                                            <input type="text" name="end_time" class="form-control datetimepicker-input"
-                                                data-target="#endTime" value="{{ old('end_time') }}" />
+                                            <input type="text" name="end_time"
+                                                class="form-control datetimepicker-input" data-target="#endTime"
+                                                value="{{ old('end_time') }}" />
                                             <div class="input-group-append" data-target="#endTime"
                                                 data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="far fa-clock"></i></div>

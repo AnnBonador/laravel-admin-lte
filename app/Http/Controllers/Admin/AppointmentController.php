@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Admin;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Clinic;
-use App\Models\Doctor;
-use App\Models\Patient;
 use App\Models\Treated;
 use App\Models\Schedule;
 use App\Models\Services;
@@ -22,26 +20,47 @@ class AppointmentController extends Controller
 {
     public function all()
     {
-        $appointments = Appointment::orderBy('schedule_id', 'desc')->get();
+        if (auth()->user()->hasRole('Super-Admin')) {
+            $appointments = Appointment::orderBy('schedule_id', 'desc')->get();
+        } else if (auth()->user()->hasRole('Clinic Admin')) {
+            $appointments = Appointment::where('clinic_id', auth()->user()->isClinicAdmin)->orderBy('schedule_id', 'desc')->get();
+        }
         return view('admin.appointment.all', compact('appointments'));
     }
 
     public function past()
     {
-        $appointments = Appointment::orderBy('schedule_id', 'desc')->get();
+        if (auth()->user()->hasRole('Super-Admin')) {
+            $appointments = Appointment::orderBy('schedule_id', 'desc')->get();
+        } else if (auth()->user()->hasRole('Clinic Admin')) {
+            $appointments = Appointment::where('clinic_id', auth()->user()->isClinicAdmin)->orderBy('schedule_id', 'desc')->get();
+        }
         return view('admin.appointment.past', compact('appointments'));
     }
 
     public function index()
     {
-        $appointments = Appointment::orderBy('schedule_id', 'desc')->get();
+        if (auth()->user()->hasRole('Super-Admin')) {
+            $appointments = Appointment::orderBy('schedule_id', 'desc')->get();
+        } else if (auth()->user()->hasRole('Clinic Admin')) {
+            $appointments = Appointment::where('clinic_id', auth()->user()->isClinicAdmin)->orderBy('schedule_id', 'desc')->get();
+        }
         return view('admin.appointment.index', compact('appointments'));
     }
 
     public function create()
     {
+        $doctors = User::where('type', '2')->where('clinic_id', auth()->user()->isClinicAdmin)
+            ->where('status', '1')
+            ->get()
+            ->pluck('full_name', 'id');
+        $patients = User::where('type', '0')->where('clinic_id', auth()->user()->isClinicAdmin)
+            ->where('status', '1')
+            ->get()
+            ->pluck('full_name', 'id');
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
-        return view('admin.appointment.create', compact('clinic'));
+
+        return view('admin.appointment.create', compact('clinic', 'doctors', 'patients'));
     }
 
     public function store(AppointmentStoreRequest $request)

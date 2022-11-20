@@ -35,15 +35,17 @@
                           </p>
                       </a>
                   </li>
-                  <li class="nav-item">
-                      <a href="{{ route('clinics.index') }}"
-                          class="nav-link {{ request()->routeIs('clinics.*') ? 'active' : '' }}">
-                          <i class="nav-icon fas fa-clinic-medical"></i>
-                          <p>
-                              Clinics
-                          </p>
-                      </a>
-                  </li>
+                  @role('Super-Admin')
+                      <li class="nav-item">
+                          <a href="{{ route('clinics.index') }}"
+                              class="nav-link {{ request()->routeIs('clinics.*') ? 'active' : '' }}">
+                              <i class="nav-icon fas fa-clinic-medical"></i>
+                              <p>
+                                  Clinics
+                              </p>
+                          </a>
+                      </li>
+                  @endrole
                   <li class="nav-item">
                       <a href="{{ route('patients.index') }}"
                           class="nav-link {{ request()->routeIs('patients.*') ? 'active' : '' }}">

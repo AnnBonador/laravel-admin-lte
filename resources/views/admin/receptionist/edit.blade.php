@@ -62,21 +62,26 @@
                                             <span class="text-danger text-left">{{ $errors->first('email') }}</span>
                                         @endif
                                     </div>
-                                    <div class="form-group col-sm-4">
-                                        <label for="">Select Clinic</label>
-                                        <select name="clinic_id" data-placeholder="Search" data-allow-clear="true"
-                                            class="form-control select2bs4" style="width: 100%;">
-                                            <option selected="selected"></option>
-                                            @foreach ($clinic as $id => $item)
-                                                <option value="{{ $id }}"
-                                                    {{ $receptionist->clinic_id == $id ? 'selected' : '' }}>
-                                                    {{ $item }}</option>
-                                            @endforeach
-                                        </select>
-                                        @if ($errors->has('clinic_id'))
-                                            <span class="text-danger text-left">{{ $errors->first('clinic_id') }}</span>
-                                        @endif
-                                    </div>
+                                    @role('Clinic Admin')
+                                        <input type="hidden" name="clinic_id" value="{{ $receptionist->clinic_id }}">
+                                    @endrole
+                                    @role('Super-Admin')
+                                        <div class="form-group col-sm-4">
+                                            <label for="">Select Clinic</label>
+                                            <select name="clinic_id" data-placeholder="Search" data-allow-clear="true"
+                                                class="form-control select2bs4" style="width: 100%;">
+                                                <option selected="selected"></option>
+                                                @foreach ($clinic as $id => $item)
+                                                    <option value="{{ $id }}"
+                                                        {{ $receptionist->clinic_id == $id ? 'selected' : '' }}>
+                                                        {{ $item }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('clinic_id'))
+                                                <span class="text-danger text-left">{{ $errors->first('clinic_id') }}</span>
+                                            @endif
+                                        </div>
+                                    @endrole
                                     <div class="form-group col-sm-4">
                                         <label for="">Contact No.</label>
                                         <span class="text-danger">*</span>
@@ -121,8 +126,9 @@
                                         <label>Gender</label>
                                         <span class="text-danger">*</span>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" value="Male" id="male"
-                                                name="gender" {{ $receptionist->gender == 'Male' ? 'checked' : '' }}>
+                                            <input class="custom-control-input" type="radio" value="Male"
+                                                id="male" name="gender"
+                                                {{ $receptionist->gender == 'Male' ? 'checked' : '' }}>
                                             <label class="custom-control-label" for="male">Male</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">

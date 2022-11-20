@@ -74,12 +74,21 @@ class HomeController extends Controller
      */
     public function adminHome()
     {
-        $total_patients = User::where('type', '0')->count();
-        $total_doctors = User::where('type', '2')->count();
-        $total_appointments = Appointment::where('status', '!=', 'Completed')->count();
-        $appointment = Appointment::orderBy('schedule_id', 'desc')->get();
-        $revenue = Transaction::all();
-        $total_earnings = $revenue->sum('amount');
+        if (auth()->user()->hasRole('Super-Admin')) {
+            $total_patients = User::where('type', '0')->count();
+            $total_doctors = User::where('type', '2')->count();
+            $total_appointments = Appointment::where('status', '!=', 'Completed')->count();
+            $appointment = Appointment::orderBy('schedule_id', 'asc')->get();
+            $revenue = Transaction::all();
+            $total_earnings = $revenue->sum('amount');
+        } else if (auth()->user()->hasRole('Clinic Admin')) {
+            $total_patients = User::where('type', '0')->where('clinic_id', auth()->user()->isClinicAdmin)->count();
+            $total_doctors = User::where('type', '2')->where('clinic_id', auth()->user()->isClinicAdmin)->count();
+            $total_appointments = Appointment::where('status', '!=', 'Completed')->where('clinic_id', auth()->user()->isClinicAdmin)->count();
+            $appointment = Appointment::orderBy('schedule_id', 'asc')->where('clinic_id', auth()->user()->isClinicAdmin)->get();
+            $revenue = Transaction::where('clinic_id', auth()->user()->isClinicAdmin)->get();
+            $total_earnings = $revenue->sum('amount');
+        }
         return view('admin.dashboard', compact('total_patients', 'total_doctors', 'total_appointments', 'appointment', 'total_earnings'));
     }
 

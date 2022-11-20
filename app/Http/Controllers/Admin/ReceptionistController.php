@@ -17,7 +17,11 @@ class ReceptionistController extends Controller
 {
     public function index()
     {
-        $receptionists = User::where('type', '3')->get();
+        if (auth()->user()->hasRole('Super-Admin')) {
+            $receptionists = User::where('type', '3')->get();
+        } else if (auth()->user()->hasRole('Clinic Admin')) {
+            $receptionists = User::where('type', '3')->where('clinic_id', auth()->user()->isClinicAdmin)->get();
+        }
         return view('admin.receptionist.index', compact('receptionists'));
     }
 

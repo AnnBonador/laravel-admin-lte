@@ -20,7 +20,11 @@ class ServicesController extends Controller
 
     public function create()
     {
-        $doctor = User::where('type', '2')->where('status', '1')->get()->pluck('full_name', 'id');
+        if (auth()->user()->hasRole('Super-Admin')) {
+            $doctor = User::where('type', '2')->where('status', '1')->get()->pluck('full_name', 'id');
+        } else if (auth()->user()->hasRole('Clinic Admin')) {
+            $doctor = User::where('type', '2')->where('status', '1')->where('clinic_id', auth()->user()->isClinicAdmin)->get()->pluck('full_name', 'id');
+        }
         $service_cat = ServiceCategory::pluck('name', 'id');
         return view('admin.service.create', compact('doctor', 'service_cat'));
     }

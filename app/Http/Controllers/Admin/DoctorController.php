@@ -20,7 +20,11 @@ class DoctorController extends Controller
 {
     public function index()
     {
-        $doctor = User::where('type', '2')->get();
+        if (auth()->user()->hasRole('Super-Admin')) {
+            $doctor = User::where('type', '2')->get();
+        } else if (auth()->user()->hasRole('Clinic Admin')) {
+            $doctor = User::where('type', '2')->where('clinic_id', auth()->user()->isClinicAdmin)->get();
+        }
         return view('admin.doctor.index', compact('doctor'));
     }
 

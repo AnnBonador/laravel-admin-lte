@@ -18,14 +18,23 @@ class ScheduleController extends Controller
 {
     public function index()
     {
-        $schedule = Schedule::all();
+        if (auth()->user()->hasRole('Super-Admin')) {
+            $schedule = Schedule::all();
+        } else if (auth()->user()->hasRole('Clinic Admin')) {
+            $schedule = Schedule::where('clinic_id', auth()->user()->isClinicAdmin)->get();
+        }
         return view('admin.schedule.index', compact('schedule'));
     }
 
     public function create()
     {
+        if (auth()->user()->hasRole('Super-Admin')) {
+            $doctors = User::where('type', '2')->where('status', '1')->get()->pluck('full_name', 'id');
+        } else if (auth()->user()->hasRole('Clinic Admin')) {
+            $doctors = User::where('type', '2')->where('status', '1')->where('clinic_id', auth()->user()->isClinicAdmin)->get()->pluck('full_name', 'id');
+        }
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
-        return view('admin.schedule.create', compact('clinic'));
+        return view('admin.schedule.create', compact('clinic', 'doctors'));
     }
 
     public function getDoctor(Request $request)
