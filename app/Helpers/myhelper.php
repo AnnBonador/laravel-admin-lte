@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Clinic;
 use App\Models\User;
 use App\Models\Doctor;
 use App\Models\Setting;
@@ -21,6 +22,10 @@ function email()
 function logo()
 {
     return Setting::value('logo');
+}
+function icon()
+{
+    return Setting::value('favicon');
 }
 function generatePass()
 {
@@ -45,11 +50,16 @@ function getFooter()
 }
 function viewDoctors()
 {
-    $doctors = User::where('type', '2')->where('status', '1')->get();
+    $doctors = User::role('Doctor')->where('status', '1')->get();
     return $doctors;
 }
 
 function doctorHelper()
 {
-    return User::where('type', '2')->where('status', '1')->get()->pluck('full_name', 'id');
+    return User::role('Doctor')->where('status', '1')->get()->pluck('full_name', 'id');
+}
+
+function getClinics()
+{
+    return Clinic::where('status', '1')->get();
 }

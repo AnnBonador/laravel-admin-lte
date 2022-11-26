@@ -14,7 +14,7 @@ class FetchController extends Controller
     public function getDoctor(Request $request)
     {
         $id = $request->clinic_id;
-        $doctor = User::where('type', '2')->where('clinic_id', $id)->where('status', '1')->get()->pluck('full_name', 'id');
+        $doctor = User::role('Doctor')->where('clinic_id', $id)->where('status', '1')->get()->pluck('full_name', 'id');
         return response()->json($doctor);
     }
 

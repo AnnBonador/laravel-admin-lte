@@ -12,11 +12,11 @@ class Services extends Model
 
     public function service_category()
     {
-        return $this->belongsTo(ServiceCategory::class, 'service_cid', 'id');
+        return $this->belongsTo(ServiceCategory::class, 'service_cid', 'id')->withDefault();
     }
 
     public function doctors()
     {
-        return $this->belongsTo(User::class, 'doctor_id', 'id');
+        return $this->belongsTo(User::class, 'doctor_id', 'id')->withDefault();
     }
 }

@@ -13,13 +13,19 @@ class PrescriptionController extends Controller
 {
     public function index()
     {
-        $prescriptions = Prescription::all();
+        if (auth()->user()->hasRole('Super-Admin')) {
+            $prescriptions = Prescription::all();
+        } else if (auth()->user()->hasRole('Clinic Admin')) {
+            $prescriptions = Prescription::where('clinic_id', auth()->user()->isClinicAdmin)->get();
+        } else if (auth()->user()->hasRole('Doctor')) {
+            $prescriptions = Prescription::where('doctor_id', auth()->id())->where('clinic_id', auth()->user()->clinic_id)->get();
+        }
         return view('admin.prescription.index', compact('prescriptions'));
     }
 
     public function create()
     {
-        $doctors = User::where('type', '2')->where('clinic_id', auth()->user()->isClinicAdmin)
+        $doctors = User::role('Doctor')->where('clinic_id', auth()->user()->isClinicAdmin)
             ->where('status', '1')
             ->get()
             ->pluck('full_name', 'id');
@@ -28,6 +34,9 @@ class PrescriptionController extends Controller
             ->get()
             ->pluck('full_name', 'id');
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
+        if (auth()->user()->hasRole('Doctor')) {
+            $clinic = Clinic::where('status', '1')->where('id', auth()->user()->clinic_id)->pluck('name', 'id');
+        }
         return view('admin.prescription.create', compact('clinic', 'doctors', 'patients', 'doctors'));
     }
 
@@ -42,7 +51,11 @@ class PrescriptionController extends Controller
         $prescription = Prescription::find($id);
         $clinics = Clinic::where('status', '1')->pluck('name', 'id');
         $patients = User::where('type', '0')->where('status', '1')->get()->pluck('full_name', 'id');
-        $doctors = User::where('type', '2')->where('status', '1')->where('clinic_id', $prescription->clinic_id)->get()->pluck('fullname', 'id');
+        $doctors = User::role('Doctor')->where('status', '1')->where('clinic_id', $prescription->clinic_id)->get()->pluck('fullname', 'id');
+        if (auth()->user()->hasRole('Doctor')) {
+            $clinics = Clinic::where('status', '1')->where('id', auth()->user()->clinic_id)->pluck('name', 'id');
+            $patients = User::where('type', '0')->where('status', '1')->where('clinic_id', auth()->user()->clinic_id)->get()->pluck('full_name', 'id');
+        }
         return view("admin.prescription.edit", compact('prescription', 'clinics', 'patients', 'doctors'));
     }
 
@@ -59,5 +72,11 @@ class PrescriptionController extends Controller
         $prescription = Prescription::find($request->delete_id);
         $prescription->delete();
         return redirect()->route('prescription.index')->with('success', 'Prescription deleted successfully');
+    }
+
+    public function print($id)
+    {
+        $prescription = Prescription::findOrFail($id);
+        return view('admin.prescription.pdf', compact('prescription'));
     }
 }

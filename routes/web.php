@@ -15,15 +15,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'redirectUser'])->name('home');
 
-Route::controller(App\Http\Controllers\AuthController::class)->group(function () {
-    Route::get('login', 'index')->name('login');
-    Route::post('post-login', 'postLogin')->name('login.post');
-    Route::post('logout',  'logout')->name('logout');
-});
 Route::controller(App\Http\Controllers\ForgotPasswordController::class)->group(function () {
     Route::get('forget-password',  'showForgetPasswordForm')->name('forget.password.get');
     Route::post('forget-password',  'submitForgetPasswordForm')->name('forget.password.post');
@@ -36,9 +31,12 @@ Route::controller(App\Http\Controllers\ForgotPasswordController::class)->group(f
 All Admin Routes List
 --------------------------------------------
 --------------------------------------------*/
-Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'verified', 'user-access:admin'])->group(function () {
 
-    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.dashboard');
+    Route::controller(App\Http\Controllers\HomeController::class)->group(function () {
+        Route::get('/dashboard', 'adminHome')->name('admin.dashboard');
+        Route::get('/dashboard/{id}', 'adminShow')->name('admin.dashboard.show');
+    });
 
     Route::controller(App\Http\Controllers\Admin\ClinicsController::class)->group(function () {
         Route::get('/clinics',  'index')->name('clinics.index');
@@ -119,6 +117,7 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
         Route::get('/prescription/{id}/edit', 'edit')->name('prescription.edit');
         Route::put('/prescription/{id}', 'update')->name('prescription.update');
         Route::post('/prescription/delete', 'destroy')->name('prescription.delete');
+        Route::get('/print-prescription/{id}', 'print')->name('print-prescription');
     });
     Route::controller(App\Http\Controllers\Admin\TreatedController::class)->group(function () {
         Route::get('/treated', 'index')->name('treated.index');
@@ -169,6 +168,19 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
         Route::put('/roles/{id}', 'update')->name('roles.update');
         Route::post('/roles/delete', 'destroy')->name('roles.delete');
     });
+
+    Route::controller(App\Http\Controllers\Admin\ProfileController::class)->group(function () {
+        Route::get('/profile', 'index')->name('change.profile');
+        Route::put('/profile-clinic/{id}', 'updateClinicAdmin')->name('update.clinic.profile');
+        Route::put('/profile-doctor/{id}', 'updateDoctor')->name('update.doctor.profile');
+        Route::put('/profile-admni/{id}', 'updateAdmin')->name('update.admin.profile');
+    });
+    Route::controller(App\Http\Controllers\Admin\ReviewsController::class)->group(function () {
+        Route::get('/reviews', 'index')->name('reviews');
+    });
+    Route::controller(App\Http\Controllers\Admin\MedicalReportController::class)->group(function () {
+        Route::get('/reports', 'index')->name('reports');
+    });
 });
 
 /*------------------------------------------
@@ -176,7 +188,7 @@ Route::prefix('admin')->middleware(['auth', 'user-access:admin'])->group(functio
 All Normal Users Routes List
 --------------------------------------------
 --------------------------------------------*/
-Route::prefix('user')->middleware(['auth', 'user-access:user'])->group(function () {
+Route::prefix('user')->middleware(['auth', 'verified', 'user-access:user'])->group(function () {
 
     Route::controller(App\Http\Controllers\HomeController::class)->group(function () {
         Route::get('/dashboard', 'index')->name('user.dashboard');
@@ -214,22 +226,20 @@ Route::prefix('user')->middleware(['auth', 'user-access:user'])->group(function 
     Route::controller(App\Http\Controllers\User\PrescriptionController::class)->group(function () {
         Route::get('/prescription', 'index')->name('user.prescription.index');
     });
-});
 
-
-
-Route::prefix('doctor')->middleware(['auth', 'user-access:doctor'])->group(function () {
-
-    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'doctorHome'])->name('doctor.dashboard');
-});
-
-Route::prefix('receptionist')->middleware(['auth', 'user-access:receptionist'])->group(function () {
-
-    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'receptionistHome'])->name('receptionist.dashboard');
+    Route::controller(App\Http\Controllers\User\ProfileController::class)->group(function () {
+        Route::get('/profile', 'index')->name('user.profile');
+        Route::put('/profile-update/{id}', 'update')->name('profileuser.update');
+    });
+    Route::controller(App\Http\Controllers\User\ChangePasswordController::class)->group(function () {
+        Route::get('/change-password', 'index')->name('user.change-password');
+        Route::post('/change-password', 'store')->name('user.store-password');
+    });
 });
 
 Route::controller(App\Http\Controllers\Front\FrontEndController::class)->group(function () {
     Route::get('/', 'homepage')->name('home.page');
     Route::get('/dentist', 'dentist')->name('dentist.page');
-    Route::get('/clinics', 'clinics')->name('clinics.page');
+    Route::get('/clinic-profile/{id}', 'clinicProfile')->name('clinics.profile');
+    Route::get('/doctor-profile/{id}', 'doctorProfile')->name('doctor.profile');
 });

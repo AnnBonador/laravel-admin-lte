@@ -2,17 +2,27 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Treated;
+use App\Models\Transaction;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TreatedRequest;
-use App\Models\Transaction;
-use App\Models\Treated;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 class TreatedController extends Controller
 {
     public function index()
     {
         $treated = Treated::all();
+        if (auth()->user()->hasRole('Doctor')) {
+            $treated = Treated::whereHas('appointment', function (Builder $query) {
+                $query->where('doctor_id', '=', auth()->id());
+            })->get();
+        } else if (auth()->user()->hasRole('Receptionist') || auth()->user()->hasRole('Clinic Admin')) {
+            $treated = Treated::whereHas('appointment', function (Builder $query) {
+                $query->where('clinic_id', '=', auth()->user()->clinic_id);
+            })->get();
+        }
         return view('admin.treated.index', compact('treated'));
     }
     public function edit($id)

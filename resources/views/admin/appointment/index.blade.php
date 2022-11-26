@@ -69,7 +69,8 @@
                                                         @endif
                                                         <small>Payment: {{ $data->payment_option }}</small>
                                                     </td>
-                                                    <td>{{ $data->start_time . ' - ' . $data->end_time }}</td>
+                                                    <td class="text-primary">
+                                                        {{ $data->start_time . ' - ' . $data->end_time }}</td>
                                                     <td>
                                                         {{ implode(', ', $data->service) }}
                                                     </td>

@@ -16,12 +16,46 @@
 
                 <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static"
                     aria-expanded="false">
-                    <img src="{{ asset('admin-assets/dist/img/user2-160x160.jpg') }}"
-                        class="user-image img-circle elevation-2" alt="User Image">
+                    @role('Super-Admin')
+                        @if (!empty(Auth::user()->image))
+                            <img src="{{ asset('uploads/admin/' . Auth::user()->image) }}"
+                                class="user-image img-circle elevation-2" alt="User Image">
+                        @else
+                            <img src="{{ asset('admin-assets/dist/img/male.png') }}"
+                                class="user-image img-circle elevation-2" alt="User Image">
+                        @endif
+                    @endrole
+                    @role('Receptionist')
+                        @if (!empty(Auth::user()->image))
+                            <img src="{{ asset('uploads/receptionist/' . Auth::user()->image) }}"
+                                class="user-image img-circle elevation-2" alt="User Image">
+                        @else
+                            <img src="{{ asset('admin-assets/dist/img/male.png') }}"
+                                class="user-image img-circle elevation-2" alt="User Image">
+                        @endif
+                    @endrole
+                    @role('Clinic Admin')
+                        @if (!empty(Auth::user()->image))
+                            <img src="{{ asset('uploads/admin/' . Auth::user()->image) }}"
+                                class="user-image img-circle elevation-2" alt="User Image">
+                        @else
+                            <img src="{{ asset('admin-assets/dist/img/male.png') }}"
+                                class="user-image img-circle elevation-2" alt="User Image">
+                        @endif
+                    @endrole
+                    @role('Doctor')
+                        @if (!empty(Auth::user()->image))
+                            <img src="{{ asset('uploads/doctor/' . Auth::user()->image) }}"
+                                class="user-image img-circle elevation-2" alt="User Image">
+                        @else
+                            <img src="{{ asset('admin-assets/dist/img/male.png') }}"
+                                class="user-image img-circle elevation-2" alt="User Image">
+                        @endif
+                    @endrole
                     {{ Auth::user()->fname }}
                 </a>
                 <ul class="dropdown-menu dropdown-menu-lg-end">
-                    <li><a href="" class="dropdown-item">Profile</a></li>
+                    <li><a href="{{ route('change.profile') }}" class="dropdown-item">Profile</a></li>
                     <li><a href="{{ route('change.password.index') }}" class="dropdown-item">Change Password</a></li>
                     <li><a href="{{ route('logout') }}" class="dropdown-item"
                             onclick="event.preventDefault();

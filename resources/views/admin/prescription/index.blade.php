@@ -71,6 +71,9 @@
                                             <td>
                                                 <a href="{{ route('prescription.edit', $data->id) }}"
                                                     class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
+                                                <a href="{{ route('print-prescription', $data->id) }}" rel="noopener"
+                                                    target="_blank" class="btn btn-sm btn-default"><i
+                                                        class="fas fa-print"></i> </a>
 
                                                 <button type="button" class="btn btn-sm btn-danger deleteRecordbtn"
                                                     value="{{ $data->id }}"><i class="fa fa-trash"></i></button>

@@ -20,12 +20,8 @@ class AuthController extends Controller
 
     public function RedirectsUsers()
     {
-        if (Auth::user()->type == '1') {
+        if (Auth::user()->type == 'admin') {
             return redirect()->route('admin.dashboard');
-        } else if (auth()->user()->type == '2') {
-            return redirect()->route('doctor.dashboard');
-        } else if (auth()->user()->type == '3') {
-            return redirect()->route('receptionist.dashboard');
         } else {
             return redirect()->route('user.dashboard');
         }
@@ -72,10 +68,6 @@ class AuthController extends Controller
                 return redirect()->route('admin.dashboard');
             } else if (auth()->user()->type == 'user') {
                 return redirect()->route('user.dashboard');
-            } else if (auth()->user()->type == 'doctor') {
-                return redirect()->route('doctor.dashboard');
-            } else if (auth()->user()->type == 'receptionist') {
-                return redirect()->route('receptionist.dashboard');
             } else {
                 return redirect()->route('home');
             }

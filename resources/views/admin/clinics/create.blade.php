@@ -30,7 +30,7 @@
                         </div>
                         <div class="card-body">
                             @include('layouts.partials.messages')
-                            <form action="{{ route('clinics.store') }}" method="POST">
+                            <form action="{{ route('clinics.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row mb-4">
                                     <div class="form-group col-sm-4">
@@ -121,6 +121,13 @@
                                             <span class="text-danger text-left">{{ $errors->first('city') }}</span>
                                         @endif
                                     </div>
+                                    <div class="form-group col-sm-4">
+                                        <label>Clinic Image</label>
+                                        <input type="file" name="clinic_image" class="form-control">
+                                        @if ($errors->has('clinic_image'))
+                                            <span class="text-danger">{{ $errors->first('clinic_image') }}</span>
+                                        @endif
+                                    </div>
                                 </div>
                                 <hr>
                                 <h4 class="text-primary">Clinic Admin Panel</h4>
@@ -191,6 +198,13 @@
                                         </select>
                                         @if ($errors->has('gender'))
                                             <span class="text-danger text-left">{{ $errors->first('gender') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label>Admin Profile Image</label>
+                                        <input type="file" name="admin_image" class="form-control">
+                                        @if ($errors->has('admin_image'))
+                                            <span class="text-danger">{{ $errors->first('admin_image') }}</span>
                                         @endif
                                     </div>
                                 </div>

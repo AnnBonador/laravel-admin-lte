@@ -14,6 +14,6 @@ class Specialization extends Model
 
     public function clinic()
     {
-        return $this->hasManyJson(Clinic::class, 'specialization_id');
+        return $this->hasManyJson(Clinic::class, 'specialization_id')->withDefault();
     }
 }

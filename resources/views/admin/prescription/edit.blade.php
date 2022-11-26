@@ -37,7 +37,10 @@
                                     @role('Clinic Admin')
                                         <input type="hidden" name="clinic_id" value="{{ $prescription->clinic_id }}">
                                     @endrole
-                                    @role('Super-Admin')
+                                    @role('Doctor')
+                                        <input type="hidden" name="doctor_id" value="{{ $prescription->doctor_id }}">
+                                    @endrole
+                                    @hasanyrole('Super-Admin|Doctor')
                                         <div class="form-group col-sm-4">
                                             <label for="">Clinic</label>
                                             <span class="text-danger">*</span>
@@ -54,22 +57,24 @@
                                                 <span class="text-danger text-left">{{ $errors->first('clinic_id') }}</span>
                                             @endif
                                         </div>
-                                    @endrole
-                                    <div class="form-group col-sm-4">
-                                        <label for="">Doctor</label>
-                                        <span class="text-danger">*</span>
-                                        <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
-                                            class="form-control select2bs4" style="width: 100%;" id="load_doctor">
-                                            @foreach ($doctors as $id => $item)
-                                                <option value="{{ $id }}"
-                                                    {{ $prescription->doctor_id == $id ? 'selected' : '' }}>
-                                                    {{ $item }}</option>
-                                            @endforeach
-                                        </select>
-                                        @if ($errors->has('doctor_id'))
-                                            <span class="text-danger text-left">{{ $errors->first('doctor_id') }}</span>
-                                        @endif
-                                    </div>
+                                    @endhasanyrole
+                                    @unlessrole('Doctor')
+                                        <div class="form-group col-sm-4">
+                                            <label for="">Doctor</label>
+                                            <span class="text-danger">*</span>
+                                            <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
+                                                class="form-control select2bs4" style="width: 100%;" id="load_doctor">
+                                                @foreach ($doctors as $id => $item)
+                                                    <option value="{{ $id }}"
+                                                        {{ $prescription->doctor_id == $id ? 'selected' : '' }}>
+                                                        {{ $item }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('doctor_id'))
+                                                <span class="text-danger text-left">{{ $errors->first('doctor_id') }}</span>
+                                            @endif
+                                        </div>
+                                    @endunlessrole
                                     <div class="form-group col-sm-4">
                                         <label for="">Patient</label>
                                         <span class="text-danger">*</span>

@@ -25,26 +25,25 @@ class Appointment extends Model
 
     public function patient()
     {
-        return $this->belongsTo(Patient::class, 'patient_id', 'id');
+        return $this->belongsTo(Patient::class, 'patient_id', 'id')->withDefault();
     }
 
     public function clinic()
     {
-        return $this->belongsTo(Clinic::class, 'clinic_id', 'id');
+        return $this->belongsTo(Clinic::class, 'clinic_id', 'id')->withDefault();
     }
 
     public function doctors()
     {
-        return $this->belongsTo(User::class, 'doctor_id', 'id');
+        return $this->belongsTo(User::class, 'doctor_id', 'id')->withDefault();
     }
     public function patients()
     {
-        return $this->belongsTo(User::class, 'patient_id', 'id');
+        return $this->belongsTo(User::class, 'patient_id', 'id')->withDefault();
     }
 
     public function schedule()
     {
-        return $this->belongsTo(Schedule::class, 'schedule_id', 'id');
+        return $this->belongsTo(Schedule::class, 'schedule_id', 'id')->withDefault();
     }
-
 }

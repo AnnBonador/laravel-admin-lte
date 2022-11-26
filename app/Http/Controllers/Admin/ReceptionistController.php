@@ -8,6 +8,7 @@ use App\Mail\SendPassword;
 use App\Models\Receptionist;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\ReceptionistStoreRequest;
@@ -18,9 +19,9 @@ class ReceptionistController extends Controller
     public function index()
     {
         if (auth()->user()->hasRole('Super-Admin')) {
-            $receptionists = User::where('type', '3')->get();
+            $receptionists = User::role('Receptionist')->get();
         } else if (auth()->user()->hasRole('Clinic Admin')) {
-            $receptionists = User::where('type', '3')->where('clinic_id', auth()->user()->isClinicAdmin)->get();
+            $receptionists = User::role('Receptionist')->where('clinic_id', auth()->user()->isClinicAdmin)->get();
         }
         return view('admin.receptionist.index', compact('receptionists'));
     }
@@ -46,7 +47,8 @@ class ReceptionistController extends Controller
         $receptionist->country = $validatedData['country'];
         $receptionist->city = $validatedData['city'];
         $receptionist->status = $validatedData['status'];
-        $receptionist->type = 3;
+        $receptionist->type = 1;
+        $receptionist->assignRole('Receptionist');
 
         if ($request->hasfile('image')) {
             $file = $request->file('image');
@@ -54,7 +56,18 @@ class ReceptionistController extends Controller
             $file->move('uploads/receptionist', $filename);
             $receptionist->image = $filename;
         }
+
+        $pw = generatePass();
+        $receptionist->password = Hash::make($pw);
+
         $receptionist->save();
+
+        $mailData = [
+            'email' => $receptionist->email,
+            'password' => $pw
+        ];
+
+        Mail::to($receptionist->email)->send(new SendPassword($mailData));
 
         return redirect()->route('receptionist.index')->with('success', 'Receptionist added successfully');
     }
@@ -117,6 +130,19 @@ class ReceptionistController extends Controller
 
         Mail::to($resend->email)->send(new SendPassword($mailData));
         return redirect()->back()->with('success', 'Receptionist credential send successfully');
+    }
+
+    public function destroy(Request $request)
+    {
+        $receptionist = User::find($request->delete_id);
+        if ($receptionist->image) {
+            $image_path = public_path('uploads/receptionist/');
+            if (file_exists($image_path . $receptionist->image)) {
+                @unlink($image_path . $receptionist->image);
+            }
+        }
+        $receptionist->delete();
+        return redirect()->route('receptionist.index')->with('success', 'Receptionist deleted successfully');
     }
 
     public function updateStatus(Request $request)

@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>Admin Panel {{ isset($title) ? '| ' . $title : '' }}</title>
+    <title>{{ title() }}</title>
+    <link href="{{ asset('uploads/setting/' . icon()) }}" rel="icon">
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -43,6 +44,8 @@
     {{-- toast --}}
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/toastr/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/dist/css/custom.css') }}">
+    {{-- calendar --}}
+    <link rel="stylesheet" href="{{ asset('admin-assets/plugins/fullcalendar/fullcalendar-5.11.3.css') }}">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -124,9 +127,6 @@
     <!-- Tempusdominus Bootstrap 4 -->
     <script src="{{ asset('admin-assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}">
     </script>
-    {{-- <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.42/js/bootstrap-datetimepicker.min.js">
-    </script> --}}
     <!-- Summernote -->
     <script src="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
     <!-- overlayScrollbars -->
@@ -143,6 +143,8 @@
     <script src="{{ asset('admin-assets/plugins/inputmask/jquery.inputmask.bundle.min.js') }}"></script>
     <!-- Toastr -->
     <script src="{{ asset('admin-assets/plugins/toastr/toastr.min.js') }}"></script>
+    {{-- Calendar --}}
+    <script src="{{ asset('admin-assets/plugins/fullcalendar/fullcalendar-5.11.3.js') }}"></script>
     <script>
         $(document).ready(function() {
             toastr.options.closeMethod = 'fadeOut';

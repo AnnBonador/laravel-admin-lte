@@ -91,7 +91,7 @@ class AppointmentsController extends Controller
     {
         $appointment = Appointment::where('patient_id', Auth::id())->where('id', $id)->first();
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
-        $doctor = User::where('type', '2')->where('status', '1')->where('clinic_id', $appointment->clinic_id)->get()->pluck('fullname', 'id');
+        $doctor = User::role('Doctor')->where('status', '1')->where('clinic_id', $appointment->clinic_id)->get()->pluck('fullname', 'id');
         $service = Services::where('status', '1')->where('doctor_id', $appointment->doctor_id)->pluck('name');
         $schedule = Schedule::where('doctor_id', $appointment->doctor_id)->pluck('day', 'id');
         return view('user.appointment.edit', compact('clinic', 'appointment', 'doctor', 'service', 'schedule'));

@@ -39,7 +39,7 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Clinic Admin Email</th>
-                                        <th>Specialization</th>
+                                        <th width="10%">Specialization</th>
                                         <th>Clinic Address</th>
                                         <th>Status</th>
                                         <th>Action</th>
@@ -48,7 +48,16 @@
                                 <tbody>
                                     @foreach ($clinic as $data)
                                         <tr>
-                                            <td>{{ $data->name }}</td>
+                                            <td>
+                                                @if (!empty($data->image))
+                                                    <img alt="Avatar" class="user-image img-square"
+                                                        width="50"src="{{ asset('uploads/clinic/' . $data->image) }}">
+                                                @else
+                                                    <img alt="Avatar" class="user-image img-square"
+                                                        width="50"src="{{ asset('admin-assets/dist/img/default.png') }}">
+                                                @endif
+                                                {{ $data->name }}
+                                            </td>
                                             <td>{{ $data->email }}</td>
                                             <td>
                                                 @if ($data->users()->exists())
@@ -72,10 +81,12 @@
                                                 <a href="{{ route('clinics.edit', $data->id) }}"
                                                     class="btn btn-sm btn-success" data-toggle="tooltip"
                                                     data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
-                                                <a href="{{ route('clinicCredentials', $data->users->id) }}"
-                                                    class="btn btn-sm btn-primary"><i class="fas fa-paper-plane"
-                                                        data-toggle="tooltip" data-placement="top"
-                                                        title="Resend credentials"></i></a>
+                                                @if ($data->users()->exists())
+                                                    <a href="{{ route('clinicCredentials', $data->users->id) }}"
+                                                        class="btn btn-sm btn-primary"><i class="fas fa-paper-plane"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="Resend credentials"></i></a>
+                                                @endif
 
                                                 <button type="button" class="btn btn-sm btn-danger deleteRecordbtn"
                                                     data-toggle="tooltip" data-placement="top" title="Delete"

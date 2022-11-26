@@ -33,6 +33,9 @@
                             <form action="{{ route('services.update', $service->id) }}" method="POST">
                                 @method('PUT')
                                 @csrf
+                                @role('Doctor')
+                                    <input type="hidden" name="doctor_id" value="{{ $service->doctor_id }}">
+                                @endrole
                                 <div class="row mb-4">
                                     <div class="form-group col-sm-4">
                                         <label for="">Service category</label>
@@ -76,22 +79,24 @@
                                             <span class="text-danger text-left">{{ $errors->first('charges') }}</span>
                                         @endif
                                     </div>
-                                    <div class="form-group col-sm-4">
-                                        <label for="">Select Doctor</label>
-                                        <span class="text-danger">*</span>
-                                        <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
-                                            class="form-control select2bs4" style="width: 100%;">
-                                            <option selected="selected"></option>
-                                            @foreach ($doctor as $id => $item)
-                                                <option value="{{ $id }}"
-                                                    {{ $service->doctor_id == $id ? 'selected' : '' }}>
-                                                    {{ $item }}</option>
-                                            @endforeach
-                                        </select>
-                                        @if ($errors->has('doctor_id'))
-                                            <span class="text-danger text-left">{{ $errors->first('doctor_id') }}</span>
-                                        @endif
-                                    </div>
+                                    @hasanyrole('Super-Admin|Clinic Admin')
+                                        <div class="form-group col-sm-4">
+                                            <label for="">Select Doctor</label>
+                                            <span class="text-danger">*</span>
+                                            <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
+                                                class="form-control select2bs4" style="width: 100%;">
+                                                <option selected="selected"></option>
+                                                @foreach ($doctor as $id => $item)
+                                                    <option value="{{ $id }}"
+                                                        {{ $service->doctor_id == $id ? 'selected' : '' }}>
+                                                        {{ $item }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('doctor_id'))
+                                                <span class="text-danger text-left">{{ $errors->first('doctor_id') }}</span>
+                                            @endif
+                                        </div>
+                                    @endhasanyrole
                                     <div class="form-group col-sm-4">
                                         <label>Status</label>
                                         <span class="text-danger">*</span>

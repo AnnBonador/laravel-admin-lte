@@ -12,6 +12,6 @@ class Treated extends Model
 
     public function appointment()
     {
-        return $this->belongsTo(Appointment::class, 'app_id', 'id');
+        return $this->belongsTo(Appointment::class, 'app_id', 'id')->withDefault();
     }
 }

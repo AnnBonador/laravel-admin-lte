@@ -11,12 +11,12 @@ class Doctor extends Model
 
     public function clinic()
     {
-        return $this->belongsTo(Clinic::class, 'clinic_id', 'id');
+        return $this->belongsTo(Clinic::class, 'clinic_id', 'id')->withDefault();
     }
 
     public function specialty()
     {
-        return $this->belongsTo(Specialization::class, 'specialization_id', 'id');
+        return $this->belongsTo(Specialization::class, 'specialization_id', 'id')->withDefault();
     }
 
     public function getFullNameAttribute()

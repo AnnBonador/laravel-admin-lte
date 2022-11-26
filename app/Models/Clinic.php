@@ -13,7 +13,7 @@ class Clinic extends Model
         'specialization_id' => 'json',
     ];
 
-    protected $fillable = ['name', 'email', 'contact', 'specialization_id', 'status', 'address', 'country', 'city'];
+    protected $fillable = ['name', 'email', 'contact', 'specialization_id', 'status', 'address', 'country', 'city', 'image'];
 
     public function setSpecializationAttribute($value)
     {
@@ -27,6 +27,6 @@ class Clinic extends Model
 
     public function users()
     {
-        return $this->hasOne(User::class, 'isClinicAdmin', 'id');
+        return $this->hasOne(User::class, 'isClinicAdmin', 'id')->withDefault();
     }
 }

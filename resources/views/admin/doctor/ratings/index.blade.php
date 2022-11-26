@@ -54,11 +54,12 @@
                                                         </div>
 
                                                         <div class="rated">
-                                                            @for ($i = 1; $i <= $data->star_rating; $i++)
-                                                                <input type="radio" id="star{{ $i }}"
-                                                                    class="rate" name="rating" value="5" />
-                                                                <label class="star-rating-complete"
-                                                                    title="text">{{ $i }} stars</label>
+                                                            @for ($i = 1; $i <= 5; $i++)
+                                                                @if ($data->star_rating >= $i)
+                                                                    <i class="fas fa-star text-warning"></i>
+                                                                @else
+                                                                    <i class="fas fa-star text-secondary"></i>
+                                                                @endif
                                                             @endfor
                                                         </div>
                                                         <input type="hidden" name="booking_id" value="{{ $data->id }}">
@@ -134,6 +135,22 @@
                                                 <h4 class="info-box-number text-center text-primary mb-0">
                                                     {{ number_format($five_star_score, 1) }} /
                                                     5</h4>
+
+                                                <div class="rated text-center">
+                                                    @for ($i = 0; $i < 5; $i++)
+                                                        @php
+                                                            $checkstar = $five_star_score - $i;
+                                                        @endphp
+
+                                                        @if ($checkstar >= 1)
+                                                            <i class="fas fa-star text-warning"></i>
+                                                        @elseif($checkstar < 1 && $checkstar > 0)
+                                                            <i class="fas fa-star-half-alt text-warning"></i>
+                                                        @else
+                                                            <i class="fas fa-star text-warning"></i>
+                                                        @endif
+                                                    @endfor
+                                                </div>
                                             </div>
                                         </div>
 

@@ -11,11 +11,15 @@ class ReviewRating extends Model
 
     public function patients()
     {
-        return $this->belongsTo(User::class, 'patient_id', 'id');
+        return $this->belongsTo(User::class, 'patient_id', 'id')->withDefault();
+    }
+    public function doctors()
+    {
+        return $this->belongsTo(User::class, 'doctor_id', 'id')->withDefault();
     }
 
     public function appointment()
     {
-        return $this->belongsTo(Appointment::class, 'appointment_id', 'id');
+        return $this->belongsTo(Appointment::class, 'appointment_id', 'id')->withDefault();
     }
 }

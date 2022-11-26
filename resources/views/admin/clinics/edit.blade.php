@@ -30,7 +30,8 @@
                         </div>
                         <div class="card-body">
                             @include('layouts.partials.messages')
-                            <form action="{{ route('clinics.update', $clinic->id) }}" method="POST">
+                            <form action="{{ route('clinics.update', $clinic->id) }}" method="POST"
+                                enctype="multipart/form-data">
                                 @method('PUT')
                                 @csrf
                                 <div class="row mb-4">
@@ -122,6 +123,14 @@
                                             <span class="text-danger text-left">{{ $errors->first('city') }}</span>
                                         @endif
                                     </div>
+                                    <div class="form-group col-sm-4">
+                                        <label>Clinic Image</label>
+                                        <input type="file" name="clinic_image" class="form-control">
+                                        <input type="hidden" value="{{ $clinic->image }}" name="clinic_old_image">
+                                        @if ($errors->has('clinic_image'))
+                                            <span class="text-danger">{{ $errors->first('clinic_image') }}</span>
+                                        @endif
+                                    </div>
                                 </div>
                                 <hr>
                                 <h4 class="text-primary">Clinic Admin Panel</h4>
@@ -200,6 +209,15 @@
                                         </select>
                                         @if ($errors->has('gender'))
                                             <span class="text-danger text-left">{{ $errors->first('gender') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label>Admin Profile Image</label>
+                                        <input type="file" name="admin_image" class="form-control">
+                                        <input type="hidden" value="{{ $clinic->users->image }}"
+                                            name="admin_old_image">
+                                        @if ($errors->has('admin_image'))
+                                            <span class="text-danger">{{ $errors->first('admin_image') }}</span>
                                         @endif
                                     </div>
                                 </div>

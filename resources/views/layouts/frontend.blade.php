@@ -1,59 +1,61 @@
 <!DOCTYPE html>
-<html lang="en')}}">
+<html lang="en">
 
 <head>
-    <title>{{ name() }}</title>
-    <meta charset="utf-8')}}">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no')}}">
 
-    <link href="https://fonts.googleapis.com/css?family=Work+Sans:100,200,300,400,500,600,700,800,900"
-        rel="stylesheet')}}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>{{ title() }}</title>
 
-    <link rel="stylesheet" href="{{ asset('front-assets/css/ajax-loader.gif') }}">
-    <link rel="stylesheet" href="{{ asset('front-assets/css/open-iconic-bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('front-assets/css/animate.css') }}">
+    <!-- Favicons -->
+    <link type="image/x-icon" href="{{ asset('uploads/setting/' . icon()) }}" rel="icon">
 
-    <link rel="stylesheet" href="{{ asset('front-assets/css/owl.carousel.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('front-assets/css/owl.theme.default.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('front-assets/css/magnific-popup.css') }}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ asset('front-assets/assets/css/bootstrap.min.css') }}">
+    <!-- Fancybox CSS -->
+    <link rel="stylesheet" href="{{ asset('front-assetsassets/plugins/fancybox/jquery.fancybox.min.css') }}">
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="{{ asset('front-assets/assets/plugins/fontawesome/css/fontawesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('front-assets/assets/plugins/fontawesome/css/all.min.css') }}">
 
-    <link rel="stylesheet" href="{{ asset('front-assets/css/aos.css') }}">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{{ asset('front-assets/assets/css/style.css') }}">
 
-    <link rel="stylesheet" href="{{ asset('front-assets/css/ionicons.min.css') }}">
-
-    <link rel="stylesheet" href="{{ asset('front-assets/css/bootstrap-datepicker.css') }}">
-    <link rel="stylesheet" href="{{ asset('front-assets/css/jquery.timepicker.css') }}">
-
-
-    <link rel="stylesheet" href="{{ asset('front-assets/css/flaticon.css') }}">
-    <link rel="stylesheet" href="{{ asset('front-assets/css/icomoon.css') }}">
-    <link rel="stylesheet" href="{{ asset('front-assets/css/style.css') }}">
 </head>
 
 <body>
-    @include('layouts.inc.front.navbar')
 
-    @yield('content')
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
 
-    @include('layouts.inc.front.footer')
+        <!-- Header -->
+        <header class="header">
+            @include('layouts.inc.front.navbar')
+        </header>
+        <!-- /Header -->
 
-    <script src="{{ asset('front-assets/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('front-assets/js/jquery-migrate-3.0.1.min.js') }}"></script>
-    <script src="{{ asset('front-assets/js/popper.min.js') }}"></script>
-    <script src="{{ asset('front-assets/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('front-assets/js/jquery.easing.1.3.js') }}"></script>
-    <script src="{{ asset('front-assets/js/jquery.waypoints.min.js') }}"></script>
-    <script src="{{ asset('front-assets/js/jquery.stellar.min.js') }}"></script>
-    <script src="{{ asset('front-assets/js/owl.carousel.min.js') }}"></script>
-    <script src="{{ asset('front-assets/js/jquery.magnific-popup.min.js') }}"></script>
-    <script src="{{ asset('front-assets/js/aos.js') }}"></script>
-    <script src="{{ asset('front-assets/js/jquery.animateNumber.min.js') }}"></script>
-    <script src="{{ asset('front-assets/js/bootstrap-datepicker.js') }}"></script>
-    <script src="{{ asset('front-assets/js/jquery.timepicker.min.js') }}"></script>
-    <script src="{{ asset('front-assets/js/scrollax.min.js') }}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-    <script src="{{ asset('front-assets/js/google-map.js') }}"></script>
-    <script src="{{ asset('front-assets/js/main.js') }}"></script>
+        @yield('section')
+
+        <!-- Footer -->
+        @include('layouts.inc.front.footer')
+        <!-- /Footer -->
+
+    </div>
+    <!-- /Main Wrapper -->
+
+    <!-- jQuery -->
+    <script src="{{ asset('front-assets/assets/js/jquery.min.js') }}"></script>
+
+    <!-- Bootstrap Core JS -->
+    <script src="{{ asset('front-assets/assets/js/popper.min.js') }}"></script>
+    <script src="{{ asset('front-assets/assets/js/bootstrap.min.js') }}"></script>
+
+    <!-- Slick JS -->
+    <script src="{{ asset('front-assets/assets/js/slick.js') }}"></script>
+    <!-- Fancybox JS -->
+    <script src="{{ asset('front-assets/assets/plugins/fancybox/jquery.fancybox.min.js') }}"></script>
+    <!-- Custom JS -->
+    <script src="{{ asset('front-assets/assets/js/script.js') }}"></script>
 
 </body>
 

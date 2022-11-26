@@ -63,16 +63,20 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|email:rfc,dns|unique:users,email',
-            'contact' => ['required', 'regex:/^(09|\+639)\d{9}$/'],
-            'birthday' => 'required|before:today',
-            'gender' => 'required',
-            'password' => 'required|min:8',
-            'password_confirmation' => 'required|same:password',
-        ]);
+        return Validator::make(
+            $data,
+            [
+                'first_name' => 'required|max:255',
+                'last_name' => 'required|max:255',
+                'email' => 'required|email:rfc,dns|unique:users,email',
+                'contact' => ['required', 'regex:/^(09|\+639)\d{9}$/'],
+                'birthday' => 'required|before_or_equal:' . \Carbon\Carbon::now()->subYears(18)->format('m/d/Y'),
+                'gender' => 'required',
+                'password' => 'required|min:8',
+                'password_confirmation' => 'required|same:password',
+            ],
+            ['birthday.before_or_equal' => 'You must be 18 years old and above.']
+        );
     }
 
     /**

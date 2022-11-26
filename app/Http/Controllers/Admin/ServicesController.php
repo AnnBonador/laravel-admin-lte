@@ -8,22 +8,37 @@ use App\Models\Services;
 use Illuminate\Http\Request;
 use App\Models\ServiceCategory;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Builder;
 use App\Http\Requests\ServiceStoreRequest;
 
 class ServicesController extends Controller
 {
     public function index()
     {
-        $service = Services::all();
+        if (auth()->user()->hasRole('Super-Admin')) {
+            $service = Services::all();
+        } else if (auth()->user()->hasRole('Clinic Admin')) {
+            $service = Services::whereHas('doctors', function (Builder $query) {
+                $query->where('clinic_id', '=', auth()->user()->clinic_id);
+            })->get();
+        } else if (auth()->user()->hasRole('Doctor')) {
+            $service = Services::where('doctor_id', auth()->id())->get();
+        } else if (auth()->user()->hasRole('Receptionist')) {
+            $service = Services::whereHas('doctors', function (Builder $query) {
+                $query->where('clinic_id', '=', auth()->user()->clinic_id);
+            })->get();
+        }
         return view('admin.service.index', compact('service'));
     }
 
     public function create()
     {
         if (auth()->user()->hasRole('Super-Admin')) {
-            $doctor = User::where('type', '2')->where('status', '1')->get()->pluck('full_name', 'id');
+            $doctor = User::role('Doctor')->where('status', '1')->get()->pluck('full_name', 'id');
         } else if (auth()->user()->hasRole('Clinic Admin')) {
-            $doctor = User::where('type', '2')->where('status', '1')->where('clinic_id', auth()->user()->isClinicAdmin)->get()->pluck('full_name', 'id');
+            $doctor = User::role('Doctor')->where('status', '1')->where('clinic_id', auth()->user()->isClinicAdmin)->get()->pluck('full_name', 'id');
+        } else if (auth()->user()->hasRole('Doctor') || auth()->user()->hasRole('Receptionist')) {
+            $doctor = User::role('Doctor')->where('status', '1')->where('clinic_id', auth()->user()->clinic_id)->get()->pluck('full_name', 'id');
         }
         $service_cat = ServiceCategory::pluck('name', 'id');
         return view('admin.service.create', compact('doctor', 'service_cat'));
@@ -39,7 +54,7 @@ class ServicesController extends Controller
     public function edit($id)
     {
         $service = Services::findOrFail($id);
-        $doctor = User::where('type', '2')->where('status', '1')->get()->pluck('full_name', 'id');
+        $doctor = User::role('Doctor')->where('status', '1')->get()->pluck('full_name', 'id');
         $service_cat = ServiceCategory::pluck('name', 'id');
         return view('admin.service.edit', compact('service', 'doctor', 'service_cat'));
     }

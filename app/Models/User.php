@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
@@ -49,18 +49,30 @@ class User extends Authenticatable
 
     public function clinic()
     {
-        return $this->belongsTo(Clinic::class, 'clinic_id', 'id');
+        return $this->belongsTo(Clinic::class, 'clinic_id', 'id')->withDefault();
     }
 
     public function specialty()
     {
-        return $this->belongsTo(Specialization::class, 'specialization_id', 'id');
+        return $this->belongsTo(Specialization::class, 'specialization_id', 'id')->withDefault();
+    }
+    public function service()
+    {
+        return $this->hasMany(Services::class, 'id', 'doctor_id');
+    }
+    public function ratings()
+    {
+        return $this->hasMany(ReviewRating::class, 'id', 'doctor_id');
     }
 
+    public function services()
+    {
+        return $this->belongsTo(Services::class, 'id', 'doctor_id');
+    }
     protected function type(): Attribute
     {
         return new Attribute(
-            get: fn ($value) =>  ["user", "admin", "doctor", "receptionist"][$value],
+            get: fn ($value) =>  ["user", "admin"][$value],
         );
     }
 }

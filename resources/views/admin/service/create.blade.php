@@ -32,6 +32,9 @@
                             @include('layouts.partials.messages')
                             <form action="{{ route('services.store') }}" method="POST">
                                 @csrf
+                                @role('Doctor')
+                                    <input type="hidden" name="doctor_id" value="{{ Auth::id() }}">
+                                @endrole
                                 <div class="row mb-4">
                                     <div class="form-group col-sm-4">
                                         <label for="">Service category</label>
@@ -65,7 +68,8 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">₱</span>
                                             </div>
-                                            <input type="text" name="charges"id="num" class="form-control">
+                                            <input type="text" name="charges"id="num" class="form-control"
+                                                value="{{ old('charges') }}">
                                             <div class="input-group-append">
                                                 <span class="input-group-text">.00</span>
                                             </div>
@@ -74,22 +78,24 @@
                                             <span class="text-danger text-left">{{ $errors->first('charges') }}</span>
                                         @endif
                                     </div>
-                                    <div class="form-group col-sm-4">
-                                        <label for="">Select Doctor</label>
-                                        <span class="text-danger">*</span>
-                                        <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
-                                            class="form-control select2bs4" style="width: 100%;">
-                                            <option selected="selected"></option>
-                                            @foreach ($doctor as $id => $item)
-                                                <option value="{{ $id }}"
-                                                    {{ old('doctor_id') == $id ? 'selected' : '' }}>
-                                                    {{ $item }}</option>
-                                            @endforeach
-                                        </select>
-                                        @if ($errors->has('doctor_id'))
-                                            <span class="text-danger text-left">{{ $errors->first('doctor_id') }}</span>
-                                        @endif
-                                    </div>
+                                    @hasanyrole('Super-Admin|Clinic Admin|Receptionist')
+                                        <div class="form-group col-sm-4">
+                                            <label for="">Select Doctor</label>
+                                            <span class="text-danger">*</span>
+                                            <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
+                                                class="form-control select2bs4" style="width: 100%;">
+                                                <option selected="selected"></option>
+                                                @foreach ($doctor as $id => $item)
+                                                    <option value="{{ $id }}"
+                                                        {{ old('doctor_id') == $id ? 'selected' : '' }}>
+                                                        {{ $item }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('doctor_id'))
+                                                <span class="text-danger text-left">{{ $errors->first('doctor_id') }}</span>
+                                            @endif
+                                        </div>
+                                    @endhasanyrole
                                     <div class="form-group col-sm-4">
                                         <label>Status</label>
                                         <span class="text-danger">*</span>

@@ -24,6 +24,10 @@ class AppointmentController extends Controller
             $appointments = Appointment::orderBy('schedule_id', 'desc')->get();
         } else if (auth()->user()->hasRole('Clinic Admin')) {
             $appointments = Appointment::where('clinic_id', auth()->user()->isClinicAdmin)->orderBy('schedule_id', 'desc')->get();
+        } else if (auth()->user()->hasRole('Doctor')) {
+            $appointments = Appointment::where('doctor_id', auth()->id())->orderBy('schedule_id', 'desc')->get();
+        } else if (auth()->user()->hasRole('Receptionist')) {
+            $appointments = Appointment::where('clinic_id', auth()->user()->clinic_id)->orderBy('schedule_id', 'desc')->get();
         }
         return view('admin.appointment.all', compact('appointments'));
     }
@@ -34,6 +38,10 @@ class AppointmentController extends Controller
             $appointments = Appointment::orderBy('schedule_id', 'desc')->get();
         } else if (auth()->user()->hasRole('Clinic Admin')) {
             $appointments = Appointment::where('clinic_id', auth()->user()->isClinicAdmin)->orderBy('schedule_id', 'desc')->get();
+        } else if (auth()->user()->hasRole('Doctor')) {
+            $appointments = Appointment::where('doctor_id', auth()->id())->orderBy('schedule_id', 'desc')->get();
+        } else if (auth()->user()->hasRole('Receptionist')) {
+            $appointments = Appointment::where('clinic_id', auth()->user()->clinic_id)->orderBy('schedule_id', 'desc')->get();
         }
         return view('admin.appointment.past', compact('appointments'));
     }
@@ -41,26 +49,54 @@ class AppointmentController extends Controller
     public function index()
     {
         if (auth()->user()->hasRole('Super-Admin')) {
-            $appointments = Appointment::orderBy('schedule_id', 'desc')->get();
+            $appointments = Appointment::orderBy('schedule_id', 'desc')->where('status', '!=', 'Completed')->get();
         } else if (auth()->user()->hasRole('Clinic Admin')) {
-            $appointments = Appointment::where('clinic_id', auth()->user()->isClinicAdmin)->orderBy('schedule_id', 'desc')->get();
+            $appointments = Appointment::where('clinic_id', auth()->user()->isClinicAdmin)->where('status', '!=', 'Completed')->orderBy('schedule_id', 'desc')->get();
+        } else if (auth()->user()->hasRole('Doctor')) {
+            $appointments = Appointment::where('doctor_id', auth()->id())->where('status', '!=', 'Completed')->orderBy('schedule_id', 'desc')->get();
+        } else if (auth()->user()->hasRole('Receptionist')) {
+            $appointments = Appointment::where('clinic_id', auth()->user()->clinic_id)->where('status', '!=', 'Completed')->orderBy('schedule_id', 'desc')->get();
         }
         return view('admin.appointment.index', compact('appointments'));
     }
 
     public function create()
     {
-        $doctors = User::where('type', '2')->where('clinic_id', auth()->user()->isClinicAdmin)
-            ->where('status', '1')
-            ->get()
-            ->pluck('full_name', 'id');
-        $patients = User::where('type', '0')->where('clinic_id', auth()->user()->isClinicAdmin)
-            ->where('status', '1')
-            ->get()
-            ->pluck('full_name', 'id');
+        $services = Services::where('doctor_id', auth()->id())->where('status', '1')->pluck('name', 'id');
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
+        $doctors = User::role('Doctor')->where('clinic_id', auth()->user()->isClinicAdmin)
+            ->where('status', '1')
+            ->get()
+            ->pluck('full_name', 'id');
+        if (auth()->user()->hasAnyRole('Super-Admin|Clinic Admin')) {
+            $patients = User::where('type', '0')->where('clinic_id', auth()->user()->isClinicAdmin)
+                ->where('status', '1')
+                ->get()
+                ->pluck('full_name', 'id');
+        } else if (auth()->user()->hasRole('Receptionist')) {
+            $patients = User::where('type', '0')->where('clinic_id', auth()->user()->clinic_id)
+                ->where('status', '1')
+                ->get()
+                ->pluck('full_name', 'id');
+            $doctors = User::role('Doctor')->where('clinic_id', auth()->user()->clinic_id)
+                ->where('status', '1')
+                ->get()
+                ->pluck('full_name', 'id');
+        } else if (auth()->user()->hasRole('Doctor')) {
+            $patients = User::where('type', '0')->where('clinic_id', auth()->user()->clinic_id)
+                ->where('status', '1')
+                ->get()
+                ->pluck('full_name', 'id');
 
-        return view('admin.appointment.create', compact('clinic', 'doctors', 'patients'));
+            $schedule = Schedule::where('day', '>=', date('m/d/Y'))
+                ->where('day', '!=', date('m/d/Y'))
+                ->where('day', '!=',  date("m/d/Y", strtotime('tomorrow')))
+                ->where('doctor_id', auth()->id())
+                ->pluck('day', 'id');
+            return view('admin.appointment.create', compact('clinic', 'doctors', 'patients', 'services', 'schedule'));
+        }
+
+        return view('admin.appointment.create', compact('clinic', 'doctors', 'patients', 'services'));
     }
 
     public function store(AppointmentStoreRequest $request)
@@ -100,7 +136,7 @@ class AppointmentController extends Controller
         $appointment = Appointment::findOrFail($id);
         $patients = User::where('type', '0')->where('status', '1')->get()->pluck('full_name', 'id');
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
-        $doctor = User::where('type', '2')->where('status', '1')->where('clinic_id', $appointment->clinic_id)->get()->pluck('fullname', 'id');
+        $doctor = User::role('Doctor')->where('status', '1')->where('clinic_id', $appointment->clinic_id)->get()->pluck('fullname', 'id');
         $service = Services::where('status', '1')->where('doctor_id', $appointment->doctor_id)->pluck('name');
         $schedule = Schedule::where('doctor_id', $appointment->doctor_id)->pluck('day', 'id');
         return view('admin.appointment.edit', compact('patients', 'clinic', 'appointment', 'doctor', 'service', 'schedule'));
@@ -189,6 +225,10 @@ class AppointmentController extends Controller
              <tr>
                 <td width='30%'><b>Service:</b></td>
                 <td width='70%'> " . implode(',', $appointment->service)  . "</td>
+             </tr>
+             <tr>
+                <td width='30%'><b>Payment option:</b></td>
+                <td width='70%'> " . $appointment->payment_option  . "</td>
              </tr>
              <tr>
                 <td width='30%'><b>Status:</b></td>

@@ -33,13 +33,15 @@ class ClinicUpdateRequest extends FormRequest
             'address' => 'required',
             'country' => 'required',
             'city' => 'required',
+            'clinic_image' => 'sometimes|nullable|image|mimes:jpeg,gif,png,jpg|max:2048',
 
             'fname_admin' => 'required',
             'lname_admin' => 'required',
             'dob' => 'required',
             'email_admin' => 'required|email:rfc,dns',
             'gender' => 'required',
-            'contact_admin' => ['required', 'regex:/^(09|\+639)\d{9}$/']
+            'contact_admin' => ['required', 'regex:/^(09|\+639)\d{9}$/'],
+            'admin_image' => 'sometimes|nullable|image|mimes:jpeg,gif,png,jpg|max:2048'
 
         ];
     }

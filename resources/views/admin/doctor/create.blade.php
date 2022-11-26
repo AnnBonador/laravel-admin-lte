@@ -63,6 +63,9 @@
                                     @role('Clinic Admin')
                                         <input type="hidden" name="clinic_id" value="{{ Auth::user()->isClinicAdmin }}">
                                     @endrole
+                                    @role('Receptionist')
+                                        <input type="hidden" name="clinic_id" value="{{ Auth::user()->clinic_id }}">
+                                    @endrole
                                     @role('Super-Admin')
                                         <div class="form-group col-sm-4">
                                             <label for="">Select Clinic</label>
@@ -169,9 +172,35 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label>Profile Image</label>
-                                        <input type="file" name="image">
+                                        <input type="file" name="image" class="form-control">
                                         @if ($errors->has('image'))
                                             <span class="text-danger">{{ $errors->first('image') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row mt-2">
+                                    <div class="form-group col-sm-6">
+                                        <label for="">Degree</label>
+                                        <input type="text" name="degree" value="{{ old('degree') }}"
+                                            class="form-control" placeholder="Enter degree">
+                                        @if ($errors->has('degree'))
+                                            <span class="text-danger text-left">{{ $errors->first('degree') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="">College/University</label>
+                                        <input type="text" name="college" value="{{ old('college') }}"
+                                            class="form-control" placeholder="Enter college">
+                                        @if ($errors->has('college'))
+                                            <span class="text-danger text-left">{{ $errors->first('college') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="">About</label>
+                                        <textarea name="about" class="form-control" rows="3"></textarea>
+                                        @if ($errors->has('about'))
+                                            <span class="text-danger text-left">{{ $errors->first('about') }}</span>
                                         @endif
                                     </div>
                                 </div>

@@ -3,7 +3,7 @@
     <div class=" login-page">
         <div class="login-box">
             <div class="login-logo">
-                <a href="../../index2.html"><b>{{ title() }}</b></a>
+                <a href="{{ route('home') }}"><b>{{ title() }}</b></a>
             </div>
             <!-- /.login-logo -->
             <div class="card">

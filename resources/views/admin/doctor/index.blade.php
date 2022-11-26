@@ -40,7 +40,7 @@
                                         <th>Clinic Name</th>
                                         <th>Email</th>
                                         <th>Mobile</th>
-                                        <th>Specialization</th>
+                                        <th>Speciality</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>

@@ -35,6 +35,9 @@
                                 @csrf
                                 <div class="row mb-2">
                                     <div class="col-sm-5">
+                                        @role('Doctor')
+                                            <input type="hidden" id="get_doctor_id" value="{{ $appointment->doctor_id }}">
+                                        @endrole
                                         @role('Super-Admin')
                                             <div class="form-group">
                                                 <label for="">Select Clinic</label>
@@ -54,24 +57,26 @@
                                                 @endif
                                             </div>
                                         @endrole
-                                        <div class="form-group">
-                                            <label for="">Select Doctor</label>
-                                            <span class="text-danger">*</span>
-                                            <input type="hidden" id="get_doctor_id" value="{{ $appointment->doctor_id }}">
-                                            <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
-                                                class="form-control select2bs4" style="width: 100%;" id="load_doctor"
-                                                disabled="disabled">
-                                                @foreach ($doctor as $id => $item)
-                                                    <option value="{{ $id }}"
-                                                        {{ $appointment->doctor_id == $id ? 'selected' : '' }}>
-                                                        {{ $item }}</option>
-                                                @endforeach
-                                            </select>
-                                            @if ($errors->has('doctor_id'))
-                                                <span
-                                                    class="text-danger text-left">{{ $errors->first('doctor_id') }}</span>
-                                            @endif
-                                        </div>
+                                        @hasanyrole('Super-Admin|Clinic Admin|Receptionist')
+                                            <div class="form-group">
+                                                <label for="">Select Doctor</label>
+                                                <span class="text-danger">*</span>
+                                                <input type="hidden" id="get_doctor_id" value="{{ $appointment->doctor_id }}">
+                                                <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
+                                                    class="form-control select2bs4" style="width: 100%;" id="load_doctor"
+                                                    disabled="disabled">
+                                                    @foreach ($doctor as $id => $item)
+                                                        <option value="{{ $id }}"
+                                                            {{ $appointment->doctor_id == $id ? 'selected' : '' }}>
+                                                            {{ $item }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @if ($errors->has('doctor_id'))
+                                                    <span
+                                                        class="text-danger text-left">{{ $errors->first('doctor_id') }}</span>
+                                                @endif
+                                            </div>
+                                        @endhasanyrole
                                         <div class="form-group">
                                             <label for="">Select Service</label>
                                             <span class="text-danger">*</span>

@@ -19,7 +19,7 @@
 
                     @include('layouts.partials.messages')
 
-                    <form action="{{ route('login.post') }}" method="POST">
+                    <form action="{{ route('login') }}" method="POST">
                         @csrf
                         <div class="input-group mb-3">
                             <input type="email" class="form-control" name="email" placeholder="Email"

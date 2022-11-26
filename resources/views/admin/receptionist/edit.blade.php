@@ -149,7 +149,7 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label>Profile Image</label>
-                                        <input type="file" name="image">
+                                        <input type="file" name="image" class="form-control">
                                         <input type="hidden" value="{{ $receptionist->image }}" name="old_image">
                                         @if ($errors->has('image'))
                                             <span class="text-danger">{{ $errors->first('image') }}</span>

@@ -4,13 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
 use App\Models\Clinic;
-use App\Models\Doctor;
 use App\Models\Schedule;
 use App\Models\Services;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ScheduleStoreRequest;
-use App\Http\Requests\ScheduleUpdateRequest;
 use App\Models\Appointment;
 use App\Models\User;
 
@@ -22,6 +20,8 @@ class ScheduleController extends Controller
             $schedule = Schedule::all();
         } else if (auth()->user()->hasRole('Clinic Admin')) {
             $schedule = Schedule::where('clinic_id', auth()->user()->isClinicAdmin)->get();
+        } else if (auth()->user()->hasRole('Doctor')) {
+            $schedule = Schedule::where('clinic_id', auth()->user()->clinic_id)->where('doctor_id', auth()->id())->get();
         }
         return view('admin.schedule.index', compact('schedule'));
     }
@@ -29,18 +29,22 @@ class ScheduleController extends Controller
     public function create()
     {
         if (auth()->user()->hasRole('Super-Admin')) {
-            $doctors = User::where('type', '2')->where('status', '1')->get()->pluck('full_name', 'id');
+            $doctors = User::role('Doctor')->where('status', '1')->get()->pluck('full_name', 'id');
+            $clinic = Clinic::where('status', '1')->pluck('name', 'id');
         } else if (auth()->user()->hasRole('Clinic Admin')) {
-            $doctors = User::where('type', '2')->where('status', '1')->where('clinic_id', auth()->user()->isClinicAdmin)->get()->pluck('full_name', 'id');
+            $doctors = User::role('Doctor')->where('status', '1')->where('clinic_id', auth()->user()->isClinicAdmin)->get()->pluck('full_name', 'id');
+            $clinic = Clinic::where('status', '1')->pluck('name', 'id');
+        } else if (auth()->user()->hasRole('Doctor')) {
+            $doctors = User::role('Doctor')->where('status', '1')->get()->pluck('full_name', 'id');
+            $clinic = Clinic::where('status', '1')->where('id', auth()->user()->clinic_id)->pluck('name', 'id');
         }
-        $clinic = Clinic::where('status', '1')->pluck('name', 'id');
         return view('admin.schedule.create', compact('clinic', 'doctors'));
     }
 
     public function getDoctor(Request $request)
     {
         $id = $request->clinic_id;
-        $doctors = User::where('type', '2')->where('clinic_id', $id)->where('status', '1')->get()->pluck('full_name', 'id');
+        $doctors = User::role('Doctor')->where('clinic_id', $id)->where('status', '1')->get()->pluck('full_name', 'id');
         $patients = User::where('type', '0')->where('clinic_id', $id)->where('status', '1')->get()->pluck('full_name', 'id');
         return response()->json(["doctors" => $doctors, "patients" => $patients]);
     }
@@ -139,8 +143,13 @@ class ScheduleController extends Controller
     public function edit($id)
     {
         $schedule = Schedule::findOrFail($id);
-        $clinic = Clinic::where('status', '1')->pluck('name', 'id');
-        $doctor = User::where('type', '2')->where('status', '1')->where('clinic_id', $schedule->clinic_id)->get()->pluck('full_name', 'id');
+        if (auth()->user()->hasRole('Super-Admin') || auth()->user()->hasRole('Clinic Admin')) {
+            $clinic = Clinic::where('status', '1')->pluck('name', 'id');
+        } else if (auth()->user()->hasRole('Doctor')) {
+            $clinic = Clinic::where('status', '1')->where('id', auth()->user()->clinic_id)->pluck('name', 'id');
+        }
+
+        $doctor = User::role('Doctor')->where('status', '1')->where('clinic_id', $schedule->clinic_id)->get()->pluck('full_name', 'id');
         return view("admin.schedule.edit", compact('schedule', 'doctor', 'clinic'));
     }
 

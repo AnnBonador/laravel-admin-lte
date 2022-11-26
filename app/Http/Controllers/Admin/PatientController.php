@@ -21,13 +21,19 @@ class PatientController extends Controller
             $patient = User::where('type', '0')->get();
         } else if (auth()->user()->hasRole('Clinic Admin')) {
             $patient = User::where('type', '0')->where('clinic_id', auth()->user()->isClinicAdmin)->get();
+        } else if (auth()->user()->hasRole('Doctor') || auth()->user()->hasRole('Receptionist')) {
+            $patient = User::where('type', '0')->where('clinic_id', auth()->user()->clinic_id)->get();
         }
         return view('admin.patient.index', compact('patient'));
     }
 
     public function create()
     {
-        $clinic = Clinic::where('status', '1')->pluck('name', 'id');
+        if (auth()->user()->hasRole('Super-Admin') || auth()->user()->hasRole('Clinic Admin')) {
+            $clinic = Clinic::where('status', '1')->pluck('name', 'id');
+        } else if (auth()->user()->hasRole('Doctor') || auth()->user()->hasRole('Receptionist')) {
+            $clinic = Clinic::where('status', '1')->where('id', auth()->user()->clinic_id)->pluck('name', 'id');
+        }
         return view('admin.patient.create', compact('clinic'));
     }
 
@@ -73,7 +79,11 @@ class PatientController extends Controller
     public function edit($id)
     {
         $patient = User::findOrFail($id);
-        $clinic = Clinic::where('status', '1')->pluck('name', 'id');
+        if (auth()->user()->hasRole('Super-Admin') || auth()->user()->hasRole('Clinic Admin')) {
+            $clinic = Clinic::where('status', '1')->pluck('name', 'id');
+        } else if (auth()->user()->hasRole('Doctor')) {
+            $clinic = Clinic::where('status', '1')->where('id', auth()->user()->clinic_id)->pluck('name', 'id');
+        }
         return view('admin.patient.edit', compact('patient', 'clinic'));
     }
 
@@ -118,9 +128,9 @@ class PatientController extends Controller
     {
         $patient = User::find($request->delete_id);
         if ($patient->image) {
-            $path = 'uploads/patient/' . $patient->image;
-            if (File::exists($path)) {
-                File::delete($path);
+            $image_path = public_path('uploads/patient/');
+            if (file_exists($image_path . $patient->image)) {
+                @unlink($image_path . $patient->image);
             }
         }
         $patient->delete();

@@ -21,9 +21,11 @@ class DoctorController extends Controller
     public function index()
     {
         if (auth()->user()->hasRole('Super-Admin')) {
-            $doctor = User::where('type', '2')->get();
+            $doctor = User::role('Doctor')->get();
         } else if (auth()->user()->hasRole('Clinic Admin')) {
-            $doctor = User::where('type', '2')->where('clinic_id', auth()->user()->isClinicAdmin)->get();
+            $doctor = User::role('Doctor')->where('clinic_id', auth()->user()->isClinicAdmin)->get();
+        } else if (auth()->user()->hasRole('Receptionist')) {
+            $doctor = User::role('Doctor')->where('clinic_id', auth()->user()->clinic_id)->get();
         }
         return view('admin.doctor.index', compact('doctor'));
     }
@@ -48,11 +50,15 @@ class DoctorController extends Controller
         $doctor->specialization_id = $validatedData['specialization_id'];
         $doctor->experience = $validatedData['experience'];
         $doctor->gender = $validatedData['gender'];
+        $doctor->degree = $validatedData['degree'];
+        $doctor->college = $validatedData['college'];
+        $doctor->about = $validatedData['about'];
         $doctor->address = $validatedData['address'];
         $doctor->country = $validatedData['country'];
         $doctor->city = $validatedData['city'];
         $doctor->status = $validatedData['status'];
-        $doctor->type = 2;
+        $doctor->type = 1;
+        $doctor->assignRole('Doctor');
 
         if ($request->hasfile('image')) {
             $file = $request->file('image');
@@ -113,8 +119,11 @@ class DoctorController extends Controller
         $doctor->specialization_id = $validatedData['specialization_id'];
         $doctor->experience = $validatedData['experience'];
         $doctor->gender = $validatedData['gender'];
+        $doctor->degree = $validatedData['degree'];
+        $doctor->college = $validatedData['college'];
         $doctor->address = $validatedData['address'];
         $doctor->country = $validatedData['country'];
+        $doctor->about = $validatedData['about'];
         $doctor->city = $validatedData['city'];
         $doctor->status = $validatedData['status'];
 
@@ -143,9 +152,9 @@ class DoctorController extends Controller
     {
         $doctor = User::find($request->delete_id);
         if ($doctor->image) {
-            $path = 'uploads/doctor/' . $doctor->image;
-            if (File::exists($path)) {
-                File::delete($path);
+            $image_path = public_path('uploads/doctor/');
+            if (file_exists($image_path . $doctor->image)) {
+                @unlink($image_path . $doctor->image);
             }
         }
         $doctor->delete();

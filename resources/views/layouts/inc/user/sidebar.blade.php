@@ -62,15 +62,6 @@
                           </p>
                       </a>
                   </li>
-                  <li class="nav-item">
-                      <a href="{{ route('doctors.index') }}"
-                          class="nav-link {{ Route::current()->getName() == 'doctors.index' ? 'active' : '' }}">
-                          <i class="nav-icon fas fa-user-md"></i>
-                          <p>
-                              Reports
-                          </p>
-                      </a>
-                  </li>
               </ul>
           </nav>
           <!-- /.sidebar-menu -->

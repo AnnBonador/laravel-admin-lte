@@ -63,7 +63,7 @@
                                     @role('Clinic Admin')
                                         <input type="hidden" name="clinic_id" value="{{ Auth::user()->isClinicAdmin }}">
                                     @endrole
-                                    @role('Super-Admin')
+                                    @hasanyrole('Super-Admin|Doctor')
                                         <div class="form-group col-sm-4">
                                             <label for="">Select Clinic</label>
                                             <span class="text-danger">*</span>
@@ -80,7 +80,7 @@
                                                 <span class="text-danger text-left">{{ $errors->first('clinic_id') }}</span>
                                             @endif
                                         </div>
-                                    @endrole
+                                    @endhasanyrole
                                     <div class="form-group col-sm-4">
                                         <label for="">Contact No.</label>
                                         <span class="text-danger">*</span>
@@ -144,7 +144,7 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label>Profile Image</label>
-                                        <input type="file" name="image">
+                                        <input type="file" name="image" class="form-control">
                                         @if ($errors->has('image'))
                                             <span class="text-danger">{{ $errors->first('image') }}</span>
                                         @endif
