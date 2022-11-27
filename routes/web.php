@@ -66,6 +66,7 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'user-access:admin'])->g
         Route::get('/appointment/all', 'all')->name('appointments.all');
         Route::get('/appointment/past', 'past')->name('appointments.past');
         Route::get('/appointment/{id}/show', 'getAppointmentDetails')->name('getAppointmentDetails');
+        Route::post('/amount/getAmount', 'getAmount')->name('getAmount');
     });
 
     Route::controller(App\Http\Controllers\Admin\DoctorController::class)->group(function () {

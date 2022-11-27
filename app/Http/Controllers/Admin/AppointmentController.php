@@ -239,4 +239,11 @@ class AppointmentController extends Controller
 
         return response()->json($response);
     }
+
+    public function getAmount(Request $request)
+    {
+        $id = $request->doctor_id;
+        $amount = Services::where('id', $request->service_id)->where('doctor_id', $id)->get();
+        return response()->json(["amount" => $amount]);
+    }
 }

@@ -52,7 +52,7 @@ class ScheduleController extends Controller
     public function getService(Request $request)
     {
         $id = $request->doctor_id;
-        $services = Services::where('doctor_id', $id)->where('status', '1')->pluck('name', 'id');
+        $services = Services::where('doctor_id', $id)->where('status', '1')->get();
         $date_id = Schedule::where('day', '>=', date('m/d/Y'))
             ->where('day', '!=', date('m/d/Y'))
             ->where('day', '!=',  date("m/d/Y", strtotime('tomorrow')))

@@ -171,12 +171,22 @@
                                             <label for="">Available Slot </label>
                                             <span class="text-danger">*</span>
                                             <input type="hidden" id="get_time_value" name="time">
-                                            <div class="text-center" id="load_slots">
-                                                <span class="fw-lighter d-none" id="no"></span>
+                                            <div class="border">
+                                                <div class="text-center p-3" id="load_slots">
+                                                    <span class="text-muted">No timeslots found</span>
+                                                </div>
                                             </div>
                                             @if ($errors->has('time'))
                                                 <span class="text-danger text-left">{{ $errors->first('time') }}</span>
                                             @endif
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Services Detail </label>
+                                            <div class="border">
+                                                <div class="text-center p-3">
+                                                    <span id="price" class="text-muted"></span>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="">Description</label>
@@ -261,15 +271,11 @@
                         },
                         success: function(data) {
                             $('#load_service').empty();
-                            $('#load_service').append(
-                                '<option value=""> Select Service</option>');
-                            $.each(data.services, function(key, value) {
-                                $('#load_service').append($(
-                                    "<option/>", {
-                                        value: value,
-                                        text: value
-                                    }));
 
+                            $.each(data.services, function(key, value) {
+                                $('#load_service').append('<option value="' + key +
+                                    '" data-price="' + value.charges + '">' + value
+                                    .name + '</option>');
                             });
                             $('#load_date').empty();
                             $('#load_date').append(
@@ -283,6 +289,7 @@
 
                             });
                             $('#get_doctor_id').val(doctor_id);
+
                         }
                     })
                 } else {
@@ -292,6 +299,30 @@
 
                 }
             });
+
+            //getting amount
+            $('#load_service').on('change', function(e) {
+                var service_id = e.target.value;
+                var doctor_id = $('#get_doctor_id').val();
+                $.ajax({
+                    url: "{{ route('getAmount') }}",
+                    type: "POST",
+                    data: {
+                        service_id: service_id,
+                        doctor_id: doctor_id,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(data) {
+
+                        var test = [];
+                        $.each($('#load_service :selected'), function() {
+                            test.push($(this).text() + " - " + $(this).data('price'));
+
+                        })
+                        document.getElementById('price').innerHTML = test.join('<br>');
+                    },
+                })
+            })
 
             //getting time slots
             $('#load_date').on('change', function(e) {
