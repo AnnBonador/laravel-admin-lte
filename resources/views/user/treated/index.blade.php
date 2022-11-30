@@ -37,6 +37,7 @@
                                         <th>Teeth</th>
                                         <th>Problem</th>
                                         <th>Fee</th>
+                                        <th>File Report</th>
                                         <th>Remarks</th>
                                     </tr>
                                 </thead>
@@ -47,7 +48,13 @@
                                                 <b>{{ $data->appointment->patients->full_name }}</b><br>
                                                 Doctor: {{ $data->appointment->doctors->full_name }}<br>
                                                 Clinic: {{ $data->appointment->clinic->name }}<br>
-                                                Service: {{ implode(', ', $data->appointment->service) }}
+                                                Service:
+                                                @foreach ($data->appointment->services as $service)
+                                                    {{ $service->name }}
+                                                    @if (!$loop->last)
+                                                        ,
+                                                    @endif
+                                                @endforeach
                                             </td>
                                             <td>
                                                 @if ($data->appointment->payment_option == 'Paypal')
@@ -64,6 +71,10 @@
                                             </td>
                                             <td>
                                                 {{ $data->fee }}
+                                            </td>
+                                            <td>
+                                                <a href="{{ asset($data->file_path) }}"
+                                                    class="btn-link text-muted">{{ $data->name }}</a>
                                             </td>
                                             <td>
                                                 {{ $data->remarks }}

@@ -42,6 +42,8 @@ class ClinicsController extends Controller
         $clinic->address = $validatedData['address'];
         $clinic->country = $validatedData['country'];
         $clinic->city = $validatedData['city'];
+        $clinic->latitude = $validatedData['latitude'];
+        $clinic->longitude = $validatedData['longitude'];
 
         if ($request->hasfile('clinic_image')) {
             $file = $request->file('clinic_image');
@@ -106,6 +108,8 @@ class ClinicsController extends Controller
         $clinic->address = $validatedData['address'];
         $clinic->country = $validatedData['country'];
         $clinic->city = $validatedData['city'];
+        $clinic->latitude = $validatedData['latitude'];
+        $clinic->longitude = $validatedData['longitude'];
 
         $old_image_clinic = $request->clinic_old_image;
 

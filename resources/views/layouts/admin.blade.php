@@ -127,6 +127,7 @@
     <!-- Tempusdominus Bootstrap 4 -->
     <script src="{{ asset('admin-assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}">
     </script>
+    <script src="{{ asset('admin-assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
     <!-- Summernote -->
     <script src="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
     <!-- overlayScrollbars -->

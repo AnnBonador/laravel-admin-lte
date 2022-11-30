@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Service;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Mail;
@@ -45,7 +46,18 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'specialization_id' => 'json',
     ];
+
+    public function setSpecializationAttribute($value)
+    {
+        $this->attributes['specialization_id'] = json_encode($value);
+    }
+
+    public function getSpecializationAttribute($value)
+    {
+        return json_decode($value);
+    }
 
     public function clinic()
     {
@@ -58,16 +70,22 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     public function service()
     {
-        return $this->hasMany(Services::class, 'id', 'doctor_id');
+        return $this->hasMany(Service::class, 'id', 'doctor_id');
     }
+
     public function ratings()
     {
         return $this->hasMany(ReviewRating::class, 'id', 'doctor_id');
     }
 
+    public function reviews()
+    {
+        return $this->belongsTo(ReviewRating::class, 'id', 'doctor_id');
+    }
+
     public function services()
     {
-        return $this->belongsTo(Services::class, 'id', 'doctor_id');
+        return $this->belongsTo(Service::class, 'id', 'doctor_id');
     }
     protected function type(): Attribute
     {

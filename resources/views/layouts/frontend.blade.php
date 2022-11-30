@@ -18,6 +18,11 @@
     <link rel="stylesheet" href="{{ asset('front-assets/assets/plugins/fontawesome/css/fontawesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('front-assets/assets/plugins/fontawesome/css/all.min.css') }}">
 
+    <!-- Datetimepicker CSS -->
+    <link rel="stylesheet" href="{{ asset('front-assets/assets/css/bootstrap-datetimepicker.min.css') }}">
+
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="{{ asset('front-assets/assets/plugins/select2/css/select2.min.css') }}">
     <!-- Main CSS -->
     <link rel="stylesheet" href="{{ asset('front-assets/assets/css/style.css') }}">
 
@@ -49,13 +54,23 @@
     <!-- Bootstrap Core JS -->
     <script src="{{ asset('front-assets/assets/js/popper.min.js') }}"></script>
     <script src="{{ asset('front-assets/assets/js/bootstrap.min.js') }}"></script>
+    <!-- Sticky Sidebar JS -->
+    <script src="{{ asset('front-assets/assets/plugins/theia-sticky-sidebar/ResizeSensor.js') }}"></script>
+    <script src="{{ asset('front-assets/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}"></script>
 
+    <!-- Select2 JS -->
+    <script src="{{ asset('front-assets/assets/plugins/select2/js/select2.min.js') }}"></script>
+
+    <!-- Datetimepicker JS -->
+    <script src="{{ asset('front-assets/assets/js/moment.min.js') }}"></script>
+    <script src="{{ asset('front-assets/assets/js/bootstrap-datetimepicker.min.js') }}"></script>
     <!-- Slick JS -->
     <script src="{{ asset('front-assets/assets/js/slick.js') }}"></script>
     <!-- Fancybox JS -->
     <script src="{{ asset('front-assets/assets/plugins/fancybox/jquery.fancybox.min.js') }}"></script>
     <!-- Custom JS -->
     <script src="{{ asset('front-assets/assets/js/script.js') }}"></script>
+    @yield('scripts')
 
 </body>
 

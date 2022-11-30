@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Carbon\Carbon;
 use App\Models\Clinic;
 use App\Models\Schedule;
-use App\Models\Services;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ScheduleStoreRequest;
@@ -52,7 +52,7 @@ class ScheduleController extends Controller
     public function getService(Request $request)
     {
         $id = $request->doctor_id;
-        $services = Services::where('doctor_id', $id)->where('status', '1')->get();
+        $services = Service::where('doctor_id', $id)->where('status', '1')->get();
         $date_id = Schedule::where('day', '>=', date('m/d/Y'))
             ->where('day', '!=', date('m/d/Y'))
             ->where('day', '!=',  date("m/d/Y", strtotime('tomorrow')))

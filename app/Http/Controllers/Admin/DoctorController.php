@@ -56,6 +56,9 @@ class DoctorController extends Controller
         $doctor->address = $validatedData['address'];
         $doctor->country = $validatedData['country'];
         $doctor->city = $validatedData['city'];
+        $doctor->latitude = $validatedData['latitude'];
+        $doctor->longitude = $validatedData['longitude'];
+        $doctor->year = $validatedData['year'];
         $doctor->status = $validatedData['status'];
         $doctor->type = 1;
         $doctor->assignRole('Doctor');
@@ -126,6 +129,9 @@ class DoctorController extends Controller
         $doctor->about = $validatedData['about'];
         $doctor->city = $validatedData['city'];
         $doctor->status = $validatedData['status'];
+        $doctor->latitude = $validatedData['latitude'];
+        $doctor->longitude = $validatedData['longitude'];
+        $doctor->year = $validatedData['year'];
 
         $old_image = $request->old_image;
         if ($request->hasfile('image')) {

@@ -27,15 +27,6 @@
                       </a>
                   </li>
                   <li class="nav-item">
-                      <a href="{{ route('user.clinic.index') }}"
-                          class="nav-link {{ request()->routeIs('user.clinic.index') ? 'active' : '' }}">
-                          <i class="nav-icon fas fa-clinic-medical"></i>
-                          <p>
-                              Clinics
-                          </p>
-                      </a>
-                  </li>
-                  <li class="nav-item">
                       <a href="{{ route('user.appointments.index') }}"
                           class="nav-link {{ request()->routeIs('user.appointments.*') || request()->routeIs('user.ratings') ? 'active' : '' }}">
                           <i class="nav-icon fas fa-calendar"></i>

@@ -133,6 +133,25 @@
                                     </div>
                                 </div>
                                 <hr>
+                                <div class="row mt-2">
+                                    <div class="form-group col-sm-6">
+                                        <label for="">Latitude</label>
+                                        <input type="text" name="latitude" value="{{ $clinic->latitude }}"
+                                            class="form-control" placeholder="Enter latitude">
+                                        @if ($errors->has('latitude'))
+                                            <span class="text-danger text-left">{{ $errors->first('latitude') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="">Longitude</label>
+                                        <input type="text" name="longitude" value="{{ $clinic->longitude }}"
+                                            class="form-control" placeholder="Enter longitude">
+                                        @if ($errors->has('longitude'))
+                                            <span class="text-danger text-left">{{ $errors->first('longitude') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <hr>
                                 <h4 class="text-primary">Clinic Admin Panel</h4>
                                 <div class="row mt-2">
                                     <div class="form-group col-sm-4">

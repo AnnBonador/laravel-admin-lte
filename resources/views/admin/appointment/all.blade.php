@@ -42,8 +42,8 @@
                                 <thead class="bg-light">
                                     <tr>
                                         <th>Patient Name</th>
-                                        <th>Time</th>
                                         <th>Services</th>
+                                        <th>Charges</th>
                                         <th>Date</th>
                                         <th>Status</th>
                                         <th>Action</th>
@@ -54,9 +54,10 @@
                                         <tr>
                                             <td>
                                                 @if ($data->patients()->exists())
-                                                    <b>{{ $data->patients->full_name }}
-                                                        ({{ $data->patients->email }})
-                                                    </b><br>
+                                                    <b>{{ $data->patients->full_name }} <span class="text-primary">
+                                                            ({{ $data->start_time . ' - ' . $data->end_time }})
+                                                        </span><br>
+                                                    </b>
                                                 @endif
                                                 @if ($data->doctors()->exists())
                                                     Doctor: {{ $data->doctors->full_name }}<br>
@@ -66,9 +67,16 @@
                                                 @endif
                                                 <small>Payment: {{ $data->payment_option }}</small>
                                             </td>
-                                            <td>{{ $data->start_time . ' - ' . $data->end_time }}</td>
                                             <td>
-                                                {{ implode(', ', $data->service) }}
+                                                @foreach ($data->services as $service)
+                                                    {{ $service->name }}
+                                                    @if (!$loop->last)
+                                                        ,
+                                                    @endif
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                ₱ {{ $data->services()->sum('charges') }}
                                             </td>
                                             <td>
                                                 @if ($data->schedule()->exists())

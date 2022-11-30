@@ -110,7 +110,14 @@
                                         <hr>
                                         <b>Clinic Name: </b>{{ $treated->appointment->clinic->name }}<br>
                                         <b>Doctor Name: </b>{{ $treated->appointment->doctors->full_name }}<br>
-                                        <b>Service:</b> {{ implode(', ', $treated->appointment->service) }}<br>
+                                        <b>Service:</b>
+                                        @foreach ($treated->appointment->services as $service)
+                                            {{ $service->name }}
+                                            @if (!$loop->last)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                        <br>
                                         @if ($treated->status == 'active')
                                             <span class="badge badge-primary">{{ $treated->status }}</span>
                                         @else

@@ -25,13 +25,15 @@ class ClinicCreateRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'email' => 'required|email:rfc,dns|unique:clinics,email',
+            'email' => 'required|email:rfc,dns',
             'contact' => ['required', 'regex:/^(09|\+639)\d{9}$/'],
             'specialization_id' => 'required|array|min:1',
             'status' => 'required',
             'address' => 'required',
             'country' => 'required',
             'city' => 'required',
+            'latitude' => 'nullable',
+            'longitude' => 'nullable',
             'clinic_image' => 'nullable|image|mimes:jpeg,gif,png,jpg|max:2048',
 
             'fname_admin' => 'required',

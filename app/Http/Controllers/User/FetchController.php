@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Models\User;
 use App\Models\Schedule;
-use App\Models\Services;
+use App\Models\Service;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,14 +14,14 @@ class FetchController extends Controller
     public function getDoctor(Request $request)
     {
         $id = $request->clinic_id;
-        $doctor = User::role('Doctor')->where('clinic_id', $id)->where('status', '1')->get()->pluck('full_name', 'id');
+        $doctor = User::role('Doctor')->where('clinic_id', $id)->where('status', '1')->get();
         return response()->json($doctor);
     }
 
     public function getService(Request $request)
     {
         $id = $request->doctor_id;
-        $services = Services::where('doctor_id', $id)->where('status', '1')->pluck('name', 'id');
+        $services = Service::where('doctor_id', $id)->where('status', '1')->get();
         $date_id = Schedule::where('day', '>=', date('m/d/Y'))
             ->where('day', '!=', date('m/d/Y'))
             ->where('day', '!=',  date("m/d/Y", strtotime('tomorrow')))

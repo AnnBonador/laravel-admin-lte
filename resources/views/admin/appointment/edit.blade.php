@@ -86,9 +86,9 @@
                                                 data-allow-clear="true" class="form-control select2bs4" style="width: 100%;"
                                                 id="load_service" disabled="disabled">
                                                 @foreach ($service as $item)
-                                                    <option value="{{ $item }}"
-                                                        {{ in_array($item, $appointment->service ?: []) ? 'selected' : '' }}>
-                                                        {{ $item }}</option>
+                                                    <option value="{{ $item->id }}"
+                                                        {{ in_array($item->id, $app ?: []) ? 'selected' : '' }}>
+                                                        {{ $item->name }}</option>
                                                 @endforeach
                                             </select>
                                             @if ($errors->has('service'))
@@ -162,12 +162,25 @@
                                             <label for="">Available Slot </label>
                                             <span class="text-danger">*</span>
                                             <input type="hidden" id="get_time_value" name="time">
-                                            <div class="text-center" id="load_slots">
-                                                <span class="fw-lighter d-none" id="no"></span>
-                                                <input type="radio" class="btn-check" name="booking_id" id=""
-                                                    value="" autocomplete="off">
-                                                <label class="btn btn-outline-primary fw-normal m-2"
-                                                    for="">{{ $appointment->start_time . ' - ' . $appointment->end_time }}</label>
+                                            <div class="border">
+                                                <div class="text-center p-3" id="load_slots">
+                                                    <input type="radio" class="btn-check" name="booking_id"
+                                                        id="" value="" autocomplete="off">
+                                                    <label class="btn btn-outline-primary fw-normal m-2"
+                                                        for="">{{ $appointment->start_time . ' - ' . $appointment->end_time }}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Services Detail </label>
+                                            <div class="border">
+                                                <div class="text-center p-3">
+                                                    <span id="price" class="text-muted">
+                                                        @foreach ($appointment->services as $service)
+                                                            <b>{{ $service->name }} </b>- ₱ {{ $service->charges }}<br>
+                                                        @endforeach
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group">

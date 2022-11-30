@@ -49,7 +49,13 @@
                                                 <b>{{ $data->appointment->patients->full_name }}</b><br>
                                                 Doctor: {{ $data->appointment->doctors->full_name }}<br>
                                                 Clinic: {{ $data->appointment->clinic->name }}<br>
-                                                Service: {{ implode(', ', $data->appointment->service) }}
+                                                Service:
+                                                @foreach ($data->appointment->services as $service)
+                                                    {{ $service->name }}
+                                                    @if (!$loop->last)
+                                                        ,
+                                                    @endif
+                                                @endforeach
                                             </td>
                                             <td>
                                                 {{ $data->teeth }}

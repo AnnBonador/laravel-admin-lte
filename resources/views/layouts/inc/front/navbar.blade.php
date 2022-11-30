@@ -24,6 +24,13 @@
             <li class="active">
                 <a href="{{ route('home.page') }}">Home</a>
             </li>
+            <li class="has-submenu">
+                <a href="#">Search Results <i class="fas fa-chevron-down"></i></a>
+                <ul class="submenu">
+                    <li><a href="{{ route('doctor.search') }}">Search Dentist</a></li>
+                    <li><a href="appointments.html">Search Clinics</a></li>
+                </ul>
+            </li>
             {{-- <li class="active">
                 <a href="index-2.html">Clinics</a>
             </li> --}}

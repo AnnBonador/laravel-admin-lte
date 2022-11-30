@@ -97,9 +97,9 @@
                                                 @role('Doctor')
                                                     <option value=""></option>
                                                     @foreach ($services as $item)
-                                                        <option value="{{ $item }}"
-                                                            {{ in_array($item, old('service') ?: []) ? 'selected' : '' }}}>
-                                                            {{ $item }}</option>
+                                                        <option value="{{ $item->id }}" data-price="{{ $item->charges }}"
+                                                            {{ in_array($item->id, old('service') ?: []) ? 'selected' : '' }}}>
+                                                            {{ $item->name }}</option>
                                                     @endforeach
                                                 @endrole
                                             </select>
@@ -173,7 +173,6 @@
                                             <input type="hidden" id="get_time_value" name="time">
                                             <div class="border">
                                                 <div class="text-center p-3" id="load_slots">
-                                                    <span class="text-muted">No timeslots found</span>
                                                 </div>
                                             </div>
                                             @if ($errors->has('time'))
@@ -273,7 +272,7 @@
                             $('#load_service').empty();
 
                             $.each(data.services, function(key, value) {
-                                $('#load_service').append('<option value="' + key +
+                                $('#load_service').append('<option value="' + value.id +
                                     '" data-price="' + value.charges + '">' + value
                                     .name + '</option>');
                             });
@@ -304,24 +303,13 @@
             $('#load_service').on('change', function(e) {
                 var service_id = e.target.value;
                 var doctor_id = $('#get_doctor_id').val();
-                $.ajax({
-                    url: "{{ route('getAmount') }}",
-                    type: "POST",
-                    data: {
-                        service_id: service_id,
-                        doctor_id: doctor_id,
-                        _token: "{{ csrf_token() }}"
-                    },
-                    success: function(data) {
+                var test = [];
+                $.each($('#load_service :selected'), function() {
+                    test.push("<b>" + $(this).text() + "</b> - ₱ " + $(this)
+                        .data('price'));
 
-                        var test = [];
-                        $.each($('#load_service :selected'), function() {
-                            test.push($(this).text() + " - " + $(this).data('price'));
-
-                        })
-                        document.getElementById('price').innerHTML = test.join('<br>');
-                    },
                 })
+                document.getElementById('price').innerHTML = test.join('<br>');
             })
 
             //getting time slots

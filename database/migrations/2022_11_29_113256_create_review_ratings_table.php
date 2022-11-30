@@ -17,7 +17,9 @@ class CreateReviewRatingsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('doctor_id');
+            $table->foreign('doctor_id')->unsigned()->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('appointment_id');
+            $table->foreign('appointment_id')->unsigned()->references('id')->on('appointments')->onDelete('cascade');
             $table->longText('comments')->nullable();
             $table->integer('star_rating');
             $table->enum('status', ['active', 'deactive']);

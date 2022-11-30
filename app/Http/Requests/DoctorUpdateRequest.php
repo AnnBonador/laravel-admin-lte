@@ -30,16 +30,19 @@ class DoctorUpdateRequest extends FormRequest
             'clinic_id' => 'required',
             'contact' => ['required', 'regex:/^(09|\+639)\d{9}$/'],
             'dob' => 'required|date_format:m/d/Y|before:today',
-            'specialization_id' => 'required|max:255',
+            'specialization_id' => 'required|array|min:1',
             'experience' => 'required',
             'gender' => 'required',
-            'address' => 'nullable|max:255',
-            'country' => 'nullable|max:255',
-            'city' => 'nullable|max:255',
+            'address' => 'required|max:255',
+            'country' => 'required|max:255',
+            'city' => 'required|max:255',
             'status' => 'required',
             'degree' => 'nullable',
             'college' => 'nullable',
             'about' => 'nullable',
+            'latitude' => 'nullable',
+            'longitude' => 'nullable',
+            'year' => 'nullable',
             'image' => 'sometimes|nullable|image|mimes:jpeg,gif,png,jpg|max:2048'
         ];
     }

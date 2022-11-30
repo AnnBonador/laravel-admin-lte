@@ -66,7 +66,6 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'user-access:admin'])->g
         Route::get('/appointment/all', 'all')->name('appointments.all');
         Route::get('/appointment/past', 'past')->name('appointments.past');
         Route::get('/appointment/{id}/show', 'getAppointmentDetails')->name('getAppointmentDetails');
-        Route::post('/amount/getAmount', 'getAmount')->name('getAmount');
     });
 
     Route::controller(App\Http\Controllers\Admin\DoctorController::class)->group(function () {
@@ -182,6 +181,18 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'user-access:admin'])->g
     Route::controller(App\Http\Controllers\Admin\MedicalReportController::class)->group(function () {
         Route::get('/reports', 'index')->name('reports');
     });
+    Route::controller(App\Http\Controllers\Admin\PaymentSettingController::class)->group(function () {
+        Route::get('/payment-settings', 'index')->name('paypal.index');
+        Route::get('/payment-settings/create', 'create')->name('paypal.create');
+        Route::post('/payment-settings', 'store')->name('paypal.store');
+        Route::get('/payment-settings/{id}/edit', 'edit')->name('paypal.edit');
+        Route::put('/payment-settings/{id}', 'update')->name('paypal.update');
+        Route::post('/payment-settings/delete', 'destroy')->name('paypal.delete');
+    });
+    Route::controller(App\Http\Controllers\Admin\MedicalController::class)->group(function () {
+        Route::get('/medical-report', 'index')->name('medical.report');
+        Route::get('/medical-report-get/', 'filter')->name('medical.show.report');
+    });
 });
 
 /*------------------------------------------
@@ -197,7 +208,13 @@ Route::prefix('user')->middleware(['auth', 'verified', 'user-access:user'])->gro
     });
     Route::controller(App\Http\Controllers\User\AppointmentsController::class)->group(function () {
         Route::get('/appointment',  'index')->name('user.appointments.index');
-        Route::get('/appointment/create', 'create')->name('user.appointments.create');
+        Route::get('/appointment/create', 'createStepOne')->name('user.appointments.create');
+        Route::post('/appointment/create', 'postCreateStepOne')->name('appointments.create.step.one.post');
+        Route::get('/appointment/create-step-two', 'createStepTwo')->name('user.appointments.create.step.two');
+        Route::post('/appointment/create-step-two', 'postCreateStepTwo')->name('user.appointments.post.step.two');
+        Route::get('/checkout/create-step-three', 'createStepThree')->name('user.appointments.step.three');
+        Route::post('checkout/create-step-three', 'postCreateStepThree')->name('user.appointments.step.three.post');
+
         Route::post('/appointment', 'store')->name('user.appointments.store');
         Route::get('/appointment/{id}/edit', 'edit')->name('user.appointments.edit');
         Route::put('/appointment/{id}', 'update')->name('user.appointments.update');
@@ -236,6 +253,9 @@ Route::prefix('user')->middleware(['auth', 'verified', 'user-access:user'])->gro
         Route::get('/change-password', 'index')->name('user.change-password');
         Route::post('/change-password', 'store')->name('user.store-password');
     });
+    Route::controller(App\Http\Controllers\User\CheckoutController::class)->group(function () {
+        Route::get('/checkout-data', 'index')->name('checkout');
+    });
 });
 
 Route::controller(App\Http\Controllers\Front\FrontEndController::class)->group(function () {
@@ -243,4 +263,8 @@ Route::controller(App\Http\Controllers\Front\FrontEndController::class)->group(f
     Route::get('/dentist', 'dentist')->name('dentist.page');
     Route::get('/clinic-profile/{id}', 'clinicProfile')->name('clinics.profile');
     Route::get('/doctor-profile/{id}', 'doctorProfile')->name('doctor.profile');
+});
+Route::controller(App\Http\Controllers\Front\LocationController::class)->group(function () {
+    Route::get('/search-doctors', 'index')->name('doctor.search');
+    Route::get('search', 'search')->name('doctor.result.search');
 });

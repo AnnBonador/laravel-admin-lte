@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>Admin Panel {{ isset($title) ? '| ' . $title : '' }}</title>
+    <title> {{ title() }}</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -32,7 +32,41 @@
     <div class="wrapper">
 
         <!-- Navbar -->
-        @include('layouts.inc.user.navbar')
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
+                            class="fas fa-bars"></i></a>
+                </li>
+
+            </ul>
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item dropdow user-menu">
+                    <!-- Messages Dropdown Menu -->
+                    <div class="btn-group">
+
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static"
+                            aria-expanded="false">
+                            {{ Auth::user()->fname }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-lg-end">
+                            <li><a href="{{ route('logout') }}" class="dropdown-item"
+                                    onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">Logout</a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+            </ul>
+        </nav>
         <!-- /.navbar -->
 
         {{-- Sidebar --}}
@@ -94,7 +128,12 @@
         </div>
         <!-- /.content-wrapper -->
         {{-- Footer --}}
-        @include('layouts.inc.user.footer')
+        <footer class="main-footer">
+            <strong>Copyright &copy; {{ date('Y') }} <a href="#">{{ getFooter() }}</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+            </div>
+        </footer>
 
 
         <!-- Control Sidebar -->

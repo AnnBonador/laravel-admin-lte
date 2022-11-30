@@ -37,8 +37,8 @@
                                 <thead class="bg-light">
                                     <tr>
                                         <th>Patient Name</th>
-                                        <th>Time</th>
                                         <th>Services</th>
+                                        <th>Charges</th>
                                         <th>Date</th>
                                         <th>Status</th>
                                         <th>Action</th>
@@ -49,21 +49,38 @@
                                         <tr>
                                             <td>
                                                 @if ($data->patients()->exists())
-                                                    <b>{{ $data->patients->full_name }}</b><br>
+                                                    <b>{{ $data->patients->full_name }} <span class="text-primary">
+                                                            ({{ $data->start_time . ' - ' . $data->end_time }})
+                                                        </span><br>
+                                                    </b>
                                                 @endif
                                                 @if ($data->doctors()->exists())
-                                                    Doctor: {{ $data->doctors->full_name }}<br>
+                                                    Doctor:
+                                                    <a href="{{ route('doctor.profile', $data->doctors->id) }}">
+                                                        {{ $data->doctors->full_name }}<br>
+                                                    </a>
                                                 @endif
                                                 @if ($data->clinic()->exists())
                                                     Clinic: <span class="text-primary">{{ $data->clinic->name }}</span><br>
                                                 @endif
                                                 <small>Payment: {{ $data->payment_option }}</small>
                                             </td>
-                                            <td>{{ $data->start_time . ' - ' . $data->end_time }}</td>
                                             <td>
-                                                {{ implode(', ', $data->service) }}
+                                                @foreach ($data->services as $service)
+                                                    {{ $service->name }}
+                                                    @if (!$loop->last)
+                                                        ,
+                                                    @endif
+                                                @endforeach
                                             </td>
-                                            <td>{{ $data->schedule->day }}</td>
+                                            <td>
+                                                ₱ {{ $data->services()->sum('charges') }}
+                                            </td>
+                                            <td>
+                                                @if ($data->schedule()->exists())
+                                                    {{ $data->schedule->day }}
+                                                @endif
+                                            </td>
                                             <td>
                                                 @if ($data->status == 'Booked')
                                                     <span class="badge badge-light">{{ $data->status }}</span>

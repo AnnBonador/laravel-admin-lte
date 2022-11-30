@@ -107,15 +107,15 @@
                                             <span class="text-danger text-left">{{ $errors->first('dob') }}</span>
                                         @endif
                                     </div>
-                                    <div class="form-group col-sm-4">
+                                    <div class="form-group col-sm-8">
                                         <label for="">Specialization</label>
                                         <span class="text-danger">*</span>
-                                        <select name="specialization_id" class="form-control select2bs4"
-                                            data-placeholder="Search" data-allow-clear="true" style="width: 100%;">
-                                            <option selected="selected"></option>
-                                            @foreach ($specialize as $id => $item)
-                                                <option value="{{ $id }}"
-                                                    {{ old('specialization_id') == $id ? 'selected' : '' }}>
+                                        <select name="specialization_id[]" class="select2bs4" data-placeholder="Search"
+                                            data-allow-clear="true" multiple="multiple" style="width: 100%;">
+                                            <option value=""></option>
+                                            @foreach ($specialize as $item)
+                                                <option value="{{ $item }}"
+                                                    {{ in_array($item, old('specialization_id') ?: []) ? 'selected' : '' }}>
                                                     {{ $item }}</option>
                                             @endforeach
                                         </select>
@@ -180,34 +180,9 @@
                                 </div>
                                 <hr>
                                 <div class="row mt-2">
-                                    <div class="form-group col-sm-6">
-                                        <label for="">Degree</label>
-                                        <input type="text" name="degree" value="{{ old('degree') }}"
-                                            class="form-control" placeholder="Enter degree">
-                                        @if ($errors->has('degree'))
-                                            <span class="text-danger text-left">{{ $errors->first('degree') }}</span>
-                                        @endif
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="">College/University</label>
-                                        <input type="text" name="college" value="{{ old('college') }}"
-                                            class="form-control" placeholder="Enter college">
-                                        @if ($errors->has('college'))
-                                            <span class="text-danger text-left">{{ $errors->first('college') }}</span>
-                                        @endif
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="">About</label>
-                                        <textarea name="about" class="form-control" rows="3"></textarea>
-                                        @if ($errors->has('about'))
-                                            <span class="text-danger text-left">{{ $errors->first('about') }}</span>
-                                        @endif
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row mt-2">
                                     <div class="form-group col-sm-12">
                                         <label for="">Address</label>
+                                        <span class="text-danger">*</span>
                                         <input type="text" name="address" value="{{ old('address') }}"
                                             class="form-control" placeholder="Enter address">
                                         @if ($errors->has('address'))
@@ -216,6 +191,7 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="">Country</label>
+                                        <span class="text-danger">*</span>
                                         <input type="text" name="country" value="{{ old('country') }}"
                                             class="form-control" placeholder="Enter country name">
                                         @if ($errors->has('country'))
@@ -224,10 +200,64 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="">City</label>
+                                        <span class="text-danger">*</span>
                                         <input type="text" name="city" value="{{ old('city') }}"
                                             class="form-control" placeholder="Enter city">
                                         @if ($errors->has('city'))
                                             <span class="text-danger text-left">{{ $errors->first('city') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row mt-2">
+                                    <div class="form-group col-sm-6">
+                                        <label for="">Latitude</label>
+                                        <input type="text" name="latitude" value="{{ old('latitude') }}"
+                                            class="form-control" placeholder="Enter latitude">
+                                        @if ($errors->has('latitude'))
+                                            <span class="text-danger text-left">{{ $errors->first('latitude') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="">Longitude</label>
+                                        <input type="text" name="longitude" value="{{ old('longitude') }}"
+                                            class="form-control" placeholder="Enter longitude">
+                                        @if ($errors->has('longitude'))
+                                            <span class="text-danger text-left">{{ $errors->first('longitude') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row mt-2">
+                                    <div class="form-group col-sm-4">
+                                        <label for="">Degree</label>
+                                        <input type="text" name="degree" value="{{ old('degree') }}"
+                                            class="form-control" placeholder="Enter degree">
+                                        @if ($errors->has('degree'))
+                                            <span class="text-danger text-left">{{ $errors->first('degree') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label for="">College/University</label>
+                                        <input type="text" name="college" value="{{ old('college') }}"
+                                            class="form-control" placeholder="Enter college">
+                                        @if ($errors->has('college'))
+                                            <span class="text-danger text-left">{{ $errors->first('college') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label for="">Year completion</label>
+                                        <input type="text" name="year" value="{{ old('year') }}"
+                                            class="form-control" placeholder="Enter year completion" id="num">
+                                        @if ($errors->has('year'))
+                                            <span class="text-danger text-left">{{ $errors->first('year') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="">About</label>
+                                        <textarea name="about" class="form-control" rows="3"></textarea>
+                                        @if ($errors->has('about'))
+                                            <span class="text-danger text-left">{{ $errors->first('about') }}</span>
                                         @endif
                                     </div>
                                 </div>

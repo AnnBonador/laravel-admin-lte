@@ -28,7 +28,7 @@
                     <div class="doctor-widget">
                         <div class="doc-info-left">
                             <div class="doctor-img">
-                                @if (!empty($data->image->count))
+                                @if (!empty($doctor->image))
                                     <img src="{{ asset('uploads/doctor/' . $doctor->image) }}" class="img-fluid"
                                         alt="User Image">
                                 @else
@@ -38,50 +38,78 @@
                             </div>
                             <div class="doc-info-cont">
                                 <h4 class="doc-name">{{ $doctor->full_name }}</h4>
-                                <p class="doc-speciality">{{ $doctor->specialty->name }}</p>
+                                <p class="doc-speciality">
+                                    @if (!empty($doctor->specialization_id))
+                                        {{ implode(', ', $doctor->specialization_id) }}
+                                    @endif
+                                </p>
                                 <p class="doc-department"><img
                                         src="{{ asset('front-assets/assets/img/specialities/specialities-05.png') }}"
                                         class="img-fluid" alt="Speciality">Dentist</p>
                                 <div class="rating">
-                                    @if (!empty($ratings->count()))
+
+                                    @if (!empty($doctor->reviews))
                                         @php
-                                            $score_total = $five_stars * 5 + $four_stars * 4 + $three_stars * 3 + $two_stars * 2 + $one_star * 1;
-                                            $five_star_score = $score_total / $ratings->count();
+                                            $rating = $doctor->reviews->avg('star_rating');
                                         @endphp
                                         @for ($i = 1; $i <= 5; $i++)
-                                            @php
-                                                $checkstar = $five_star_score - $i;
-                                            @endphp
-                                            @if ($checkstar >= $i)
-                                                <i class="fas fa-star filled"></i>
-                                            @else
+                                            @if ($rating < $i)
+                                                @if (round($rating) == $i)
+                                                    <i class="fas fa-star-half filled"></i>
+                                                    @continue
+                                                @endif
                                                 <i class="fas fa-star"></i>
+                                                @continue
                                             @endif
+                                            <i class="fas fa-star filled"></i>
                                         @endfor
+                                        <span class="d-inline-block average-rating">
+                                            ({{ $doctor->reviews->count() }})
+                                        </span>
                                     @else
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <i class="fas fa-star"></i>
+                                        @endfor
+                                        <span class="d-inline-block average-rating">(0)</span>
                                     @endif
 
-                                    <span class="d-inline-block average-rating">({{ $ratings->count() }})</span>
                                 </div>
                                 <div class="clinic-details">
-                                    <p class="doc-location">{{ $doctor->degree }}</p>
+                                    <p class="doc-location"><i class="fas fa-map-marker-alt"></i>
+                                        {{ $doctor->address . ' ' . $doctor->city . ', ' . $doctor->country }}</p>
                                 </div>
                                 <div class="clinic-services">
-                                    @foreach ($doctor->service as $data)
-                                        <li>{{ $data->name }}</li>
+                                    @foreach ($services as $data)
+                                        <span>{{ $data->name }}</span>
                                     @endforeach
                                 </div>
                             </div>
                         </div>
+
                         <div class="doc-info-right">
                             <div class="clini-infos">
                                 <ul>
-                                    <li><i class="far fa-comment"></i> {{ $ratings->count() }} Feedback</li>
+                                    <li><i class="fas fa-location-arrow"></i>
+                                        <b class="text-info">
+                                            @foreach ($distance as $value)
+                                                @php
+                                                    $miles = $value->distance;
+                                                    $meter = 1.609344 * $miles;
+                                                @endphp
+                                                {{ round($meter, 0) }} km
+                                            @endforeach
+                                        </b>
+                                    </li>
+                                    <li><i class="far fa-comment"></i>
+                                        @if ($doctor->reviews)
+                                            {{ $doctor->reviews->count() ?: '0' }}
+                                        @else
+                                            0
+                                        @endif
+                                        Feedback
+                                    </li>
+                                    <li><i class="fas fa-envelope"></i>{{ $doctor->email }}</li>
+                                    <li><i class="fas fa-phone"></i>{{ $doctor->contact }}</li>
                                     <li><i class="fas fa-map-marker-alt"></i>{{ $doctor->city . ', ' . $doctor->country }}
                                     </li>
                                 </ul>
@@ -136,11 +164,14 @@
                                         <div class="experience-box">
                                             <ul class="experience-list">
                                                 <li>
+                                                    <div class="experience-user">
+                                                        <div class="before-circle"></div>
+                                                    </div>
                                                     <div class="experience-content">
                                                         <div class="timeline-content">
                                                             <a href="#/" class="name">{{ $doctor->college }}</a>
                                                             <div>{{ $doctor->degree }}</div>
-                                                            {{-- <span class="time">1998 - 2003</span> --}}
+                                                            <span class="time">{{ $doctor->year }}</span>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -163,6 +194,19 @@
                                     </div>
                                     <!-- /Services List -->
 
+                                    <!-- Specializations List -->
+                                    <div class="service-list">
+                                        <h4>Specializations</h4>
+                                        <ul class="clearfix">
+                                            @if (!empty($doctor->specialization_id))
+                                                @foreach ($doctor->specialization_id as $data)
+                                                    <li>{{ $data }}</li>
+                                                @endforeach
+                                            @endif
+                                        </ul>
+                                    </div>
+                                    <!-- /Specializations List -->
+
                                 </div>
                             </div>
                         </div>
@@ -182,8 +226,14 @@
                                             <!-- Comment List -->
                                             <li>
                                                 <div class="comment">
-                                                    <img class="avatar avatar-sm rounded-circle" alt="User Image"
-                                                        src="{{ asset('uploads/patient/' . $data->patients->image) }}">
+                                                    @if (!empty($data->patients->image))
+                                                        <img class="avatar avatar-sm rounded-circle" alt="User Image"
+                                                            src="{{ asset('uploads/patient/' . $data->patients->image) }}">
+                                                    @else
+                                                        <img src="{{ asset('admin-assets/dist/img/default.png') }}"
+                                                            class="avatar avatar-sm rounded-circle" width="50"
+                                                            alt="User Image">
+                                                    @endif
                                                     <div class="comment-body">
                                                         <div class="meta-data">
                                                             <span
@@ -193,11 +243,13 @@
 
                                                             <div class="review-count rating"
                                                                 style="position: relative !important">
-                                                                <i class="fas fa-star filled"></i>
-                                                                <i class="fas fa-star filled"></i>
-                                                                <i class="fas fa-star filled"></i>
-                                                                <i class="fas fa-star filled"></i>
-                                                                <i class="fas fa-star"></i>
+                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                    @if ($data->star_rating >= $i)
+                                                                        <i class="fas fa-star filled"></i>
+                                                                    @else
+                                                                        <i class="fas fa-star"></i>
+                                                                    @endif
+                                                                @endfor
                                                             </div>
 
                                                         </div>
@@ -233,15 +285,17 @@
                                         <div class="widget-content">
                                             <div class="listing-hours">
                                                 @foreach ($schedule as $data)
-                                                    <div class="listing-day">
-                                                        <div class="day">
-                                                            {{ \Carbon\Carbon::parse($data->day)->toFormattedDateString() }}
+                                                    @if ($data->day >= Carbon\Carbon::now()->format('m/d/Y'))
+                                                        <div class="listing-day">
+                                                            <div class="day">
+                                                                {{ \Carbon\Carbon::parse($data->day)->toFormattedDateString() }}
+                                                            </div>
+                                                            <div class="time-items">
+                                                                <span
+                                                                    class="time">{{ $data->start_time . ' - ' . $data->end_time }}</span>
+                                                            </div>
                                                         </div>
-                                                        <div class="time-items">
-                                                            <span
-                                                                class="time">{{ $data->start_time . ' - ' . $data->end_time }}</span>
-                                                        </div>
-                                                    </div>
+                                                    @endif
                                                 @endforeach
                                             </div>
                                         </div>

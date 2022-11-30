@@ -126,12 +126,21 @@
                   </li>
                   @hasanyrole('Super-Admin|Clinic Admin')
                       <li class="nav-item">
-                          <a href="{{ route('reports') }}" class="nav-link">
+                          <a href="#" class="nav-link">
                               <i class="nav-icon fas fa-file-pdf "></i>
                               <p>
                                   Reports
+                                  <i class="right fas fa-angle-left"></i>
                               </p>
                           </a>
+                          <ul class="nav nav-treeview">
+                              <li class="nav-item">
+                                  <a href="{{ route('medical.report') }}" class="nav-link">
+                                      <i class="far fas fa-user"></i>
+                                      <p>Medical Report</p>
+                                  </a>
+                              </li>
+                          </ul>
                       </li>
                   @endhasanyrole
                   @hasrole('Super-Admin')
@@ -159,17 +168,20 @@
 
                           </ul>
                       </li>
-                      <li
-                          class="nav-item {{ request()->routeIs('settings.*') || request()->routeIs('specialization.*') ? 'menu-open' : '' }}">
-                          <a href="#"
-                              class="nav-link {{ request()->routeIs('settings.*') || request()->routeIs('specialization.*') ? 'active' : '' }}">
-                              <i class="nav-icon fas fa-wrench"></i>
-                              <p>
-                                  Settings
-                                  <i class="right fas fa-angle-left"></i>
-                              </p>
-                          </a>
-                          <ul class="nav nav-treeview">
+                  @endrole
+
+                  <li
+                      class="nav-item {{ request()->routeIs('settings.*') || request()->routeIs('specialization.*') ? 'menu-open' : '' }}">
+                      <a href="#"
+                          class="nav-link {{ request()->routeIs('settings.*') || request()->routeIs('specialization.*') ? 'active' : '' }}">
+                          <i class="nav-icon fas fa-wrench"></i>
+                          <p>
+                              Settings
+                              <i class="right fas fa-angle-left"></i>
+                          </p>
+                      </a>
+                      <ul class="nav nav-treeview">
+                          @hasrole('Super-Admin')
                               <li class="nav-item">
                                   <a href="{{ route('settings.index') }}"
                                       class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}">
@@ -177,6 +189,8 @@
                                       <p>System Settings</p>
                                   </a>
                               </li>
+                          @endrole
+                          @hasanyrole('Super-Admin|Clinic Admin|Receptionist')
                               <li class="nav-item">
                                   <a href="{{ route('specialization.index') }}"
                                       class="nav-link {{ request()->routeIs('specialization.*') ? 'active' : '' }}">
@@ -184,10 +198,16 @@
                                       <p>Specialization</p>
                                   </a>
                               </li>
-
-                          </ul>
-                      </li>
-                  @endhasrole
+                              <li class="nav-item">
+                                  <a href="{{ route('paypal.index') }}"
+                                      class="nav-link {{ request()->routeIs('paypal.*') ? 'active' : '' }}">
+                                      <i class="fas fa-wallet"></i>
+                                      <p>Payment</p>
+                                  </a>
+                              </li>
+                          @endhasrole
+                      </ul>
+                  </li>
 
               </ul>
           </nav>

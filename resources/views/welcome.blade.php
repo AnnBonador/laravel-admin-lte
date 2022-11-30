@@ -39,8 +39,13 @@
                             <div class="profile-widget">
                                 <div class="doc-img">
                                     <a href="doctor-profile.html">
-                                        <img class="img-fluid" alt="User Image"
-                                            src="{{ asset('uploads/clinic/' . $data->image) }}">
+                                        @if (!empty($data->image))
+                                            <img class="img-fluid" alt="User Image"
+                                                src="{{ asset('uploads/clinic/' . $data->image) }}">
+                                        @else
+                                            <img src="{{ asset('admin-assets/dist/img/default.png') }}" class="img-fluid"
+                                                alt="clinic Image">
+                                        @endif
                                     </a>
                                 </div>
                                 <div class="pro-content">

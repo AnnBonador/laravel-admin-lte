@@ -8,20 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Appointment extends Model
 {
     use HasFactory;
-
-    protected $casts = [
-        'service' => 'json',
-    ];
-
-    public function setServiceAttribute($value)
-    {
-        $this->attributes['service'] = json_encode($value);
-    }
-
-    public function getServiceAttribute($value)
-    {
-        return json_decode($value);
-    }
+    protected $fillable = ['clinic_id', 'doctor_id', 'patient_id', 'schedule_id', 'description', 'status', 'payment_option', 'start_time', 'end_time'];
 
     public function patient()
     {
@@ -45,5 +32,9 @@ class Appointment extends Model
     public function schedule()
     {
         return $this->belongsTo(Schedule::class, 'schedule_id', 'id')->withDefault();
+    }
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'appointment_service');
     }
 }

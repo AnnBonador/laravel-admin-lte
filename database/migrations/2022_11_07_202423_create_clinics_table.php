@@ -15,15 +15,18 @@ class CreateClinicsTable extends Migration
     {
         Schema::create('clinics', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('doctor_id')->nullable();
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('contact');
-            $table->string('specialization');
+            $table->json('specialization_id');
             $table->tinyInteger('status');
             $table->string('address');
             $table->string('country');
             $table->string('city');
+            $table->string('image')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string('about')->nullable();
             $table->timestamps();
         });
     }

@@ -31,9 +31,9 @@
                         </div>
                         <div class="card-body">
                             @include('layouts.partials.messages')
-                            <form action="{{ route('user.appointments.store') }}" method="POST">
+                            <form action="{{ route('appointments.create.step.one.post') }}" method="POST">
                                 @csrf
-                                <div class="row mb-2">
+                                <div class="row">
                                     <div class="col-sm-5">
                                         <div class="form-group">
                                             <label for="">Clinic</label>
@@ -84,44 +84,39 @@
                                                     class="text-danger text-left">{{ $errors->first('schedule_id') }}</span>
                                             @endif
                                         </div>
-                                        <div class="form-group">
-                                            <label>Payment Mode</label>
-                                            <span class="text-danger">*</span>
-                                            <select name="payment_option" class="custom-select online-payment">
-                                                <option value="Cash"
-                                                    {{ old('payment_status') == 'Cash' ? 'selected' : '' }}>
-                                                    Cash
-                                                </option>
-                                                <option value="Paypal"
-                                                    {{ old('payment_status') == 'Paypal' ? 'selected' : '' }}>Paypal
-                                                </option>
-                                            </select>
-                                            @if ($errors->has('status'))
-                                                <span class="text-danger text-left">{{ $errors->first('name') }}</span>
-                                            @endif
-                                        </div>
                                     </div>
                                     <div class="col-sm-7">
                                         <div class="form-group">
                                             <label for="">Available Slot </label>
                                             <span class="text-danger">*</span>
                                             <input type="hidden" id="get_time_value" name="time">
-                                            <div class="text-center" id="load_slots">
-                                                <span class="fw-lighter d-none" id="no"></span>
+                                            <div class="border">
+                                                <div class="text-center p-3" id="load_slots">
+                                                </div>
                                             </div>
                                             @if ($errors->has('time'))
                                                 <span class="text-danger text-left">{{ $errors->first('time') }}</span>
                                             @endif
                                         </div>
                                         <div class="form-group">
+                                            <label for="">Services Detail </label>
+                                            <div class="border">
+                                                <div class="text-center p-3">
+                                                    <span id="price" class="text-muted"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="">Description</label>
-                                            <textarea name="description" class="form-control" rows="2" placeholder="Enter appointment description"></textarea>
+                                            <textarea name="description" class="form-control" rows="2" placeholder="Enter appointment description">{{ old('description', $app->description ?? '') }}</textarea>
                                         </div>
                                     </div>
                                 </div>
-                                <button class="btn btn-primary" type="submit">Save</button>
-                            </form>
                         </div>
+                        <div class="card-footer text-right">
+                            <button type="submit" class="btn btn-primary">Next</button>
+                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -157,12 +152,9 @@
                             $('#load_doctor').append(
                                 '<option value=""> Select Doctor</option>');
                             $.each(data, function(key, value) {
-                                $('#load_doctor').append($(
-                                    "<option/>", {
-                                        value: key,
-                                        text: value
-                                    }));
-
+                                $('#load_doctor').append('<option value="' + value.id +
+                                    '">' + value.fname + ' ' + value.lname +
+                                    '</option>');
                             });
                         }
                     })
@@ -189,15 +181,10 @@
                         },
                         success: function(data) {
                             $('#load_service').empty();
-                            $('#load_service').append(
-                                '<option value=""> Select Service</option>');
                             $.each(data.services, function(key, value) {
-                                $('#load_service').append($(
-                                    "<option/>", {
-                                        value: value,
-                                        text: value
-                                    }));
-
+                                $('#load_service').append('<option value="' + value.id +
+                                    '" data-price="' + value.charges + '">' + value
+                                    .name + '</option>');
                             });
                             $('#load_date').empty();
                             $('#load_date').append(
@@ -219,6 +206,19 @@
 
                 }
             });
+
+            //getting amount
+            $('#load_service').on('change', function(e) {
+                var service_id = e.target.value;
+                var doctor_id = $('#get_doctor_id').val();
+                var test = [];
+                $.each($('#load_service :selected'), function() {
+                    test.push("<b>" + $(this).text() + "</b> - ₱ " + $(this)
+                        .data('price'));
+
+                })
+                document.getElementById('price').innerHTML = test.join('<br>');
+            })
 
             //getting time slots
             $('#load_date').on('change', function(e) {

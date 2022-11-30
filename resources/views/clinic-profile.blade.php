@@ -28,8 +28,13 @@
                     <div class="doctor-widget">
                         <div class="doc-info-left">
                             <div class="doctor-img">
-                                <img src="{{ asset('uploads/clinic/' . $clinic->image) }}" class="img-fluid"
-                                    alt="User Image">
+                                @if (!empty($clinic->image))
+                                    <img src="{{ asset('uploads/clinic/' . $clinic->image) }}" class="img-fluid"
+                                        alt="User Image">
+                                @else
+                                    <img src="{{ asset('admin-assets/dist/img/default.png') }}" class="img-fluid"
+                                        alt="User Image">
+                                @endif
                             </div>
                             <div class="doc-info-cont">
                                 <h4 class="doc-name">{{ $clinic->name }}</h4>
@@ -115,67 +120,107 @@
                         <!-- Locations Content -->
                         <div role="tabpanel" id="doc_locations" class="tab-pane fade">
 
+                            <!-- Doctor Widget -->
                             @foreach ($doctors as $data)
-                                <!-- Location List -->
-                                <div class="location-list">
-                                    <div class="row">
-
-                                        <!-- Clinic Content -->
-                                        <div class="col-md-6">
-                                            <div class="clinic-content">
-                                                <div class="doc-info-left">
-                                                    <div class="doctor-img">
-                                                        @if (!empty($data->image))
-                                                            <a href="{{ route('doctor.profile', $data->id) }}">
-                                                                <img src="{{ asset('uploads/doctor/' . $data->image) }}"
-                                                                    class="img-fluid" alt="User Image">
-                                                            </a>
-                                                        @else
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="doctor-widget">
+                                            <div class="doc-info-left">
+                                                <div class="doctor-img">
+                                                    @if (!empty($data->image))
+                                                        <a href="{{ route('doctor.profile', $data->id) }}">
+                                                            <img src="{{ asset('uploads/doctor/' . $data->image) }}"
+                                                                class="img-fluid" alt="User Image">
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route('doctor.profile', $data->id) }}">
                                                             <img src="{{ asset('admin-assets/dist/img/default.png') }}"
                                                                 class="img-fluid" alt="User Image">
+                                                        </a>
+                                                    @endif
+                                                </div>
+                                                <div class="doc-info-cont">
+                                                    <h4 class="doc-name"><a
+                                                            href="{{ route('doctor.profile', $data->id) }}">{{ $data->full_name }}</a>
+                                                    </h4>
+                                                    <p class="doc-speciality">
+                                                        @if (!empty($data->specialization_id))
+                                                            {{ implode(', ', $data->specialization_id) }}
+                                                        @endif
+                                                    </p>
+                                                    <h5 class="doc-department"><img
+                                                            src="{{ asset('front-assets/assets/img/specialities/specialities-05.png') }}"
+                                                            class="img-fluid" alt="Speciality">Dentist</h5>
+                                                    <div class="rating">
+                                                        @if (!empty($data->reviews))
+                                                            @php
+                                                                $rating = $data->reviews->avg('star_rating');
+                                                            @endphp
+                                                            @for ($i = 1; $i <= 5; $i++)
+                                                                @if ($rating < $i)
+                                                                    @if (round($rating) == $i)
+                                                                        <i class="fas fa-star-half filled"></i>
+                                                                        @continue
+                                                                    @endif
+                                                                    <i class="fas fa-star"></i>
+                                                                    @continue
+                                                                @endif
+                                                                <i class="fas fa-star filled"></i>
+                                                            @endfor
+                                                            <span class="d-inline-block average-rating">
+                                                                ({{ $data->reviews->count() }})
+                                                            </span>
+                                                        @else
+                                                            @for ($i = 1; $i <= 5; $i++)
+                                                                <i class="fas fa-star"></i>
+                                                            @endfor
+                                                            <span class="d-inline-block average-rating">(0)</span>
                                                         @endif
                                                     </div>
-                                                    <div class="doc-info-cont">
-                                                        <h4 class="doc-name"><a
-                                                                href="{{ route('doctor.profile', $data->id) }}">{{ $data->full_name }}</a>
-                                                        </h4>
-                                                        <p class="doc-speciality">{{ $data->specialty->name }}</p>
-                                                        <h5 class="doc-department"><img
-                                                                src="{{ asset('front-assets/assets/img/specialities/specialities-05.png') }}"
-                                                                class="img-fluid" alt="Speciality">Dentist</h5>
-                                                        <div class="rating">
-
-                                                            {{-- @for ($i = 1; $i <= 5; $i++)
-                                                                @if ($data->ratings->star_rating >= $i)
-                                                                    <i class="fas fa-star filled"></i>
-                                                                @else
-                                                                    <i class="fas fa-star"></i>
-                                                                @endif
-                                                            @endfor --}}
-
-                                                            <span class="d-inline-block average-rating">
-                                                                @foreach ($data->ratings as $val)
-                                                                    {{ $val->ratings()->avg() }}
-                                                                @endforeach
-
-                                                            </span>
-                                                        </div>
-                                                        <div class="clinic-details">
-                                                            <p class="doc-location"><i class="far fa-envelope"></i>
-                                                                {{ $data->email }}</p>
-                                                        </div>
+                                                    <div class="clinic-details">
+                                                        <p class="doc-location"><i class="fas fa-map-marker-alt"></i>
+                                                            {{ $data->address . ' ' . $data->city . ', ' . $data->country }}
+                                                        </p>
+                                                    </div>
+                                                    <div class="clinic-services">
+                                                        @if ($data->services)
+                                                            <span>{{ $data->services->name }}</span>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="doc-info-right">
+                                                <div class="clini-infos">
+                                                    <ul>
+                                                        <li><i class="far fa-comment"></i>
+                                                            @if ($data->reviews)
+                                                                {{ $data->reviews->count() ?: '0' }}
+                                                            @else
+                                                                0
+                                                            @endif
+                                                            Feedback
+                                                        </li>
+                                                        <li><i class="fas fa-envelope"></i>{{ $data->email }}</li>
+                                                        <li><i class="fas fa-phone"></i>{{ $data->contact }}</li>
+                                                        <li><i
+                                                                class="fas fa-map-marker-alt"></i>{{ $data->city . ', ' . $data->country }}
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="clinic-booking">
+                                                    <a class="view-pro-btn"
+                                                        href="{{ route('doctor.profile', $data->id) }}">View Profile</a>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <!-- /Clinic Content -->
                                     </div>
                                 </div>
                             @endforeach
-                            <!-- /Location List -->
+                            <!-- /Doctor Widget -->
 
                         </div>
                         <!-- /Locations Content -->
+
 
                     </div>
                 </div>

@@ -66,8 +66,8 @@
                                             <td>{{ $data->email }}</td>
                                             <td>{{ $data->contact }}</td>
                                             <td>
-                                                @if ($data->specialty()->exists())
-                                                    {{ $data->specialty->name }}
+                                                @if (!empty($data->specialization_id))
+                                                    {{ implode(', ', $data->specialization_id) }}
                                                 @endif
                                             </td>
                                             <td class="text-center">

@@ -7,9 +7,10 @@ use App\Models\User;
 use App\Models\Clinic;
 use App\Models\Treated;
 use App\Models\Schedule;
-use App\Models\Services;
+use App\Models\Service;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
+use App\Models\AppointmentService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Appointment as MailAppointment;
@@ -62,7 +63,7 @@ class AppointmentController extends Controller
 
     public function create()
     {
-        $services = Services::where('doctor_id', auth()->id())->where('status', '1')->pluck('name', 'id');
+        $services = Service::where('doctor_id', auth()->id())->where('status', '1')->get();
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
         $doctors = User::role('Doctor')->where('clinic_id', auth()->user()->isClinicAdmin)
             ->where('status', '1')
@@ -108,10 +109,10 @@ class AppointmentController extends Controller
         $appointment->doctor_id = $validatedData['doctor_id'];
         $appointment->patient_id = $validatedData['patient_id'];
         $appointment->schedule_id = $validatedData['schedule_id'];
-        $appointment->service = $validatedData['service'];
         $appointment->description = $validatedData['description'];
         $appointment->status = $validatedData['status'];
         $appointment->payment_option = 'Cash';
+        $service_app = $validatedData['service'];
 
         $selectedTime = $request->time;
         $preferredTime = explode(" - ", $selectedTime);
@@ -119,6 +120,13 @@ class AppointmentController extends Controller
         $appointment->end_time = $preferredTime[1];
 
         $appointment->save();
+
+        foreach ($service_app as $data) {
+            AppointmentService::create([
+                'appointment_id' => $appointment->id,
+                'service_id' => $data
+            ]);
+        }
 
         $mailData = [
             'name' => $appointment->patients->full_name,
@@ -133,13 +141,14 @@ class AppointmentController extends Controller
 
     public function edit($id)
     {
-        $appointment = Appointment::findOrFail($id);
+        $appointment = Appointment::with('services')->where('id', $id)->first();
+        $app = $appointment->services->pluck('id')->toArray();
         $patients = User::where('type', '0')->where('status', '1')->get()->pluck('full_name', 'id');
         $clinic = Clinic::where('status', '1')->pluck('name', 'id');
         $doctor = User::role('Doctor')->where('status', '1')->where('clinic_id', $appointment->clinic_id)->get()->pluck('fullname', 'id');
-        $service = Services::where('status', '1')->where('doctor_id', $appointment->doctor_id)->pluck('name');
+        $service = Service::where('status', '1')->where('doctor_id', $appointment->doctor_id)->get();
         $schedule = Schedule::where('doctor_id', $appointment->doctor_id)->pluck('day', 'id');
-        return view('admin.appointment.edit', compact('patients', 'clinic', 'appointment', 'doctor', 'service', 'schedule'));
+        return view('admin.appointment.edit', compact('app', 'patients', 'clinic', 'appointment', 'doctor', 'service', 'schedule'));
     }
 
     public function destroy(Request $request)
@@ -194,7 +203,8 @@ class AppointmentController extends Controller
     public function getAppointmentDetails($id = 0)
     {
 
-        $appointment = Appointment::find($id);
+        $appointment = Appointment::with('services')->where('id', $id)->first();
+        $services = $appointment->services->pluck('name')->toArray();
 
         $html = "";
         if (!empty($appointment)) {
@@ -219,12 +229,12 @@ class AppointmentController extends Controller
                 <td width='70%'> " . $appointment->clinic->name  . "</td>
              </tr>
              <tr>
-                <td width='30%'><b>Description:</b></td>
-                <td width='70%'> " . $appointment->description  . "</td>
+                <td width='30%'><b>Services:</b></td>
+                <td width='70%'> " . implode(', ', $services) . "</td>
              </tr>
              <tr>
-                <td width='30%'><b>Service:</b></td>
-                <td width='70%'> " . implode(',', $appointment->service)  . "</td>
+                <td width='30%'><b>Description:</b></td>
+                <td width='70%'> " . $appointment->description  . "</td>
              </tr>
              <tr>
                 <td width='30%'><b>Payment option:</b></td>
@@ -238,12 +248,5 @@ class AppointmentController extends Controller
         $response['html'] = $html;
 
         return response()->json($response);
-    }
-
-    public function getAmount(Request $request)
-    {
-        $id = $request->doctor_id;
-        $amount = Services::where('id', $request->service_id)->where('doctor_id', $id)->get();
-        return response()->json(["amount" => $amount]);
     }
 }

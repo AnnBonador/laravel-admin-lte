@@ -4,15 +4,10 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Doctor;
-use App\Models\Patient;
 use App\Models\Treated;
-use App\Models\Schedule;
-use App\Models\Services;
+use App\Models\Service;
 use App\Models\Appointment;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -101,7 +96,7 @@ class HomeController extends Controller
         } else if (auth()->user()->hasRole('Doctor')) {
             $total_patients = User::where('type', '0')->where('clinic_id', auth()->user()->clinic_id)->count();
             $total_appointments = Appointment::where('status', '!=', 'Completed')->where('doctor_id', Auth::id())->count();
-            $service = Services::where('doctor_id', Auth::id())->count();
+            $service = Service::where('doctor_id', Auth::id())->count();
             $treated = Treated::whereHas('appointment', function (Builder $query) {
                 $query->where('doctor_id', '=', Auth::id());
             })->count();

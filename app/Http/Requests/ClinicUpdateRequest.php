@@ -33,6 +33,8 @@ class ClinicUpdateRequest extends FormRequest
             'address' => 'required',
             'country' => 'required',
             'city' => 'required',
+            'latitude' => 'nullable',
+            'longitude' => 'nullable',
             'clinic_image' => 'sometimes|nullable|image|mimes:jpeg,gif,png,jpg|max:2048',
 
             'fname_admin' => 'required',
