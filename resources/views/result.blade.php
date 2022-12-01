@@ -17,28 +17,13 @@
                         <form action="{{ route('doctor.result.search') }}" method="GET">
                             <div class="form-group search-info">
                                 <input type="text" class="form-control" name="search"
-                                    value="{{ Request::get('search') }}" placeholder="Search Doctors, Services Etc">
+                                    value="{{ Request::get('search') }}" placeholder="Search Doctors, Services Etc.">
                             </div>
                             <button type="submit" class="btn btn-primary search-btn"><i class="fas fa-search"></i>
                                 <span>Search</span></button>
                         </form>
                     </div>
                     <!-- /Search -->
-                </div>
-                <div class="col-md-2 col-12 d-md-block d-none">
-                    <div class="sort-by">
-                        <span class="sort-title">Sort by</span>
-                        <span class="sortby-fliter">
-                            <select class="select">
-                                <option>Select</option>
-                                <option class="sorting">Proximity</option>
-                                <option class="sorting">Rating</option>
-                                <option class="sorting">Popular</option>
-                                <option class="sorting">Latest</option>
-                                <option class="sorting">Free</option>
-                            </select>
-                        </span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -118,9 +103,9 @@
                                                         </p>
                                                     </div>
                                                     <div class="clinic-services">
-                                                        @if ($data->service)
-                                                            @foreach ($data->service as $data)
-                                                                <span>{{ $data->service->name }}</span>
+                                                        @if ($data->services)
+                                                            @foreach ($data->service as $s)
+                                                                <span>{{ $s->name }}</span>
                                                             @endforeach
                                                         @endif
                                                     </div>

@@ -70,7 +70,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     public function service()
     {
-        return $this->hasMany(Service::class, 'id', 'doctor_id');
+        return $this->hasMany(Service::class, 'doctor_id', 'id');
     }
 
     public function ratings()

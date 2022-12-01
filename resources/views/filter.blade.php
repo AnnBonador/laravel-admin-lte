@@ -16,7 +16,8 @@
                     <div class="search-box mt-2">
                         <form action="{{ route('doctor.result.search') }}" method="GET">
                             <div class="form-group search-info">
-                                <input type="text" class="form-control" name="search" placeholder="Search Doctors">
+                                <input type="text" class="form-control" name="search"
+                                    placeholder="Search Doctors, Services Etc.">
                             </div>
                             <button type="submit" class="btn btn-primary search-btn"><i class="fas fa-search"></i>
                                 <span>Search</span></button>
@@ -54,7 +55,7 @@
                                     </div>
                                     <div>
                                         <label class="custom_check">
-                                            <input type="checkbox" name="ratings">
+                                            <input type="checkbox" name="ratings" >
                                             <span class="checkmark"></span> Ratings
                                         </label>
                                     </div>
@@ -71,96 +72,6 @@
 
                 <div class="col-md-12 col-lg-8 col-xl-9">
 
-                    {{-- @foreach ($users as $doctor)
-                        <!-- Doctor Widget -->
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="doctor-widget">
-                                    <div class="doc-info-left">
-                                        <div class="doctor-img">
-                                            <a href="doctor-profile.html">
-                                                <img src="assets/img/doctors/doctor-thumb-01.jpg" class="img-fluid"
-                                                    alt="User Image">
-                                            </a>
-                                        </div>
-
-                                        @php
-                                            $miles = $doctor->distance;
-                                            $meter = 1.609344 * $miles;
-                                        @endphp
-                                        <div class="doc-info-cont">
-                                            <h4 class="doc-name"><a href="doctor-profile.html">
-                                                    {{ $doctor->fname . ' ' . $doctor->lname }}
-                                                </a></h4>
-                                            <p class="doc-speciality">{{ round($meter, 1) }} km</p>
-                                            <h5 class="doc-department"><img
-                                                    src="assets/img/specialities/specialities-05.png" class="img-fluid"
-                                                    alt="Speciality">Dentist</h5>
-                                            <div class="rating">
-                                                <i class="fas fa-star filled"></i>
-                                                <i class="fas fa-star filled"></i>
-                                                <i class="fas fa-star filled"></i>
-                                                <i class="fas fa-star filled"></i>
-                                                <i class="fas fa-star"></i>
-                                                <span class="d-inline-block average-rating">(17)</span>
-                                            </div>
-                                            <div class="clinic-details">
-                                                <p class="doc-location"><i class="fas fa-map-marker-alt"></i> Florida, USA
-                                                </p>
-                                                <ul class="clinic-gallery">
-                                                    <li>
-                                                        <a href="assets/img/features/feature-01.jpg"
-                                                            data-fancybox="gallery">
-                                                            <img src="assets/img/features/feature-01.jpg" alt="Feature">
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="assets/img/features/feature-02.jpg"
-                                                            data-fancybox="gallery">
-                                                            <img src="assets/img/features/feature-02.jpg" alt="Feature">
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="assets/img/features/feature-03.jpg"
-                                                            data-fancybox="gallery">
-                                                            <img src="assets/img/features/feature-03.jpg" alt="Feature">
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="assets/img/features/feature-04.jpg"
-                                                            data-fancybox="gallery">
-                                                            <img src="assets/img/features/feature-04.jpg" alt="Feature">
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="clinic-services">
-                                                <span>Dental Fillings</span>
-                                                <span> Whitneing</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="doc-info-right">
-                                        <div class="clini-infos">
-                                            <ul>
-                                                <li><i class="far fa-thumbs-up"></i> 98%</li>
-                                                <li><i class="far fa-comment"></i> 17 Feedback</li>
-                                                <li><i class="fas fa-map-marker-alt"></i> Florida, USA</li>
-                                                <li><i class="far fa-money-bill-alt"></i> $300 - $1000 <i
-                                                        class="fas fa-info-circle" data-toggle="tooltip"
-                                                        title="Lorem Ipsum"></i> </li>
-                                            </ul>
-                                        </div>
-                                        <div class="clinic-booking">
-                                            <a class="view-pro-btn" href="doctor-profile.html">View Profile</a>
-                                            <a class="apt-btn" href="booking.html">Book Appointment</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /Doctor Widget -->
-                    @endforeach --}}
                     @foreach ($doctors as $data)
                         <div class="card">
                             <div class="card-body">
@@ -193,13 +104,10 @@
                                                     src="{{ asset('front-assets/assets/img/specialities/specialities-05.png') }}"
                                                     class="img-fluid" alt="Speciality">Dentist</h5>
                                             <div class="rating">
-                                                @if (!empty($data->reviews))
-                                                    @php
-                                                        $rating = $data->reviews->avg('star_rating');
-                                                    @endphp
+                                                @if (!empty($data->average_rating))
                                                     @for ($i = 1; $i <= 5; $i++)
-                                                        @if ($rating < $i)
-                                                            @if (round($rating) == $i)
+                                                        @if ($data->average_rating < $i)
+                                                            @if (round($data->average_rating) == $i)
                                                                 <i class="fas fa-star-half filled"></i>
                                                                 @continue
                                                             @endif
@@ -208,9 +116,9 @@
                                                         @endif
                                                         <i class="fas fa-star filled"></i>
                                                     @endfor
-                                                    <span class="d-inline-block average-rating">
-                                                        ({{ $data->reviews->count() }})
-                                                    </span>
+                                                    {{-- <span class="d-inline-block average-rating">
+                                                        ({{ $data->average_rating->count() }})
+                                                    </span> --}}
                                                 @else
                                                     @for ($i = 1; $i <= 5; $i++)
                                                         <i class="fas fa-star"></i>
@@ -259,9 +167,6 @@
                         </div>
                     @endforeach
 
-                    <div class="load-more text-center">
-                        <a class="btn btn-primary btn-sm" href="javascript:void(0);">Load More</a>
-                    </div>
                 </div>
             </div>
 

@@ -178,9 +178,6 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'user-access:admin'])->g
     Route::controller(App\Http\Controllers\Admin\ReviewsController::class)->group(function () {
         Route::get('/reviews', 'index')->name('reviews');
     });
-    Route::controller(App\Http\Controllers\Admin\MedicalReportController::class)->group(function () {
-        Route::get('/reports', 'index')->name('reports');
-    });
     Route::controller(App\Http\Controllers\Admin\PaymentSettingController::class)->group(function () {
         Route::get('/payment-settings', 'index')->name('paypal.index');
         Route::get('/payment-settings/create', 'create')->name('paypal.create');
@@ -190,8 +187,11 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'user-access:admin'])->g
         Route::post('/payment-settings/delete', 'destroy')->name('paypal.delete');
     });
     Route::controller(App\Http\Controllers\Admin\MedicalController::class)->group(function () {
-        Route::get('/medical-report', 'index')->name('medical.report');
         Route::get('/medical-report-get/', 'filter')->name('medical.show.report');
+        Route::get('/medical-report-prnt', 'printMedical')->name('medical.print.report');
+    });
+    Route::controller(App\Http\Controllers\Admin\ServicesReportController::class)->group(function () {
+        Route::get('/reports/services', 'index')->name('report.services');
     });
 });
 
@@ -260,11 +260,12 @@ Route::prefix('user')->middleware(['auth', 'verified', 'user-access:user'])->gro
 
 Route::controller(App\Http\Controllers\Front\FrontEndController::class)->group(function () {
     Route::get('/', 'homepage')->name('home.page');
-    Route::get('/dentist', 'dentist')->name('dentist.page');
-    Route::get('/clinic-profile/{id}', 'clinicProfile')->name('clinics.profile');
-    Route::get('/doctor-profile/{id}', 'doctorProfile')->name('doctor.profile');
+    Route::get('dentist', 'dentist')->name('dentist.page');
+    Route::get('clinic-profile/{id}', 'clinicProfile')->name('clinics.profile');
+    Route::get('doctor-profile/{id}', 'doctorProfile')->name('doctor.profile');
 });
 Route::controller(App\Http\Controllers\Front\LocationController::class)->group(function () {
-    Route::get('/search-doctors', 'index')->name('doctor.search');
+    Route::get('search-doctors', 'index')->name('doctor.search');
     Route::get('search', 'search')->name('doctor.result.search');
+    Route::get('sort-doctors', 'sort')->name('doctor.filter.search');
 });

@@ -32,9 +32,7 @@ class FrontEndController extends Controller
         $services = Service::whereHas('doctors', function (Builder $query) use ($id) {
             $query->where('clinic_id', $id);
         })->get();
-        $doctors = User::with('reviews', 'services')->role('Doctor')->where('clinic_id', $id)->get();
-
-        dd($doctors);
+        $doctors = User::with('reviews', 'service')->role('Doctor')->where('clinic_id', $id)->get();
         return view('clinic-profile', compact('clinic', 'services', 'doctors'));
     }
 

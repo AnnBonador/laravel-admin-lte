@@ -17,11 +17,12 @@ class Service extends Model
 
     public function doctors()
     {
-        return $this->belongsTo(User::class, 'doctor_id', 'id')->withDefault();
+        return $this->belongsTo(User::class, 'doctor_id', 'id');
     }
 
     public function appointments()
     {
         return $this->belongsToMany(Appointment::class, 'appointment_services');
     }
+
 }

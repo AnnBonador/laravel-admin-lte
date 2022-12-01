@@ -135,9 +135,15 @@
                           </a>
                           <ul class="nav nav-treeview">
                               <li class="nav-item">
-                                  <a href="{{ route('medical.report') }}" class="nav-link">
+                                  <a href="{{ route('medical.show.report') }}" class="nav-link">
                                       <i class="far fas fa-user"></i>
                                       <p>Medical Report</p>
+                                  </a>
+                              </li>
+                              <li class="nav-item">
+                                  <a href="{{ route('report.services') }}" class="nav-link">
+                                      <i class="far fas fa-user"></i>
+                                      <p>Services Report</p>
                                   </a>
                               </li>
                           </ul>

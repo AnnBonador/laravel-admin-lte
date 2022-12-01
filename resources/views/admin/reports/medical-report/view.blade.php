@@ -33,13 +33,24 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-md-12">
-                    <table class="table ">
-                        <tr>
-                            <th>Patient Registered</th>
-                            <td>{{ $results }}</td>
-                        </tr>
-                    </table>
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <table class="table table-sm bg-white">
+                            <tr>
+                                <th>Category</th>
+                                <th>#</th>
+                            </tr>
+                            <tr>
+                                <th>Patient Registration</th>
+                                <td>{{ $results_patients }}</td>
+                            </tr>
+                            <tr>
+                                <th>Number Of Appointment Treated</th>
+                                <td>{{ $results_treated }}</td>
+                            </tr>
+                        </table>
+                        <a href="{{ route('medical.print.report') }}" class="btn btn-success">Print</a>
+                    </div>
                 </div>
             </div>
         </div>

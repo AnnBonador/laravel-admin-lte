@@ -23,7 +23,7 @@ class ServicesController extends Controller
         } else if (auth()->user()->hasRole('Doctor')) {
             $service = Service::where('doctor_id', auth()->id())->get();
         } else if (auth()->user()->hasRole('Receptionist')) {
-            $service = Services::whereHas('doctors', function (Builder $query) {
+            $service = Service::whereHas('doctors', function (Builder $query) {
                 $query->where('clinic_id', '=', auth()->user()->clinic_id);
             })->get();
         }

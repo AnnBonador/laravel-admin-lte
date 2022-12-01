@@ -29,18 +29,33 @@ class LocationController extends Controller
                 WHERE distance < ' . $max_distance . '
                 ORDER BY distance;'
         );
-
-        return view('search-doctors', compact('users'));
+        $doctors = User::with('service')->role('Doctor')->where('status', '1')->get();
+        return view('search-doctors', compact('users', 'doctors'));
     }
 
     public function search(Request $request)
     {
         $results = Search::new()
-            ->add(User::where('status', '1')->role('Doctor'), ['fname', 'lname', 'address', 'city', 'country', 'specialization_id'])
-            ->add(Service::class, ['name'])
+            ->add(User::where('status', '1')->with('service')->role('Doctor'), ['fname', 'lname', 'address', 'city', 'country', 'specialization_id', 'service.name'])
             ->beginWithWildcard()
             ->search(request('search'));
 
         return view('result', compact('results'));
+    }
+
+    public function sort(Request $request)
+    {
+        $doctors = User::with('reviews', 'service')->role('Doctor')->where('status', '1')->get();
+        if ($request->input('ratings')) {
+            $doctors = User::query()
+                ->selectRaw('*, avg(review_ratings.star_rating) as average_rating')
+                ->join('review_ratings', 'review_ratings.doctor_id', 'users.id')
+                ->join('services', 'services.doctor_id', 'users.id')
+                ->orderBy('review_ratings.star_rating')
+                ->orderByDesc('average_rating')
+                ->get();
+            return view('filter', compact('doctors'));
+        }
+        return view('search-doctors', compact('doctors'));
     }
 }

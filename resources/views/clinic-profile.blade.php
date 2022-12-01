@@ -120,6 +120,7 @@
                         <!-- Locations Content -->
                         <div role="tabpanel" id="doc_locations" class="tab-pane fade">
 
+
                             <!-- Doctor Widget -->
                             @foreach ($doctors as $data)
                                 <div class="card">
@@ -141,7 +142,8 @@
                                                 </div>
                                                 <div class="doc-info-cont">
                                                     <h4 class="doc-name"><a
-                                                            href="{{ route('doctor.profile', $data->id) }}">{{ $data->full_name }}</a>
+                                                            href="{{ route('doctor.profile', $data->id) }}">{{ $data->full_name }}
+                                                        </a>
                                                     </h4>
                                                     <p class="doc-speciality">
                                                         @if (!empty($data->specialization_id))
@@ -183,8 +185,10 @@
                                                         </p>
                                                     </div>
                                                     <div class="clinic-services">
-                                                        @if ($data->services)
-                                                            <span>{{ $data->services->name }}</span>
+                                                        @if ($data->service)
+                                                            @foreach ($data->service as $s)
+                                                                <span>{{ $s->name }}</span>
+                                                            @endforeach
                                                         @endif
                                                     </div>
                                                 </div>
@@ -204,7 +208,6 @@
                                                         <li><i class="fas fa-phone"></i>{{ $data->contact }}</li>
                                                         <li><i
                                                                 class="fas fa-map-marker-alt"></i>{{ $data->city . ', ' . $data->country }}
-                                                        </li>
                                                     </ul>
                                                 </div>
                                                 <div class="clinic-booking">
