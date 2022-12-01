@@ -42,7 +42,7 @@
                                     <thead>
                                         <tr>
                                             <th>Services</th>
-                                            <th>Price</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -51,7 +51,7 @@
                                                 <td>
                                                     {{ $data->name }}
                                                 </td>
-                                                <td>{{ $data->total_count }}</td>
+                                                <td>{{ $data->count }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

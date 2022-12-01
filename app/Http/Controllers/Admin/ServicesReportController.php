@@ -14,18 +14,14 @@ class ServicesReportController extends Controller
 {
     public function index()
     {
-        $services = Service::whereHas('doctors', function (Builder $query) {
-            $query->where('clinic_id', '=', '2');
-        })->pluck('name');
 
         $count = DB::table('appointment_service')
-        ->leftjoin('services','services.id','=','appointment_service.service_id')
-            ->selectRaw('count(service_id) AS count','appointment_service.*')
-            ->groupBy('services.id')
-            ->orderBy('count')
+            ->join('services', 'appointment_service.service_id', '=', 'services.id')
+            ->select('appointment_service.*', 'services.name', DB::raw('count(service_id) AS count'))
+            ->groupBy('service_id')
+            ->orderBy('count', 'desc')
             ->get();
-        dd($count);
-        return view('admin.reports.services-reports.index', compact('services', 'count'));
+        return view('admin.reports.services-reports.index', compact('count'));
     }
 
     public function fetch_data(Request $request)
