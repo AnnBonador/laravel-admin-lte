@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Carbon\Carbon;
 use App\Models\Clinic;
 use App\Models\Service;
 use Illuminate\Http\Request;
@@ -14,40 +15,37 @@ class ServicesReportController extends Controller
 {
     public function index()
     {
+        $from = Carbon::parse(sprintf(
+            '%s-%s-01',
+            request()->query('y', Carbon::now()->year),
+            request()->query('m', Carbon::now()->month)
+        ));
+        $to      = clone $from;
+        $to->day = $to->daysInMonth;
 
-        $count = DB::table('appointment_service')
+        $service_category = DB::table('appointment_service')
+            ->join('appointments', 'appointment_service.appointment_id', '=', 'appointments.id')
             ->join('services', 'appointment_service.service_id', '=', 'services.id')
-            ->select('appointment_service.*', 'services.name', DB::raw('count(service_id) AS count'))
+            ->join('service_category', 'services.service_cid', '=', 'service_category.id')
+            ->select('appointment_service.*', 'services.name', 'service_category.name', DB::raw('count(service_cid) AS count'), DB::raw('sum(charges) AS earnings'))
+            ->where('appointments.status', 'Completed')
+            ->where('appointments.payment_option', 'Paypal')
+            ->whereBetween('appointments.updated_at', [$from, $to])
+            ->groupBy('service_cid')
+            ->orderBy('count', 'desc')
+            ->get();
+
+        $procedures = DB::table('appointment_service')
+            ->join('appointments', 'appointment_service.appointment_id', '=', 'appointments.id')
+            ->join('services', 'appointment_service.service_id', '=', 'services.id')
+            ->select('appointment_service.*', 'services.name', 'appointments.created_at', DB::raw('count(service_id) AS count'))
+            ->whereBetween('appointments.updated_at', [$from, $to])
+            ->where('appointments.status', 'Completed')
             ->groupBy('service_id')
             ->orderBy('count', 'desc')
             ->get();
-        return view('admin.reports.services-reports.index', compact('count'));
+        // dd($to);
+
+        return view('admin.reports.services-reports.index', compact('service_category', 'procedures'));
     }
-
-    public function fetch_data(Request $request)
-    {
-        if ($request->clinic) {
-
-            $chart_data = Service::whereHas('doctors', function (Builder $query) use ($clinic) {
-                $query->where('clinic_id', '=', $clinic);
-            })->get();
-
-            // foreach ($chart_data as $row) {
-            //     $output[] = array(s
-            //         'service' => $row->name,
-            //         'total' => $row->count()
-            //     );
-            // }
-            // echo json_encode($output);
-            dd($request->clinic);
-        }
-    }
-
-    //     public function fetch_chart_data($clinic)
-    //     {
-    //         $data = Service::whereHas('doctors', function (Builder $query) use ($clinic) {
-    //             $query->where('clinic_id', '=', $clinic);
-    //         })->get();
-    //         return $data;
-    //     }
 }

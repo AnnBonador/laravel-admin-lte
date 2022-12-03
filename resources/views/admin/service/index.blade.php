@@ -49,7 +49,7 @@
                                         <tr>
                                             <td>{{ $data->name }}</td>
                                             <td>{{ $data->doctors->full_name }}</td>
-                                            <td>{{ $data->charges }}</td>
+                                            <td class="text-right">{{ number_format($data->charges, 2, '.', ',') }}</td>
                                             <td>{{ $data->service_category->name }}</td>
                                             <td class="text-center">
                                                 <div class="form-check form-switch">

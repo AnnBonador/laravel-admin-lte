@@ -125,8 +125,10 @@
                       </a>
                   </li>
                   @hasanyrole('Super-Admin|Clinic Admin')
-                      <li class="nav-item">
-                          <a href="#" class="nav-link">
+                      <li
+                          class="nav-item {{ request()->routeIs('medical.*') || request()->routeIs('report.*') || request()->routeIs('paypal.*') ? 'menu-open' : '' }}">
+                          <a href="#"
+                              class="nav-link {{ request()->routeIs('medical.*') || request()->routeIs('report.*') || request()->routeIs('paypal.*') ? 'active' : '' }}">
                               <i class="nav-icon fas fa-file-pdf "></i>
                               <p>
                                   Reports
@@ -135,15 +137,24 @@
                           </a>
                           <ul class="nav nav-treeview">
                               <li class="nav-item">
-                                  <a href="{{ route('medical.show.report') }}" class="nav-link">
-                                      <i class="far fas fa-user"></i>
+                                  <a href="{{ route('medical.show.report') }}"
+                                      class="nav-link {{ request()->routeIs('medical.*') ? 'active' : '' }}">
+                                      <i class="nav-icon fas fa-file-medical"></i>
                                       <p>Medical Report</p>
                                   </a>
                               </li>
                               <li class="nav-item">
-                                  <a href="{{ route('report.services') }}" class="nav-link">
-                                      <i class="far fas fa-user"></i>
+                                  <a href="{{ route('report.services') }}"
+                                      class="nav-link {{ request()->routeIs('report.*') ? 'active' : '' }}">
+                                      <i class="nav-icon fas fa-file-alt"></i>
                                       <p>Services Report</p>
+                                  </a>
+                              </li>
+                              <li class="nav-item">
+                                  <a href="{{ route('sales.show.report') }}"
+                                      class="nav-link {{ request()->routeIs('Sales.*') ? 'active' : '' }}">
+                                      <i class="nav-icon fas fa-file-alt"></i>
+                                      <p>Sales Report</p>
                                   </a>
                               </li>
                           </ul>
@@ -177,9 +188,9 @@
                   @endrole
 
                   <li
-                      class="nav-item {{ request()->routeIs('settings.*') || request()->routeIs('specialization.*') ? 'menu-open' : '' }}">
+                      class="nav-item {{ request()->routeIs('settings.*') || request()->routeIs('specialization.*') || request()->routeIs('paypal.*') ? 'menu-open' : '' }}">
                       <a href="#"
-                          class="nav-link {{ request()->routeIs('settings.*') || request()->routeIs('specialization.*') ? 'active' : '' }}">
+                          class="nav-link {{ request()->routeIs('settings.*') || request()->routeIs('specialization.*') || request()->routeIs('paypal.*') ? 'active' : '' }}">
                           <i class="nav-icon fas fa-wrench"></i>
                           <p>
                               Settings
@@ -191,7 +202,7 @@
                               <li class="nav-item">
                                   <a href="{{ route('settings.index') }}"
                                       class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}">
-                                      <i class="fas fa-cog"></i>
+                                      <i class="nav-icon fas fa-cog"></i>
                                       <p>System Settings</p>
                                   </a>
                               </li>
@@ -200,14 +211,14 @@
                               <li class="nav-item">
                                   <a href="{{ route('specialization.index') }}"
                                       class="nav-link {{ request()->routeIs('specialization.*') ? 'active' : '' }}">
-                                      <i class="fas fa-school"></i>
+                                      <i class="nav-icon fas fa-tooth"></i>
                                       <p>Specialization</p>
                                   </a>
                               </li>
                               <li class="nav-item">
                                   <a href="{{ route('paypal.index') }}"
                                       class="nav-link {{ request()->routeIs('paypal.*') ? 'active' : '' }}">
-                                      <i class="fas fa-wallet"></i>
+                                      <i class="nav-icon fas fa-wallet"></i>
                                       <p>Payment</p>
                                   </a>
                               </li>

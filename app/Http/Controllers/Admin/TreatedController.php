@@ -13,7 +13,7 @@ class TreatedController extends Controller
 {
     public function index()
     {
-        $treated = Treated::all();
+        $treated = Treated::with('appointment')->get();
         if (auth()->user()->hasRole('Doctor')) {
             $treated = Treated::whereHas('appointment', function (Builder $query) {
                 $query->where('doctor_id', '=', auth()->id());
@@ -23,6 +23,7 @@ class TreatedController extends Controller
                 $query->where('clinic_id', '=', auth()->user()->clinic_id);
             })->get();
         }
+        // dd($treated);
         return view('admin.treated.index', compact('treated'));
     }
     public function edit($id)

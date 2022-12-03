@@ -55,7 +55,15 @@
                                                     @if (!$loop->last)
                                                         ,
                                                     @endif
-                                                @endforeach
+                                                @endforeach <br>
+                                                Charges:
+                                                @if ($data->appointment->payment_option == 'Paypal')
+                                                    {{ number_format($data->appointment->services()->sum('charges'), 2, '.', ',') }}
+                                                    <span class="badge badge-success">Paid</span>
+                                                @else
+                                                    {{ number_format($data->appointment->services()->sum('charges'), 2, '.', ',') }}
+                                                    <span class="badge badge-danger">Unpaid</span>
+                                                @endif
                                             </td>
                                             <td>
                                                 {{ $data->teeth }}

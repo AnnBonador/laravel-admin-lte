@@ -17,7 +17,7 @@
                         <form action="{{ route('doctor.result.search') }}" method="GET">
                             <div class="form-group search-info">
                                 <input type="text" class="form-control" name="search"
-                                    placeholder="Search Doctors, Services Etc.">
+                                    value="{{ Request::get('search') }}" placeholder="Search Doctors, Services Etc.">
                             </div>
                             <button type="submit" class="btn btn-primary search-btn"><i class="fas fa-search"></i>
                                 <span>Search</span></button>
@@ -55,7 +55,7 @@
                                     </div>
                                     <div>
                                         <label class="custom_check">
-                                            <input type="checkbox" name="ratings" >
+                                            <input type="checkbox" name="ratings">
                                             <span class="checkmark"></span> Ratings
                                         </label>
                                     </div>
@@ -151,8 +151,10 @@
                                                     @endif
                                                     Feedback
                                                 </li>
-                                                <li><i class="fas fa-envelope"></i>{{ $data->email }}</li>
-                                                <li><i class="fas fa-phone"></i>{{ $data->contact }}</li>
+                                                <li><i class="fas fa-envelope"></i>{{ $data->email }}
+                                                </li>
+                                                <li><i class="fas fa-phone"></i>{{ $data->contact }}
+                                                </li>
                                                 <li><i
                                                         class="fas fa-map-marker-alt"></i>{{ $data->city . ', ' . $data->country }}
                                             </ul>

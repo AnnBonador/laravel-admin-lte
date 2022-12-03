@@ -61,7 +61,10 @@
                                                     </a>
                                                 @endif
                                                 @if ($data->clinic()->exists())
-                                                    Clinic: <span class="text-primary">{{ $data->clinic->name }}</span><br>
+                                                    Clinic:
+                                                    <a href="{{ route('clinics.profile', $data->clinic->id) }}">
+                                                        <span class="text-primary">{{ $data->clinic->name }}</span><br>
+                                                    </a>
                                                 @endif
                                                 <small>Payment: {{ $data->payment_option }}</small>
                                             </td>
@@ -74,7 +77,7 @@
                                                 @endforeach
                                             </td>
                                             <td>
-                                                ₱ {{ $data->services()->sum('charges') }}
+                                                ₱ {{ number_format($data->services()->sum('charges'), 2, '.', ',') }}
                                             </td>
                                             <td>
                                                 @if ($data->schedule()->exists())

@@ -193,6 +193,9 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'user-access:admin'])->g
     Route::controller(App\Http\Controllers\Admin\ServicesReportController::class)->group(function () {
         Route::get('/reports/services', 'index')->name('report.services');
     });
+    Route::controller(App\Http\Controllers\Admin\SalesReportController::class)->group(function () {
+        Route::get('/sales-report', 'index')->name('sales.show.report');
+    });
 });
 
 /*------------------------------------------

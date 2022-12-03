@@ -34,25 +34,22 @@
                             <div class="card-body">
                                 <div class="row mb-2">
                                     <div class="col-sm-6">
-                                        <label for="">First Name</label>
-                                        <input type="text" name="first_name" class="form-control"
-                                            placeholder="Enter first name">
+                                        <label for="">First Name:</label>
+                                        <span>{{ $app->patients->fname }}</span>
                                     </div>
                                     <div class="col-sm-6">
                                         <label for="">Last Name</label>
-                                        <input type="text" name="last_name" class="form-control"
-                                            placeholder="Enter last name">
+                                        <span>{{ $app->patients->lname }}</span>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label for="">Email</label>
-                                        <input type="email" name="email" class="form-control" placeholder="Enter email">
+                                        <span>{{ $app->patients->email }}</span>
                                     </div>
                                     <div class="col-sm-6">
                                         <label for="">Phone</label>
-                                        <input type="text" name="contact" class="form-control"
-                                            placeholder="Enter phone number">
+                                        <span>{{ $app->patients->contact }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -73,12 +70,9 @@
                                                         {{ $data->charges }}.00</span>
                                                 </li>
                                             @endforeach
-                                            <li class="list-group-item">
-                                                <b>Booking Fee</b> <span class="float-right text-muted">₱ 25.00</span>
-                                            </li>
                                             @php
                                                 $total_services = $app_service->sum('charges');
-                                                $total = 15 + $total_services;
+                                                $total = $total_services;
                                             @endphp
                                             <li class="list-group-item">
                                                 <b class="fs-5 fw-bolder">Total</b> <b class="float-right text-primary">₱

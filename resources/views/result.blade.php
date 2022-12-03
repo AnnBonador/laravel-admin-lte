@@ -34,8 +34,43 @@
     <div class="content">
         <div class="container-fluid">
 
-            <div class="row justify-content-md-center">
+            <div class="row">
                 <p id="demo" class="d-none"></p>
+
+                <div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar">
+
+                    <!-- Search Filter -->
+                    <div class="card search-filter">
+                        <div class="card-header">
+                            <h4 class="card-title mb-0">Search Filter</h4>
+                        </div>
+                        <div class="card-body">
+                            <form action="{{ route('doctor.filter.search') }}" method="GET">
+                                <div class="filter-widget">
+                                    <h4>Sort</h4>
+                                    <div>
+                                        <label class="custom_check">
+                                            <input type="checkbox" name="proximity">
+                                            <span class="checkmark"></span> Proximity
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label class="custom_check">
+                                            <input type="checkbox" name="ratings">
+                                            <span class="checkmark"></span> Ratings
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="btn-search">
+                                    <button type="submit" class="btn btn-block">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /Search Filter -->
+
+                </div>
+
 
                 <div class="col-md-12 col-lg-8 col-xl-9">
                     @if (count($results) > 0)

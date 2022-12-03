@@ -91,6 +91,8 @@
                     </div>
                     <!-- /.col -->
                 </div>
+            @endhasanyrole
+            @hasanyrole('Clinic Admin|Receptionist')
                 <div class="row">
                     <div class="col-sm-7">
                         <div class="card">
@@ -159,7 +161,8 @@
                         </div>
                     </div>
                 </div>
-                @elserole('Doctor')
+            @endhasanyrole
+            @role('Doctor')
                 <div class="row">
                     <div class="col-md-3 col-sm-6 col-12">
                         <div class="info-box bg-gradient-info">
@@ -236,7 +239,7 @@
                         </div>
                     </div>
                 </div>
-            @endhasanyrole
+            @endrole
         </div>
 
         <!-- /.row -->

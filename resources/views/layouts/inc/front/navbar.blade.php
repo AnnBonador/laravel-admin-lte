@@ -14,7 +14,7 @@
     <div class="main-menu-wrapper">
         <div class="menu-header">
             <a href="index-2.html" class="menu-logo">
-                <img src="assets/img/logo.png" class="img-fluid" alt="Logo">
+                <img src="{{ asset('uploads/setting/' . logo()) }}" class="img-fluid" alt="Logo">
             </a>
             <a id="menu_close" class="menu-close" href="javascript:void(0);">
                 <i class="fas fa-times"></i>
@@ -35,7 +35,7 @@
                 <a href="index-2.html">Clinics</a>
             </li> --}}
             <li class="login-link">
-                <a href="login.html">Login / Signup</a>
+                <a href="{{ route('login') }}">Login / Signup</a>
             </li>
         </ul>
     </div>

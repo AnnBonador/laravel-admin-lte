@@ -23,44 +23,82 @@
     <div class="row">
         <div class="container-fluid">
             <div class="col-md-12">
+                <form method="get">
+                    <div class="row">
+                        <div class="col-3 form-group">
+                            <label class="control-label" for="y">Year</label>
+                            <select name="y" id="y" class="custom-select">
+                                @foreach (array_combine(range(date('Y'), 1900), range(date('Y'), 1900)) as $year)
+                                    <option value="{{ $year }}" @if ($year === old('y', Request::get('y', date('Y')))) selected @endif>
+                                        {{ $year }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-3 form-group">
+                            <label class="control-label" for="m">Month</label>
+                            <select name="m" for="m" class="custom-select">
+                                @foreach (cal_info(0)['months'] as $month)
+                                    <option value="{{ $month }}" @if ($month === old('m', Request::get('m', date('m')))) selected @endif>
+                                        {{ $month }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label class="control-label">&nbsp;</label><br>
+                            <button class="btn btn-primary" type="submit">Filter</button>
+                        </div>
+                    </div>
+                </form>
                 <div class="row mt-2">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card-header border-0">
-                                <h3 class="card-title">Top Services</h3>
-                                <div class="card-tools">
-                                    <a href="#" class="btn btn-tool btn-sm">
-                                        <i class="fas fa-download"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-tool btn-sm">
-                                        <i class="fas fa-bars"></i>
-                                    </a>
-                                </div>
+                            <div class="card-header">
+                                Services Report
                             </div>
-                            <div class="card-body table-responsive p-0">
-                                <table class="table table-striped table-valign-middle">
-                                    <thead>
-                                        <tr>
-                                            <th>Services</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($count as $data)
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <table class="table table-bordered table-striped">
                                             <tr>
-                                                <td>
-                                                    {{ $data->name }}
-                                                </td>
-                                                <td>{{ $data->count }}</td>
+                                                <th>Top Availed Services by Category</th>
+                                                <th>Earnings</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                            @foreach ($service_category as $data)
+                                                <tr>
+                                                    <td>
+                                                        {{ $data->name }}
+                                                    </td>
+                                                    <td>{{ number_format($data->earnings, 2, '.', ',') }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </table>
+                                    </div>
+                                    <div class="col-6">
+                                        <table class="table table-bordered table-striped">
+                                            <tr>
+                                                <th>Top Availed Procedures</th>
+                                                <th></th>
+                                            </tr>
+                                            @foreach ($procedures as $data)
+                                                <tr>
+                                                    <td>
+                                                        {{ $data->name }}
+                                                    </td>
+                                                    <td>{{ $data->count }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </table>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-@endsection
+    @endsection

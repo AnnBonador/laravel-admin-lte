@@ -16,7 +16,8 @@
                     <div class="search-box mt-2">
                         <form action="{{ route('doctor.result.search') }}" method="GET">
                             <div class="form-group search-info">
-                                <input type="text" class="form-control" name="search" placeholder="Search Doctors">
+                                <input type="text" class="form-control" name="search"
+                                    placeholder="Search Doctors, Services Etc.">
                             </div>
                             <button type="submit" class="btn btn-primary search-btn"><i class="fas fa-search"></i>
                                 <span>Search</span></button>
@@ -259,9 +260,6 @@
                         </div>
                     @endforeach
 
-                    <div class="load-more text-center">
-                        <a class="btn btn-primary btn-sm" href="javascript:void(0);">Load More</a>
-                    </div>
                 </div>
             </div>
 

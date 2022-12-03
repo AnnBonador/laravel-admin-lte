@@ -15,10 +15,13 @@ use App\Models\PaymentSetting;
 use App\Models\AppointmentService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Config;
 use Srmklive\PayPal\Services\ExpressCheckout;
 use App\Http\Requests\User\AppointmentStoreRequest;
 use App\Http\Requests\User\AppointmentUpdateRequest;
+use App\Mail\Appointment as MailAppointment;
+use App\Mail\UserAppointmentMail;
 
 class AppointmentsController extends Controller
 {
@@ -100,6 +103,14 @@ class AppointmentsController extends Controller
                     'service_id' => $data
                 ]);
             }
+            $mailData = [
+                'name' => $app->doctors->full_name,
+                'day' => $app->schedule->day,
+                'start_time' => $app->start_time,
+                'end_time' => $app->end_time,
+                'status' => $app->status
+            ];
+            Mail::to($app->patients->email)->send(new UserAppointmentMail($mailData));
 
             $request->session()->forget('app');
 
@@ -107,7 +118,8 @@ class AppointmentsController extends Controller
         } else {
             $request->session()->put('app', $app);
             $request->session()->put('app_service', $app_service);
-            $request->session()->put('payment', $validatedData['payment_option']);
+            $request->session()->put('payment', $app_service);
+            $request->session()->put('payment_option', $validatedData['payment_option']);
 
             return redirect()->route('user.appointments.step.three');
         }
@@ -117,6 +129,7 @@ class AppointmentsController extends Controller
     {
         $app = $request->session()->get('app');
         $app_service = $request->session()->get('app_service');
+        $payment_option = $request->session()->get('payment_option');
 
         $collection = json_decode($app_service);
         $ids = $collection->service_id;
@@ -132,43 +145,25 @@ class AppointmentsController extends Controller
      */
     public function postCreateStepThree(Request $request)
     {
-        // $validatedData = $request->validate([
-        //     'first_name' => 'required',
-        //     'last_name' => 'required',
-        //     'email' => 'required|email:rfc,dns',
-        //     'phone' => 'required'
-        // ]);
-
-        //insert to appointments
         $app = $request->session()->get('app');
-        $payment = $request->session()->get('payment');
-        $app->payment_option = $payment;
-        $app->save();
-
-        //insert data to pivot
         $app_service = $request->session()->get('app_service');
-        $collection = json_decode($app_service);
-        $ids = $collection->service_id;
-        foreach ($ids as $data) {
-            AppointmentService::create([
-                'appointment_id' => $app->id,
-                'service_id' => $data
-            ]);
-        }
+        $payment_option = $request->session()->get('payment_option');
 
-        //get amount
+        // //get amount
         $collection = json_decode($app_service);
         $ids = $collection->service_id;
         $app_service = Service::whereIn('id', $ids)->get();
         $price = $app_service->sum('charges');
 
-        //getting clinic id paypal config
-        // $paypal = PaymentSetting::where('clinic_id', $app->clinic_id)->first();
+        // //invoice no.
+        $latest = Transaction::latest()->first();
 
-        //setting config file!
-        // config()->set('paypal.sandbox.username', $paypal->username);
-        // config()->set('paypal.sandbox.password',  $paypal->password);
-        // config()->set('paypal.sandbox.secret',  $paypal->secret);
+        if (!$latest) {
+            $inv =  'INV0001';
+        } else {
+            $string = preg_replace("/[^0-9\.]/", '', $latest->invoice);
+            $inv = 'INV' . sprintf('%04d', $string + 1);
+        }
 
         $fee = [];
         $fee['items'] = [
@@ -177,17 +172,9 @@ class AppointmentsController extends Controller
                 'price' => $price
             ]
         ];
-        $input = $request->all();
-        $input['appointment_id'] = $app->id;
-        $input['doctor_id'] = $app->doctor_id;
-        $input['clinic_id'] = $app->clinic_id;
-        $input['patient_id'] =  Auth::id();
-        $input['reference_no'] =  time() . '-' . Auth::user()->id;
-        $input['amount'] =  $price;
-        Transaction::create($input);
 
-        $fee['invoice_id'] = $app->id;
-        $fee['invoice_description'] = "Appointment Fee #{$app->id}";
+        $fee['invoice_id'] = $inv;
+        $fee['invoice_description'] = "Appointment Fee #{$inv}";
         $fee['return_url'] = route('success.payment');
         $fee['cancel_url'] = route('cancel.payment');
         $fee['total'] = $price;
@@ -199,88 +186,13 @@ class AppointmentsController extends Controller
 
         return redirect($res['paypal_link']);
 
-        $request->session()->forget('app');
-        $request->session()->forget('app_services');
-        $request->session()->forget('payment');
+        $request->session()->put('app', $app);
+        $request->session()->put('app_service', $app_service);
+        $request->session()->put('payment_option', $payment_option);
 
         return redirect()->route('user.appointments.index');
     }
-    /**
-     * Show the step One Form for creating a new product.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    // public function postCreateStepTwo(Request $request)
-    // {
-    //     $product = $request->session()->get('product');
-    //     $product->save();
 
-    //     $request->session()->forget('product');
-
-    //     return redirect()->route('products.index');
-    // }
-
-    // public function store(AppointmentStoreRequest $request)
-    // {
-    //     $validatedData = $request->validated();
-    //     $appointment = new Appointment();
-    //     $appointment->clinic_id = $validatedData['clinic_id'];
-    //     $appointment->doctor_id = $validatedData['doctor_id'];
-    //     $appointment->patient_id = Auth::id();
-    //     $appointment->schedule_id = $validatedData['schedule_id'];
-    //     $appointment->description = $validatedData['description'];
-    //     $appointment->status = 'Booked';
-    //     $appointment->payment_option = $validatedData['payment_option'];
-    //     $service_app = $validatedData['service'];
-
-    //     $selectedTime = $validatedData['time'];
-    //     $preferredTime = explode(" - ", $selectedTime);
-    //     $appointment->start_time = $preferredTime[0];
-    //     $appointment->end_time = $preferredTime[1];
-
-    //     $appointment->save();
-
-    //     foreach ($service_app as $data) {
-    //         AppointmentService::create([
-    //             'appointment_id' => $appointment->id,
-    //             'service_id' => $data
-    //         ]);
-    //     }
-
-    //     if ($request->payment_option == 'Paypal') {
-    //         $fee = [];
-    //         $fee['items'] = [
-    //             [
-    //                 'name' => Auth::user()->full_name,
-    //                 'price' => 100
-    //             ]
-    //         ];
-
-    //         $appPaypal = new Transaction();
-    //         $appPaypal->appointment_id = $appointment->id;
-    //         $appPaypal->doctor_id = $request->doctor_id;
-    //         $appPaypal->clinic_id = $request->clinic_id;
-    //         $appPaypal->patient_id = Auth::id();
-    //         $appPaypal->reference_no = time() . '-' . Auth::user()->id;
-    //         $appPaypal->amount = 100;
-    //         $appPaypal->save();
-
-    //         $fee['invoice_id'] = $appointment->id;
-    //         $fee['invoice_description'] = "Appointment Fee #{$appointment->id}";
-    //         $fee['return_url'] = route('success.payment');
-    //         $fee['cancel_url'] = route('cancel.payment');
-    //         $fee['total'] = 100;
-
-    //         $provider = new ExpressCheckout();
-
-    //         $res = $provider->setExpressCheckout($fee);
-    //         $res = $provider->setExpressCheckout($fee, true);
-
-    //         return redirect($res['paypal_link']);
-    //     }
-
-    //     return redirect()->route('user.appointments.index')->with('success', 'Appointment added successfully');
-    // }
 
     public function edit($id)
     {
@@ -334,6 +246,48 @@ class AppointmentsController extends Controller
         $response = $provider->getExpressCheckoutDetails($request->token);
 
         if (in_array(strtoupper($response['ACK']), ['SUCCESS', 'SUCCESSWITHWARNING'])) {
+
+            $app = $request->session()->get('app');
+            $payment_option = $request->session()->get('payment_option');
+            $app->payment_option = $payment_option;
+            $app->save();
+
+            $app_service = $request->session()->get('app_service');
+            $collection = json_decode($app_service);
+            $ids = $collection->service_id;
+            foreach ($ids as $data) {
+                AppointmentService::create([
+                    'appointment_id' => $app->id,
+                    'service_id' => $data
+                ]);
+            }
+            $collection = json_decode($app_service);
+            $ids = $collection->service_id;
+            $app_service = Service::whereIn('id', $ids)->get();
+            $price = $app_service->sum('charges');
+            $latest = Transaction::latest()->first();
+
+            if (!$latest) {
+                $inv =  'INV0001';
+            } else {
+                $string = preg_replace("/[^0-9\.]/", '', $latest->invoice);
+                $inv = 'INV' . sprintf('%04d', $string + 1);
+            }
+
+            $input['appointment_id'] = $app->id;
+            $input['doctor_id'] = $app->doctor_id;
+            $input['clinic_id'] = $app->clinic_id;
+            $input['patient_id'] =  Auth::id();
+            $input['reference_no'] =  time() . '-' . Auth::user()->id;
+            $input['amount'] =  $price;
+            $input['invoice'] =  $inv;
+            Transaction::create($input);
+
+            $request->session()->forget('app');
+            $request->session()->forget('app_services');
+            $request->session()->forget('inv');
+            $request->session()->forget('payment_option');
+
             return redirect()->route('user.appointments.index')->with('success', 'Payment Successfull');
         }
 
