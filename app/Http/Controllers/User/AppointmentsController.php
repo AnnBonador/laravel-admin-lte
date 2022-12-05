@@ -21,6 +21,7 @@ use Srmklive\PayPal\Services\ExpressCheckout;
 use App\Http\Requests\User\AppointmentStoreRequest;
 use App\Http\Requests\User\AppointmentUpdateRequest;
 use App\Mail\Appointment as MailAppointment;
+use App\Mail\MailInvoice;
 use App\Mail\UserAppointmentMail;
 
 class AppointmentsController extends Controller
@@ -193,51 +194,9 @@ class AppointmentsController extends Controller
         return redirect()->route('user.appointments.index');
     }
 
-
-    public function edit($id)
-    {
-        $appointment = Appointment::with('services')->where('patient_id', Auth::id())->where('id', $id)->first();
-        $app = $appointment->services->pluck('id')->toArray();
-        $clinic = Clinic::where('status', '1')->pluck('name', 'id');
-        $doctor = User::role('Doctor')->where('status', '1')->where('clinic_id', $appointment->clinic_id)->get()->pluck('fullname', 'id');
-        $service = Service::where('status', '1')->where('doctor_id', $appointment->doctor_id)->get();
-        $schedule = Schedule::where('doctor_id', $appointment->doctor_id)->pluck('day', 'id');
-        return view('user.appointment.edit', compact('app', 'clinic', 'appointment', 'doctor', 'service', 'schedule'));
-    }
-
-    public function destroy(Request $request)
-    {
-        $appointment = Appointment::find($request->delete_id);
-        $appointment->delete();
-        return redirect()->route('user.appointments.index')->with('success', 'Appointment deleted successfully');
-    }
-
-    public function update(AppointmentUpdateRequest $request, $id)
-    {
-        $validatedData = $request->validated();
-        $appointment = Appointment::where('patient_id', Auth::id())->where('id', $id)->firstOrFail();
-
-        $appointment->clinic_id = $validatedData['clinic_id'];
-        $appointment->doctor_id = $validatedData['doctor_id'];
-        $appointment->schedule_id = $validatedData['schedule_id'];
-        $appointment->service = $validatedData['service'];
-        $appointment->description = $validatedData['description'];
-
-        if (!empty($request->time)) {
-            $selectedTime = $request->time;
-            $preferredTime = explode(" - ", $selectedTime);
-            $appointment->start_time = $preferredTime[0];
-            $appointment->end_time = $preferredTime[1];
-        }
-
-        $appointment->save();
-
-        return redirect()->route('user.appointments.index')->with('success', 'Appointment updated successfully');
-    }
-
     public function paymentCancel()
     {
-        return redirect()->route('user.appointments.index')->with('Your payment has been declend. The payment cancelation page goes here!');
+        return redirect()->route('user.appointments.index')->with('Your payment has been cancelled');
     }
 
     public function paymentSuccess(Request $request)
@@ -283,16 +242,65 @@ class AppointmentsController extends Controller
             $input['invoice'] =  $inv;
             Transaction::create($input);
 
+
+            $invoice_no = Transaction::with('appointment')->where('appointment_id', $app->id)->get();
+            Mail::to($app->patients->email)->send(new MailInvoice($invoice_no));
+
+            // dd($invoice_no);
+
             $request->session()->forget('app');
             $request->session()->forget('app_services');
             $request->session()->forget('inv');
             $request->session()->forget('payment_option');
 
-            return redirect()->route('user.appointments.index')->with('success', 'Payment Successfull');
+            return redirect()->route('user.appointments.index')->with('success', 'Payment Receipt has been sent to your email');
         }
 
         dd('Error occured!');
     }
+
+
+    public function edit($id)
+    {
+        $appointment = Appointment::with('services')->where('patient_id', Auth::id())->where('id', $id)->first();
+        $app = $appointment->services->pluck('id')->toArray();
+        $clinic = Clinic::where('status', '1')->pluck('name', 'id');
+        $doctor = User::role('Doctor')->where('status', '1')->where('clinic_id', $appointment->clinic_id)->get()->pluck('fullname', 'id');
+        $service = Service::where('status', '1')->where('doctor_id', $appointment->doctor_id)->get();
+        $schedule = Schedule::where('doctor_id', $appointment->doctor_id)->pluck('day', 'id');
+        return view('user.appointment.edit', compact('app', 'clinic', 'appointment', 'doctor', 'service', 'schedule'));
+    }
+
+    public function destroy(Request $request)
+    {
+        $appointment = Appointment::find($request->delete_id);
+        $appointment->delete();
+        return redirect()->route('user.appointments.index')->with('success', 'Appointment deleted successfully');
+    }
+
+    public function update(AppointmentUpdateRequest $request, $id)
+    {
+        $validatedData = $request->validated();
+        $appointment = Appointment::where('patient_id', Auth::id())->where('id', $id)->firstOrFail();
+
+        $appointment->clinic_id = $validatedData['clinic_id'];
+        $appointment->doctor_id = $validatedData['doctor_id'];
+        $appointment->schedule_id = $validatedData['schedule_id'];
+        $appointment->service = $validatedData['service'];
+        $appointment->description = $validatedData['description'];
+
+        if (!empty($request->time)) {
+            $selectedTime = $request->time;
+            $preferredTime = explode(" - ", $selectedTime);
+            $appointment->start_time = $preferredTime[0];
+            $appointment->end_time = $preferredTime[1];
+        }
+
+        $appointment->save();
+
+        return redirect()->route('user.appointments.index')->with('success', 'Appointment updated successfully');
+    }
+
 
     public function rateDoctor($id)
     {

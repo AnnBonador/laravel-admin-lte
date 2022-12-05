@@ -47,32 +47,26 @@
                                         src="{{ asset('front-assets/assets/img/specialities/specialities-05.png') }}"
                                         class="img-fluid" alt="Speciality">Dentist</p>
                                 <div class="rating">
-
-                                    @if (!empty($doctor->reviews))
+                                    @if (!empty($doctor->ratings))
                                         @php
-                                            $rating = $doctor->reviews->avg('star_rating');
+                                            $rating = $doctor->ratings->avg('star_rating');
                                         @endphp
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            @if ($rating < $i)
-                                                @if (round($rating) == $i)
-                                                    <i class="fas fa-star-half filled"></i>
-                                                    @continue
+                                        @foreach (range(1, 5) as $i)
+                                            <span class="fa-stack" style="width:1em">
+                                                <i class="far fa-star fa-stack-1x"></i>
+                                                @if ($rating > 0)
+                                                    @if ($rating > 0.5)
+                                                        <i class="fas fa-star fa-stack-1x text-warning"></i>
+                                                    @else
+                                                        <i class="fas fa-star-half fa-stack-1x text-warning"></i>
+                                                    @endif
                                                 @endif
-                                                <i class="fas fa-star"></i>
-                                                @continue
-                                            @endif
-                                            <i class="fas fa-star filled"></i>
-                                        @endfor
-                                        <span class="d-inline-block average-rating">
-                                            ({{ $doctor->reviews->count() }})
-                                        </span>
-                                    @else
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <i class="fas fa-star"></i>
-                                        @endfor
-                                        <span class="d-inline-block average-rating">(0)</span>
+                                                @php $rating--; @endphp
+                                            </span>
+                                        @endforeach
+                                        <span
+                                            class="d-inline-block">{{ number_format($doctor->ratings->avg('star_rating'), 1, '.', ',') }}</span>
                                     @endif
-
                                 </div>
                                 <div class="clinic-details">
                                     <p class="doc-location"><i class="fas fa-map-marker-alt"></i>
@@ -101,10 +95,8 @@
                                         </b>
                                     </li>
                                     <li><i class="far fa-comment"></i>
-                                        @if ($doctor->reviews)
-                                            {{ $doctor->reviews->count() ?: '0' }}
-                                        @else
-                                            0
+                                        @if ($doctor->ratings)
+                                            {{ $doctor->ratings->count() ?: '0' }}
                                         @endif
                                         Feedback
                                     </li>

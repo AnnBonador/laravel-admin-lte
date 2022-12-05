@@ -216,7 +216,8 @@ Route::prefix('user')->middleware(['auth', 'verified', 'user-access:user'])->gro
         Route::get('/appointment/create-step-two', 'createStepTwo')->name('user.appointments.create.step.two');
         Route::post('/appointment/create-step-two', 'postCreateStepTwo')->name('user.appointments.post.step.two');
         Route::get('/checkout/create-step-three', 'createStepThree')->name('user.appointments.step.three');
-        Route::post('checkout/create-step-three', 'postCreateStepThree')->name('user.appointments.step.three.post');
+        Route::post('/checkout/create-step-three', 'postCreateStepThree')->name('user.appointments.step.three.post');
+        Route::get('/invoice/{invoice_id}', 'viewInvoice')->name('invoice');
 
         Route::post('/appointment', 'store')->name('user.appointments.store');
         Route::get('/appointment/{id}/edit', 'edit')->name('user.appointments.edit');
@@ -258,6 +259,11 @@ Route::prefix('user')->middleware(['auth', 'verified', 'user-access:user'])->gro
     });
     Route::controller(App\Http\Controllers\User\CheckoutController::class)->group(function () {
         Route::get('/checkout-data', 'index')->name('checkout');
+    });
+    Route::controller(App\Http\Controllers\User\PaymentController::class)->group(function () {
+        Route::get('/payment', 'index')->name('payments');
+        Route::get('/payment/{id}', 'show')->name('payments.show');
+        Route::get('/payment/{id}/print', 'print')->name('payments.print');
     });
 });
 

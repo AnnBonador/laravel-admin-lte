@@ -194,29 +194,26 @@
                                                     src="{{ asset('front-assets/assets/img/specialities/specialities-05.png') }}"
                                                     class="img-fluid" alt="Speciality">Dentist</h5>
                                             <div class="rating">
-                                                @if (!empty($data->reviews))
+                                                @if (!empty($data->ratings))
                                                     @php
-                                                        $rating = $data->reviews->avg('star_rating');
+                                                        $rating = $data->ratings->avg('star_rating');
                                                     @endphp
-                                                    @for ($i = 1; $i <= 5; $i++)
-                                                        @if ($rating < $i)
-                                                            @if (round($rating) == $i)
-                                                                <i class="fas fa-star-half filled"></i>
-                                                                @continue
+                                                    @foreach (range(1, 5) as $i)
+                                                        <span class="fa-stack" style="width:1em">
+                                                            <i class="far fa-star fa-stack-1x"></i>
+                                                            @if ($rating > 0)
+                                                                @if ($rating > 0.5)
+                                                                    <i class="fas fa-star fa-stack-1x text-warning"></i>
+                                                                @else
+                                                                    <i
+                                                                        class="fas fa-star-half fa-stack-1x text-warning"></i>
+                                                                @endif
                                                             @endif
-                                                            <i class="fas fa-star"></i>
-                                                            @continue
-                                                        @endif
-                                                        <i class="fas fa-star filled"></i>
-                                                    @endfor
-                                                    <span class="d-inline-block average-rating">
-                                                        ({{ $data->reviews->count() }})
-                                                    </span>
-                                                @else
-                                                    @for ($i = 1; $i <= 5; $i++)
-                                                        <i class="fas fa-star"></i>
-                                                    @endfor
-                                                    <span class="d-inline-block average-rating">(0)</span>
+                                                            @php $rating--; @endphp
+                                                        </span>
+                                                    @endforeach
+                                                    <span
+                                                        class="d-inline-block">{{ number_format($data->ratings->avg('star_rating'), 1, '.', ',') }}</span>
                                                 @endif
                                             </div>
                                             <div class="clinic-details">
@@ -237,10 +234,8 @@
                                         <div class="clini-infos">
                                             <ul>
                                                 <li><i class="far fa-comment"></i>
-                                                    @if ($data->reviews)
-                                                        {{ $data->reviews->count() ?: '0' }}
-                                                    @else
-                                                        0
+                                                    @if ($data->ratings)
+                                                        {{ $data->ratings->count() ?: '0' }}
                                                     @endif
                                                     Feedback
                                                 </li>

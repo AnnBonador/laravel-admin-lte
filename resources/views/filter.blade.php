@@ -58,6 +58,8 @@
                                             <input type="checkbox" name="ratings">
                                             <span class="checkmark"></span> Ratings
                                         </label>
+                                        <input type="hidden" name="latitude" id="lat" value="">
+                                        <input type="hidden" name="longitude" id="long" value="">
                                     </div>
                                 </div>
                                 <div class="btn-search">
@@ -104,26 +106,24 @@
                                                     src="{{ asset('front-assets/assets/img/specialities/specialities-05.png') }}"
                                                     class="img-fluid" alt="Speciality">Dentist</h5>
                                             <div class="rating">
-                                                @if (!empty($data->average_rating))
-                                                    @for ($i = 1; $i <= 5; $i++)
-                                                        @if ($data->average_rating < $i)
-                                                            @if (round($data->average_rating) == $i)
-                                                                <i class="fas fa-star-half filled"></i>
-                                                                @continue
+                                                @if (!empty($data->ratings))
+                                                    <?php $rating = $data->average_rating; ?>
+                                                    @foreach (range(1, 5) as $i)
+                                                        <span class="fa-stack" style="width:1em">
+                                                            <i class="far fa-star fa-stack-1x"></i>
+                                                            @if ($rating > 0)
+                                                                @if ($rating > 0.5)
+                                                                    <i class="fas fa-star fa-stack-1x text-warning"></i>
+                                                                @else
+                                                                    <i
+                                                                        class="fas fa-star-half fa-stack-1x text-warning"></i>
+                                                                @endif
                                                             @endif
-                                                            <i class="fas fa-star"></i>
-                                                            @continue
-                                                        @endif
-                                                        <i class="fas fa-star filled"></i>
-                                                    @endfor
-                                                    {{-- <span class="d-inline-block average-rating">
-                                                        ({{ $data->average_rating->count() }})
-                                                    </span> --}}
-                                                @else
-                                                    @for ($i = 1; $i <= 5; $i++)
-                                                        <i class="fas fa-star"></i>
-                                                    @endfor
-                                                    <span class="d-inline-block average-rating">(0)</span>
+                                                            @php $rating--; @endphp
+                                                        </span>
+                                                    @endforeach
+                                                    <span
+                                                        class="d-inline-block">{{ number_format($data->average_rating, 1, '.', ',') }}</span>
                                                 @endif
                                             </div>
                                             <div class="clinic-details">
@@ -143,18 +143,19 @@
                                     <div class="doc-info-right">
                                         <div class="clini-infos">
                                             <ul>
+                                                @php
+                                                    $miles = $data->distance;
+                                                    $meter = 1.609344 * $miles;
+                                                @endphp
+                                                <li>{{ round($meter, 1) }} km</li>
                                                 <li><i class="far fa-comment"></i>
-                                                    @if ($data->reviews)
-                                                        {{ $data->reviews->count() ?: '0' }}
-                                                    @else
-                                                        0
+                                                    @if ($data->ratings)
+                                                        {{ $data->ratings->count() ?: '0' }}
                                                     @endif
                                                     Feedback
                                                 </li>
-                                                <li><i class="fas fa-envelope"></i>{{ $data->email }}
-                                                </li>
-                                                <li><i class="fas fa-phone"></i>{{ $data->contact }}
-                                                </li>
+                                                <li><i class="fas fa-envelope"></i>{{ $data->email }}</li>
+                                                <li><i class="fas fa-phone"></i>{{ $data->contact }}</li>
                                                 <li><i
                                                         class="fas fa-map-marker-alt"></i>{{ $data->city . ', ' . $data->country }}
                                             </ul>
@@ -180,6 +181,8 @@
 @section('scripts')
     <script>
         //getting location
+        var lat = document.getElementById("lat");
+        var long = document.getElementById("long");
         var x = document.getElementById("demo");
 
         if (navigator.geolocation) {
@@ -190,7 +193,8 @@
 
         function showPosition(position) {
             console.log(position);
-            x.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude;
+            $('#lat').val(position.coords.latitude);
+            $('#long').val(position.coords.longitude);
         }
     </script>
 @endsection

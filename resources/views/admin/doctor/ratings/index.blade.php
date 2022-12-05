@@ -79,7 +79,7 @@
                                         <div class="progress-group">
                                             <span class="progress-text">5 star</span>
                                             <span
-                                                class="float-right"><b>{{ ($five_stars / $ratings->count()) * 100 }}%</b></span>
+                                                class="float-right"><b>{{ round(($five_stars / $ratings->count()) * 100) }}%</b></span>
                                             <div class="progress progress-sm">
                                                 <div class="progress-bar bg-warning progress-bar-striped"
                                                     style="width:{{ ($five_stars / $ratings->count()) * 100 }}%"></div>
@@ -89,7 +89,7 @@
                                         <div class="progress-group">
                                             <span class="progress-text">4 star</span>
                                             <span
-                                                class="float-right"><b>{{ ($four_stars / $ratings->count()) * 100 }}%</b></span>
+                                                class="float-right"><b>{{ round(($four_stars / $ratings->count()) * 100) }}%</b></span>
                                             <div class="progress progress-sm">
                                                 <div class="progress-bar bg-warning progress-bar-striped"
                                                     style="width: {{ ($four_stars / $ratings->count()) * 100 }}%"></div>
@@ -99,7 +99,7 @@
                                         <div class="progress-group">
                                             <span class="progress-text">3 star</span>
                                             <span
-                                                class="float-right"><b>{{ ($three_stars / $ratings->count()) * 100 }}%</b></span>
+                                                class="float-right"><b>{{ round(($three_stars / $ratings->count()) * 100) }}%</b></span>
                                             <div class="progress progress-sm">
                                                 <div class="progress-bar bg-warning progress-bar-striped"
                                                     style="width: {{ ($three_stars / $ratings->count()) * 100 }}%"></div>
@@ -108,7 +108,7 @@
 
                                         <div class="progress-group">
                                             <span class="progress-text">2 star</span>
-                                            <span class="float-right"><b>{{ ($two_stars / $ratings->count()) * 100 }}%
+                                            <span class="float-right"><b>{{ round(($two_stars / $ratings->count()) * 100) }}%
                                                 </b></span>
                                             <div class="progress progress-sm">
                                                 <div class="progress-bar bg-warning progress-bar-striped"

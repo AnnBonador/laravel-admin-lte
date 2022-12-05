@@ -153,7 +153,9 @@
                                 '<option value=""> Select Doctor</option>');
                             $.each(data, function(key, value) {
                                 $('#load_doctor').append('<option value="' + value.id +
-                                    '">' + value.fname + ' ' + value.lname +
+                                    '">' + value.fname + ' ' + value
+                                    .lname + ' (' +
+                                    value.specialization_id + ')' +
                                     '</option>');
                             });
                         }

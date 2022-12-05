@@ -38,7 +38,7 @@
                             <!-- Doctor Widget -->
                             <div class="profile-widget">
                                 <div class="doc-img">
-                                    <a href="doctor-profile.html">
+                                    <a href="{{ route('clinics.profile', $data->id) }}">
                                         @if (!empty($data->image))
                                             <img class="img-fluid" alt="User Image"
                                                 src="{{ asset('uploads/clinic/' . $data->image) }}">

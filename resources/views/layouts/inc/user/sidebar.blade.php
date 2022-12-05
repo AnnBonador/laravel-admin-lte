@@ -53,6 +53,15 @@
                           </p>
                       </a>
                   </li>
+                  <li class="nav-item">
+                      <a href="{{ route('payments') }}"
+                          class="nav-link {{ request()->routeIs('payments') || request()->routeIs('payments.*') ? 'active' : '' }}">
+                          <i class="nav-icon fas fa-credit-card"></i>
+                          <p>
+                              Payments
+                          </p>
+                      </a>
+                  </li>
               </ul>
           </nav>
           <!-- /.sidebar-menu -->

@@ -32,7 +32,7 @@ class FrontEndController extends Controller
         $services = Service::whereHas('doctors', function (Builder $query) use ($id) {
             $query->where('clinic_id', $id);
         })->get();
-        $doctors = User::with('reviews', 'service')->role('Doctor')->where('clinic_id', $id)->get();
+        $doctors = User::with('ratings', 'service')->role('Doctor')->where('clinic_id', $id)->get();
         return view('clinic-profile', compact('clinic', 'services', 'doctors'));
     }
 
@@ -55,7 +55,7 @@ class FrontEndController extends Controller
                 ORDER BY distance
                 LIMIT 1;'
         );
-        $doctor = User::with('reviews')->where('id', $id)->first();
+        $doctor = User::with('ratings')->where('id', $id)->first();
         $services = Service::where('doctor_id', $id)->get();
         $schedule = Schedule::where('doctor_id', $id)->orderBy('id', 'desc')->get();
         $reviews = ReviewRating::where('doctor_id', $id)->get();
