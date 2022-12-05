@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\Image;
 use App\Models\Clinic;
 use App\Mail\SendPassword;
 use Illuminate\Http\Request;
@@ -210,5 +211,17 @@ class ClinicsController extends Controller
         $user->save();
 
         return response()->json(['success' => 'Clinic status updated successfully.']);
+    }
+
+    public function storeImage(Request $request)
+    {
+        $image = $request->file('file');
+        $avatarName = $image->getClientOriginalName();
+        $image->move(public_path('images'),$avatarName);
+
+        $imageUpload = new Image();
+        $imageUpload->title = $avatarName;
+        $imageUpload->save();
+        return response()->json(['success'=>$avatarName]);
     }
 }

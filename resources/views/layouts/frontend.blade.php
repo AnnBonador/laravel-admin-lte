@@ -70,6 +70,7 @@
     <script src="{{ asset('front-assets/assets/plugins/fancybox/jquery.fancybox.min.js') }}"></script>
     <!-- Custom JS -->
     <script src="{{ asset('front-assets/assets/js/script.js') }}"></script>
+    <script src="{{ asset('front-assets/admin/assets/js/user.js') }}"></script>
     @yield('scripts')
 
 </body>

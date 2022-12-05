@@ -83,17 +83,6 @@
                         <div class="doc-info-right">
                             <div class="clini-infos">
                                 <ul>
-                                    <li><i class="fas fa-location-arrow"></i>
-                                        <b class="text-info">
-                                            @foreach ($distance as $value)
-                                                @php
-                                                    $miles = $value->distance;
-                                                    $meter = 1.609344 * $miles;
-                                                @endphp
-                                                {{ round($meter, 0) }} km
-                                            @endforeach
-                                        </b>
-                                    </li>
                                     <li><i class="far fa-comment"></i>
                                         @if ($doctor->ratings)
                                             {{ $doctor->ratings->count() ?: '0' }}

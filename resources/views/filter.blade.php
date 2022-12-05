@@ -49,13 +49,13 @@
                                     <h4>Sort</h4>
                                     <div>
                                         <label class="custom_check">
-                                            <input type="checkbox" name="proximity">
+                                            <input type="checkbox" name="proximity" class="checkFilter">
                                             <span class="checkmark"></span> Proximity
                                         </label>
                                     </div>
                                     <div>
                                         <label class="custom_check">
-                                            <input type="checkbox" name="ratings">
+                                            <input type="checkbox" name="ratings" class="checkFilter">
                                             <span class="checkmark"></span> Ratings
                                         </label>
                                         <input type="hidden" name="latitude" id="lat" value="">
@@ -63,7 +63,8 @@
                                     </div>
                                 </div>
                                 <div class="btn-search">
-                                    <button type="submit" class="btn btn-block">Search</button>
+                                    <button type="submit" id="filter"
+                                        disabled="true"class="btn btn-block">Search</button>
                                 </div>
                             </form>
                         </div>
@@ -177,24 +178,4 @@
 
     </div>
     <!-- /Page Content -->
-@endsection
-@section('scripts')
-    <script>
-        //getting location
-        var lat = document.getElementById("lat");
-        var long = document.getElementById("long");
-        var x = document.getElementById("demo");
-
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-        } else {
-            x.innerHTML = "Geolocation is not supported by this browser.";
-        }
-
-        function showPosition(position) {
-            console.log(position);
-            $('#lat').val(position.coords.latitude);
-            $('#long').val(position.coords.longitude);
-        }
-    </script>
 @endsection

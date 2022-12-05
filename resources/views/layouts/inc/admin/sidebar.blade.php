@@ -77,16 +77,18 @@
                           </a>
                       </li>
                   @endunlessrole
-                  <li class="nav-item">
-                      <a href="{{ route('services.index') }}"
-                          class="nav-link {{ request()->routeIs('services.*') ? 'active' : '' }}">
-                          <i class="nav-icon fas fa-clipboard-list"></i>
-                          <p>
-                              Services
-                          </p>
-                      </a>
-                  </li>
-                  @unlessrole('Receptionist')
+                  @hasanyrole('Clinic Admin|Receptonist|Doctor')
+                      <li class="nav-item">
+                          <a href="{{ route('services.index') }}"
+                              class="nav-link {{ request()->routeIs('services.*') ? 'active' : '' }}">
+                              <i class="nav-icon fas fa-clipboard-list"></i>
+                              <p>
+                                  Services
+                              </p>
+                          </a>
+                      </li>
+                  @endhasanyrole
+                  @unlessrole('Receptionist|Super-Admin')
                       <li class="nav-item">
                           <a href="{{ route('schedules.index') }}"
                               class="nav-link {{ request()->routeIs('schedules.*') ? 'active' : '' }}">
@@ -106,15 +108,17 @@
                           </a>
                       </li>
                   @endunlessrole
-                  <li class="nav-item">
-                      <a href="{{ route('treated.index') }}"
-                          class="nav-link {{ request()->routeIs('treated.*') ? 'active' : '' }}">
-                          <i class="nav-icon fas fa-user-check"></i>
-                          <p>
-                              Treated
-                          </p>
-                      </a>
-                  </li>
+                  @unlessrole('Super-Admin')
+                      <li class="nav-item">
+                          <a href="{{ route('treated.index') }}"
+                              class="nav-link {{ request()->routeIs('treated.*') ? 'active' : '' }}">
+                              <i class="nav-icon fas fa-user-check"></i>
+                              <p>
+                                  Treated
+                              </p>
+                          </a>
+                      </li>
+                  @endunlessrole
                   <li class="nav-item">
                       <a href="{{ route('reviews') }}"
                           class="nav-link {{ request()->routeIs('reviews') ? 'active' : '' }}">
@@ -126,9 +130,9 @@
                   </li>
                   @hasanyrole('Super-Admin|Clinic Admin')
                       <li
-                          class="nav-item {{ request()->routeIs('medical.*') || request()->routeIs('report.*') || request()->routeIs('paypal.*') ? 'menu-open' : '' }}">
+                          class="nav-item {{ request()->routeIs('medical.*') || request()->routeIs('report.*') || request()->routeIs('sales.*') ? 'menu-open' : '' }}">
                           <a href="#"
-                              class="nav-link {{ request()->routeIs('medical.*') || request()->routeIs('report.*') || request()->routeIs('paypal.*') ? 'active' : '' }}">
+                              class="nav-link {{ request()->routeIs('medical.*') || request()->routeIs('report.*') || request()->routeIs('sales.*') ? 'active' : '' }}">
                               <i class="nav-icon fas fa-file-pdf "></i>
                               <p>
                                   Reports
@@ -152,7 +156,7 @@
                               </li>
                               <li class="nav-item">
                                   <a href="{{ route('sales.show.report') }}"
-                                      class="nav-link {{ request()->routeIs('Sales.*') ? 'active' : '' }}">
+                                      class="nav-link {{ request()->routeIs('sales.*') ? 'active' : '' }}">
                                       <i class="nav-icon fas fa-file-alt"></i>
                                       <p>Sales Report</p>
                                   </a>

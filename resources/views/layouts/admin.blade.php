@@ -43,6 +43,7 @@
         href="{{ asset('admin-assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     {{-- toast --}}
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/toastr/toastr.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.0/min/dropzone.min.css">
     <link rel="stylesheet" href="{{ asset('admin-assets/dist/css/custom.css') }}">
     {{-- calendar --}}
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/fullcalendar/fullcalendar-5.11.3.css') }}">
@@ -105,6 +106,8 @@
     <script src="{{ asset('admin-assets/plugins/jszip/jszip.min.js') }}"></script>
     <script src="{{ asset('admin-assets/plugins/pdfmake/pdfmake.min.js') }}"></script>
     <script src="{{ asset('admin-assets/plugins/pdfmake/vfs_fonts.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.0/dropzone.js"></script>
     <script src="{{ asset('admin-assets/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('admin-assets/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('admin-assets/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>

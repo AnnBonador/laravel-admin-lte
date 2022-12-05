@@ -227,6 +227,13 @@
                                         @endif
                                     </div>
                                 </div>
+                                {{-- <div class="row mt-2">
+                                    <label for="">Featured Image</label>
+                                    <form method="post" action="{{ url('dropzone/store') }}"
+                                        enctype="multipart/form-data" class="dropzone" id="dropzone">
+                                        @csrf
+                                    </form>
+                                </div> --}}
                                 <button class="btn btn-primary" type="submit">Save</button>
                             </form>
                         </div>
@@ -237,4 +244,25 @@
 
     </div>
     <!-- /.row (main row) -->
+@endsection
+@section('scripts')
+    <script type="text/javascript">
+        Dropzone.options.dropzone = {
+            maxFilesize: 10,
+            renameFile: function(file) {
+                var dt = new Date();
+                var time = dt.getTime();
+                return time + file.name;
+            },
+            acceptedFiles: ".jpeg,.jpg,.png,.gif",
+            addRemoveLinks: true,
+            timeout: 60000,
+            success: function(file, response) {
+                console.log(response);
+            },
+            error: function(file, response) {
+                return false;
+            }
+        };
+    </script>
 @endsection
