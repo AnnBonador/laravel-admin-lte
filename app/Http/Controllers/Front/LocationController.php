@@ -16,7 +16,7 @@ class LocationController extends Controller
     public function index(Request $request)
     {
         $doctors = User::with('ratings', 'service')->role('Doctor')->where('status', '1')->get();
-        return view('search-doctors', compact('users', 'doctors'));
+        return view('search-doctors', compact( 'doctors'));
     }
 
     public function search(Request $request)
