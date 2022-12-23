@@ -2,7 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\API\AccountManagement;
+use App\Http\Controllers\API\PatientManagement;
+use App\Http\Controllers\API\DentistManagement;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('register', [AccountManagement::class, 'register']);
+Route::post('login', [AccountManagement::class, 'login']);
+
+Route::get('rating', [DentistManagement::class, 'ratings']);
+
+Route::middleware('auth:api')->group( function () {
+    //Route::resource('products', ProductController::class);
+    Route::get('profile', [AccountManagement::class, 'UserProfile']);
+    Route::get('patient_information', [PatientManagement::class, 'get_patient']);
+    Route::get('dentist_information', [DentistManagement::class, 'dentist_information']);
 });
