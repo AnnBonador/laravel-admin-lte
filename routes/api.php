@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AccountManagement;
 use App\Http\Controllers\API\PatientManagement;
 use App\Http\Controllers\API\DentistManagement;
+use App\Http\Controllers\API\AppointmentManagement;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -26,4 +27,7 @@ Route::middleware('auth:api')->group( function () {
     Route::get('profile', [AccountManagement::class, 'UserProfile']);
     Route::get('patient_information', [PatientManagement::class, 'get_patient']);
     Route::get('dentist_information', [DentistManagement::class, 'dentist_information']);
+    Route::get('clinic', [AppointmentManagement::class, 'get_clinic']);
+    Route::get('get_doctor/{id}', [AppointmentManagement::class, 'get_doctor']);
+    Route::get('get_service/{id}', [AppointmentManagement::class, 'get_service']);
 });
