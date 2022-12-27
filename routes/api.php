@@ -23,6 +23,7 @@ Route::post('login', [AccountManagement::class, 'login']);
 Route::get('rating', [DentistManagement::class, 'ratings']);
 
 Route::middleware('auth:api')->group( function () {
+    //coommentttt
     //Route::resource('products', ProductController::class);
     Route::get('profile', [AccountManagement::class, 'UserProfile']);
     Route::get('patient_information', [PatientManagement::class, 'get_patient']);
