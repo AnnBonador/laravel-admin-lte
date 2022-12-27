@@ -98,4 +98,18 @@ class AppointmentManagement extends Controller
 
         return response()->json($new_array_of_time);
     }
+
+    public function appointmentTrigger(Request $request){
+        $validator = Validator::make($request->all(), [
+            'clinic_id' => 'required',
+            'doctor_id' => 'required',
+            'patient_id' => 'required',
+            'schedule_id' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'payment_option' => 'required'
+        ]);
+
+        return response()->json($request);
+    }
 }

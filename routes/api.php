@@ -32,4 +32,5 @@ Route::middleware('auth:api')->group( function () {
     Route::get('get_clinic_doctors/{id}', [AppointmentManagement::class, 'get_doctor']);
     Route::get('get_doctor_services/{id}', [AppointmentManagement::class, 'get_service']);
     Route::post('get_doctor_slots', [AppointmentManagement::class, 'get_doctor_slots']);
+    Route::post('appointment', [AppointmentManagement::class, 'appointmentTrigger']);
 });
