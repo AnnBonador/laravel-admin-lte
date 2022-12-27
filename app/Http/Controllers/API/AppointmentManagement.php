@@ -22,7 +22,7 @@ class AppointmentManagement extends Controller
      * @return \Illuminate\Http\Response
      */
     public function get_clinic(Request $request){
-        $clinic = Clinic::where('status', '1')->pluck('name', 'id');
+        $clinic = Clinic::where('status', '1')->get('name', 'id');
         return response()->json($clinic);
     }
 
