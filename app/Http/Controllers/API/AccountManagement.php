@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller as Controller;
 use Validator;
 use App\Models\User;
 use Auth;
+use Hash;
 class AccountManagement extends Controller
 {
     /**
@@ -69,5 +70,38 @@ class AccountManagement extends Controller
     public function UserProfile(){
         $user = Auth::user();
         return response()->json($user);
+    }
+
+    public function updateProfile(Request $request){
+        $validator = Validator::make($request->all(), [
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'address' => 'required',
+            'dob' => 'required',
+            'contact' => 'required',
+            'email' => 'required|email',
+            'password' => 'required',
+            'o_password' => 'required',
+        ]);
+
+        $userid = $request->id;
+        $get_user = User::where('id','=',$userid)->first();
+
+        if(!Hash::check($request->o_password, $get_user->password)) {
+            return response()->json(['error' => ['The old password does not match our records.'] ]);
+        }
+        $query = User::find($userid);
+        $query->fname = $request->firstname;
+        $query->lname = $request->lastname;
+        $query->address = $request->address;
+        $query->dob = $request->dob;
+        $query->contact = $request->contact;
+        $query->email = $request->email;
+        $query->password = $request->password;
+        $query->save();
+
+        return response()->json(['success' => ['Profile Updated Succesfully'] ]);
+
+
     }
 }

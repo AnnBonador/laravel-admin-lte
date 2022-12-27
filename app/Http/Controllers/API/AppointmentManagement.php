@@ -106,7 +106,7 @@ class AppointmentManagement extends Controller
             'patient_id' => 'required',
             'schedule_id' => 'required',
             'start_time' => 'required',
-            'end_time' => 'required',
+            
             'payment_option' => 'required'
         ]);
 
