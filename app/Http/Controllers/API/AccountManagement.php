@@ -75,20 +75,28 @@ class AccountManagement extends Controller
     public function updateProfile(Request $request){
 
         $userid = $request->id;
-        $get_user = User::where('id','=',$userid)->first();
         
-        if(!Hash::check($request->o_password, $get_user->password)) {
-            return response()->json(['error' => ['The old password does not match our records.'] ]);
+        if($request->filled('password')){
+            $get_user = User::where('id','=',$userid)->first();
+            if(!Hash::check($request->o_password, $get_user->password)) {
+                return response()->json(['error' => ['The old password does not match our records.'] ]);
+            }
+            $data = $request->except('c_password');
+            $query = User::where('id', '=', $userid)->update($data);
+            return response()->json(['success' => ['Profile Updated Succesfully'] ]);
+            
         }
-        $query = User::find($userid);
-        $query->fname = $request->firstname;
-        $query->lname = $request->lastname;
-        $query->address = $request->address;
-        $query->dob = $request->dob;
-        $query->contact = $request->contact;
-        $query->email = $request->email;
-        $query->password = $request->password;
-        $query->save();
+        $data = $request->except('c_password');
+        $query = User::where('id', '=', $userid)->update($data);
+        return response()->json(['success' => ['Profile Updated Succesfully'] ]);
+        // $query->fname = $request->firstname;
+        // $query->lname = $request->lastname;
+        // $query->address = $request->address;
+        // $query->dob = $request->dob;
+        // $query->contact = $request->contact;
+        // $query->email = $request->email;
+        // $query->password = $request->password;
+        // $query->save();
 
         return response()->json(['success' => ['Profile Updated Succesfully'] ]);
 
