@@ -183,7 +183,9 @@
                         },
                         success: function(data) {
                             $('#load_service').empty();
+                            
                             $.each(data.services, function(key, value) {
+                                console.log(value.id);
                                 $('#load_service').append('<option value="' + value.id +
                                     '" data-price="' + value.charges + '">' + value
                                     .name + '</option>');
