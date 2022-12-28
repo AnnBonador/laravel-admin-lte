@@ -116,4 +116,15 @@ class AppointmentManagement extends Controller
         $user = Appointment::create($request->all());
         return response()->json(['success'=> 'Appointment Succesfully Set']);
     }
+
+    //for patient
+    public function get_patient_appointment($id){
+        $get_appointment_by_id = Appointment::where('patient_id', '=', $id)->get();
+        return response()->json($get_appointment_by_id);
+    }
+
+    public function get_appointment(){
+        $get_appointment_by_id = Appointment::where('doctor_id', '=', $id)->get();
+        return response()->json($get_appointment_by_id);
+    }
 }
