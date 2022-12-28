@@ -148,7 +148,7 @@
                                     <div class="row mt-2">
                                         <div class="form-group col-sm-6">
                                             <label for="">Degree</label>
-                                            <input type="text" name="degree" value="{{ $doctor->degree }}"
+                                            <input type="text" name="degree" value="{{-- $doctor->degree --}}"
                                                 class="form-control" placeholder="Enter degree">
                                             @if ($errors->has('degree'))
                                                 <span class="text-danger text-left">{{ $errors->first('degree') }}</span>

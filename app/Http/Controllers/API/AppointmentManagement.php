@@ -38,8 +38,10 @@ class AppointmentManagement extends Controller
             ->where('day', '!=',  date("m/d/Y", strtotime('tomorrow')))
             ->where('doctor_id', $id)
             ->first();
-        if(empty($services) OR empty($date_id)){
-            return response()->json(['success' => false, 'message' => 'No Services Found']);
+
+
+        if(empty($date_id)){
+            return response()->json(['services' => $services, 'date_id' => 'No Schedule Found.']);
             
         }
         return response()->json(['services' => $services, 'date_id' => $date_id->id]);
