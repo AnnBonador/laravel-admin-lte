@@ -38,7 +38,7 @@ Route::middleware('auth:api')->group( function () {
     //appointment data
     Route::get('get_patient_appointment/{id}', [AppointmentManagement::class, 'get_patient_appointment']);
 
-    Route::get('get_patient_appointment', [AppointmentManagement::class, 'get_appointment']);
+    Route::get('get_appointment/{id}', [AppointmentManagement::class, 'get_appointment']);
 
     //prescription
     Route::get('get_prescription/{id}', [PatientManagement::class, 'prescription_list']);

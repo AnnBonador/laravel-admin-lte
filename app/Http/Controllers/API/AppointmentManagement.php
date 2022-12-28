@@ -123,7 +123,7 @@ class AppointmentManagement extends Controller
         return response()->json($get_appointment_by_id);
     }
 
-    public function get_appointment(){
+    public function get_appointment($id){
         $get_appointment_by_id = Appointment::where('doctor_id', '=', $id)->get();
         return response()->json($get_appointment_by_id);
     }
