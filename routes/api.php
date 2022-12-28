@@ -23,8 +23,8 @@ Route::post('login', [AccountManagement::class, 'login']);
 Route::get('rating', [DentistManagement::class, 'ratings']);
 
 Route::middleware('auth:api')->group( function () {
-    //coommentttt
-    //Route::resource('products', ProductController::class);
+    
+    //
     Route::get('profile', [AccountManagement::class, 'UserProfile']);
     Route::get('patient_information', [PatientManagement::class, 'get_patient']);
     Route::get('dentist_information', [DentistManagement::class, 'dentist_information']);
@@ -34,4 +34,8 @@ Route::middleware('auth:api')->group( function () {
     Route::post('get_doctor_slots', [AppointmentManagement::class, 'get_doctor_slots']);
     Route::post('appointment', [AppointmentManagement::class, 'appointmentTrigger']);
     Route::post('update_profile', [AccountManagement::class, 'updateProfile']);
+
+    //prescription
+    Route::get('get_prescription/{id}', [PatientManagement::class, 'prescription_list']);
+    Route::get('view_prescription/{id}', [PatientManagement::class, 'view_prescription']);
 });
