@@ -82,11 +82,13 @@ class AccountManagement extends Controller
                 return response()->json(['error' => ['The old password does not match our records.'] ]);
             }
             $data = $request->except('c_password');
+            $data['password'] = Hash::make($request['password']);
             $query = User::where('id', '=', $userid)->update($data);
             return response()->json(['success' => ['Profile Updated Succesfully'] ]);
             
         }
         $data = $request->except('c_password');
+        $data['password'] = Hash::make($request['password']);
         $query = User::where('id', '=', $userid)->update($data);
         return response()->json(['success' => ['Profile Updated Succesfully'] ]);
         // $query->fname = $request->firstname;
