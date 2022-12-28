@@ -79,17 +79,17 @@ class AccountManagement extends Controller
         if($request->filled('password')){
             $get_user = User::where('id','=',$userid)->first();
             if(!Hash::check($request->o_password, $get_user->password)) {
-                return response()->json(['error' => ['The old password does not match our records.'] ]);
+                return response()->json(['success' => false, 'message' => 'The old password does not match our records.' ]);
             }
             $data = $request->except(['o_password', 'id']);
             $data['password'] = Hash::make($data['password']);
             $query = User::where('id', '=', $userid)->update($data);
-            return response()->json(['success' => ['Profile Updated Succesfully'] ]);
+            return response()->json(['success' => true, 'message' => 'Profile Updated Succesfully' ]);
             
         }
         $data = $request->except('id');
         $query = User::where('id', '=', $userid)->update($data);
-        return response()->json(['success' => ['Profile Updated Succesfully'] ]);
+        
         // $query->fname = $request->firstname;
         // $query->lname = $request->lastname;
         // $query->address = $request->address;
@@ -99,7 +99,7 @@ class AccountManagement extends Controller
         // $query->password = $request->password;
         // $query->save();
 
-        return response()->json(['success' => ['Profile Updated Succesfully'] ]);
+        return response()->json(['success' => true, 'message' => 'Profile Updated Succesfully' ]);
 
 
     }
