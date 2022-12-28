@@ -73,16 +73,6 @@ class AccountManagement extends Controller
     }
 
     public function updateProfile(Request $request){
-        $validator = Validator::make($request->all(), [
-            'firstname' => 'required',
-            'lastname' => 'required',
-            'address' => 'required',
-            'dob' => 'required',
-            'contact' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
-            'o_password' => 'required',
-        ]);
 
         $userid = $request->id;
         $get_user = User::where('id','=',$userid)->first();
