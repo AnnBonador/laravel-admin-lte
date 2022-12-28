@@ -76,9 +76,7 @@ class AccountManagement extends Controller
 
         $userid = $request->id;
         $get_user = User::where('id','=',$userid)->first();
-        if($validator->fails()){
-            return response()->json($validator->errors());       
-        }
+        
         if(!Hash::check($request->o_password, $get_user->password)) {
             return response()->json(['error' => ['The old password does not match our records.'] ]);
         }
