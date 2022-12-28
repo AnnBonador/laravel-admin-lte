@@ -110,6 +110,10 @@ class AppointmentManagement extends Controller
             'payment_option' => 'required'
         ]);
 
-        return response()->json($request);
+        if($validator->fails()){
+            return response()->json($validator->errors());       
+        }
+        $user = Appointment::create($request);
+        return response()->json(['success', 'Appointment Succesfully Set']);
     }
 }
