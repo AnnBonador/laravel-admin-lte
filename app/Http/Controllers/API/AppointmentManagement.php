@@ -113,7 +113,7 @@ class AppointmentManagement extends Controller
         if($validator->fails()){
             return response()->json($validator->errors());       
         }
-        $user = Appointment::create($request);
+        $user = Appointment::create($request->all());
         return response()->json(['success', 'Appointment Succesfully Set']);
     }
 }
