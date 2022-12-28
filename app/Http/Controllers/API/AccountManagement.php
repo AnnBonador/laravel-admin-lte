@@ -81,7 +81,7 @@ class AccountManagement extends Controller
             if(!Hash::check($request->o_password, $get_user->password)) {
                 return response()->json(['error' => ['The old password does not match our records.'] ]);
             }
-            $data = $request->except(['c_password', 'id']);
+            $data = $request->except(['o_password', 'id']);
             $data['password'] = Hash::make($data['password']);
             $query = User::where('id', '=', $userid)->update($data);
             return response()->json(['success' => ['Profile Updated Succesfully'] ]);
