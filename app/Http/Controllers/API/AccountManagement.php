@@ -87,8 +87,7 @@ class AccountManagement extends Controller
             return response()->json(['success' => ['Profile Updated Succesfully'] ]);
             
         }
-        $data = $request->except('c_password');
-        $data['password'] = Hash::make($request['password']);
+        $data = $request->except('id');
         $query = User::where('id', '=', $userid)->update($data);
         return response()->json(['success' => ['Profile Updated Succesfully'] ]);
         // $query->fname = $request->firstname;
