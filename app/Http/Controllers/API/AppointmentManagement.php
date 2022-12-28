@@ -111,15 +111,25 @@ class AppointmentManagement extends Controller
             'doctor_id' => 'required',
             'patient_id' => 'required',
             'schedule_id' => 'required',
-            'start_time' => 'required',
-            
             'payment_option' => 'required'
         ]);
 
         if($validator->fails()){
             return response()->json($validator->errors());       
         }
-        $user = Appointment::create($request->all());
+        //$user = Appointment::create($request->all());
+        $time_range = $request->time;
+        $times = explode("-", $time_range);
+        $appointment = new Appointment;
+        $appointment->clinic_id = $request->clinic_id;
+        $appointment->doctor_id = $request->doctor_id;
+        $appointment->patient_id = $request->patient_id;
+        $appointment->schedule_id = $request->schedule_id;
+        $appointment->start_time = trim($times[0]);
+        $appointment->end_time = trim($times[1]);
+        $appointment->description = ($request->description!=''? $request->description: '');
+        $appointment->save();
+
         return response()->json(['success'=> 'Appointment Succesfully Set']);
     }
 
