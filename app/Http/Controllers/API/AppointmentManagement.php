@@ -40,10 +40,10 @@ class AppointmentManagement extends Controller
             ->first();
 
 
-        // if(empty($date_id)){
-        //     return response()->json(['services' => $services, 'date_id' => 'No Schedule Found.']);
+        if(empty($date_id)){
+            return response()->json(['services' => $services, 'date_id' => 'No Schedule Found.']);
             
-        // }
+        }
         return response()->json(['services' => $services, 'date_id' => $date_id->id]);
     }
 
