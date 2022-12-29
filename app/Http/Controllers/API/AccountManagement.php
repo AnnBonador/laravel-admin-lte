@@ -20,9 +20,9 @@ class AccountManagement extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'firstname' => 'required',
-            'middlename' => 'required',
-            'lastname' => 'required',
+            'fname' => 'required',
+            //'middlename' => 'required',
+            'lname' => 'required',
             'dob' => 'required',
             'gender' => 'required',
             'address' => 'required',
@@ -36,7 +36,7 @@ class AccountManagement extends Controller
             return response()->json($validator->errors());       
         }
    
-        $input = $request->all();
+        $input = $request->except('c_password');
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         
