@@ -40,10 +40,10 @@ class AppointmentManagement extends Controller
             ->first();
 
 
-        if(empty($date_id)){
-            return response()->json(['services' => $services, 'date_id' => 'No Schedule Found.']);
+        // if(empty($date_id)){
+        //     return response()->json(['services' => $services, 'date_id' => 'No Schedule Found.']);
             
-        }
+        // }
         return response()->json(['services' => $services, 'date_id' => $date_id->id]);
     }
 
@@ -95,6 +95,7 @@ class AppointmentManagement extends Controller
             // resetting index
             $narray_of_time = $new_array_of_time;
             $new_array_of_time = array();
+            $counter = 0;
             foreach ($narray_of_time as $item) {
                 $new_array_of_time[] = $item;
             }
