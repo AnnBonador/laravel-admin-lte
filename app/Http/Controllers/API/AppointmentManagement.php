@@ -37,14 +37,14 @@ class AppointmentManagement extends Controller
             ->where('day', '!=', date('m/d/Y'))
             ->where('day', '!=',  date("m/d/Y", strtotime('tomorrow')))
             ->where('doctor_id', $id)
-            ->get();
+            ->pluck('day', 'id');
 
 
         if(empty($date_id)){
             return response()->json(['services' => $services, 'date_id' => 'No Schedule Found.']);
             
         }
-        return response()->json(['services' => $services, 'date_id' => $date_id->id]);
+        return response()->json(['services' => $services, 'date_id' => $date_id]);
     }
 
     public function get_doctor_slots(Request $request){
