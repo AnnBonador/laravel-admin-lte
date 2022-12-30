@@ -17,7 +17,7 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-    protected $fillable = ['fname', 'lname', 'email', 'contact', 'dob', 'gender', 'status', 'type', 'password', 'specialization_id', 'experience', 'clinic_id'];
+    protected $fillable = ['fname', 'lname', 'email', 'contact', 'dob', 'gender', 'status', 'type', 'password', 'specialization_id', 'experience', 'clinic_id', 'address'];
     public function getFullNameAttribute()
     {
         return "{$this->fname} {$this->lname}";
