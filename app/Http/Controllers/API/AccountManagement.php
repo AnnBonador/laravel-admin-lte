@@ -35,14 +35,15 @@ class AccountManagement extends Controller
         if($validator->fails()){
             return response()->json($validator->errors());       
         }
+        $success = $request->specialization_id;
    
-        $input = $request->except('c_password');
-        $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
+        // $input = $request->except('c_password');
+        // $input['password'] = bcrypt($input['password']);
+        // $user = User::create($input);
         
-        $success['token'] =  $user->createToken('MyApp')->accessToken;
-        $success['name'] =  $user->fname.' '.$user->lname;
-        $success['message'] = 'User Register Succesfully';
+        // $success['token'] =  $user->createToken('MyApp')->accessToken;
+        // $success['name'] =  $user->fname.' '.$user->lname;
+        // $success['message'] = 'User Register Succesfully';
    
         return response()->json($success);
     }

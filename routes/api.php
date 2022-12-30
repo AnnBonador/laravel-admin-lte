@@ -17,23 +17,31 @@ use App\Http\Controllers\API\AppointmentManagement;
 |
 */
 
-Route::post('register', [AccountManagement::class, 'register']);
+Route::post('register', [AccountManagement::class, 'register']); //universal for patient and doctor
 Route::post('login', [AccountManagement::class, 'login']);
 
 Route::get('rating', [DentistManagement::class, 'ratings']);
 
 Route::middleware('auth:api')->group( function () {
     
-    //
+    //Universal for Patient and  Doctor
+    Route::post('update_profile', [AccountManagement::class, 'updateProfile']);
     Route::get('profile', [AccountManagement::class, 'UserProfile']);
+
+    
     Route::get('patient_information', [PatientManagement::class, 'get_patient']);
     Route::get('dentist_information', [DentistManagement::class, 'dentist_information']);
+    
+    //dentist
+
+    //patient
     Route::get('get_clinics', [AppointmentManagement::class, 'get_clinic']);
     Route::get('get_clinic_doctors/{id}', [AppointmentManagement::class, 'get_doctor']);
     Route::get('get_doctor_services/{id}', [AppointmentManagement::class, 'get_service']);
     Route::post('get_doctor_slots', [AppointmentManagement::class, 'get_doctor_slots']);
     Route::post('appointment', [AppointmentManagement::class, 'appointmentTrigger']);
-    Route::post('update_profile', [AccountManagement::class, 'updateProfile']);
+
+    
 
     //appointment data
     Route::get('get_patient_appointment/{id}', [AppointmentManagement::class, 'get_patient_appointment']);
