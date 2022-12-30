@@ -27,8 +27,8 @@ class DentistManagement extends Controller
 
     public function get_treated($id){
         $query = DB::table('treated')
-                ->join('appointment', 'treated.app_id', '=', 'appointment.id')
-                ->where('appointment.doctor_id', '=', $id)
+                ->join('appointments', 'treated.app_id', '=', 'appointments.id')
+                ->where('appointments.doctor_id', '=', $id)
                 ->get();
 
         return response()->json($query);
