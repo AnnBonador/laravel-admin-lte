@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\ReviewRating;
 use App\Models\Treated;
 use Auth;
+use DB;
 class DentistManagement extends Controller
 {
     /**
