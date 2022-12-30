@@ -41,7 +41,7 @@ class AccountManagement extends Controller
         $user = User::create($input);
         
         $success['token'] =  $user->createToken('MyApp')->accessToken;
-        $success['name'] =  $user->name;
+        $success['name'] =  $user->fname.' '.$user->lname;
         $success['message'] = 'User Register Succesfully';
    
         return response()->json($success);
