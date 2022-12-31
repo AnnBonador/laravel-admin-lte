@@ -6,6 +6,8 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
+use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Password;
 use Validator;
 use App\Models\User;
 use Auth;
@@ -103,5 +105,19 @@ class AccountManagement extends Controller
         return response()->json(['success' => true, 'message' => 'Profile Updated Succesfully' ]);
 
 
+    }
+
+    public function reset_password(Request $request){
+        $credentials = ['email' => $request->email];
+        $response = Password::sendResetLink($credentials, function (Message $message) {
+            $message->subject($this->getEmailSubject());
+        });
+
+        switch ($response) {
+            case Password::RESET_LINK_SENT:
+                return response()->json(['status' => trans($response)]);
+            case Password::INVALID_USER:
+                return response()->jsonErrors(['status' => trans($response)]);
+        }
     }
 }

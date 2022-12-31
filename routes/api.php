@@ -34,6 +34,7 @@ Route::middleware('auth:api')->group( function () {
     
     //dentist
     Route::get('get_doctor_treated/{id}', [DentistManagement::class, 'get_treated']);
+    Route::post('create_schedule', [DentistManagement::class, 'create_schedule']);
     //patient
     Route::get('get_clinics', [AppointmentManagement::class, 'get_clinic']);
     Route::get('get_clinic_doctors/{id}', [AppointmentManagement::class, 'get_doctor']);

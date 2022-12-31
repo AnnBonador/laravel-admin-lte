@@ -34,6 +34,12 @@ class DentistManagement extends Controller
         return response()->json($query);
     }
 
+    public function create_schedule(Request $request){
+        // if($){
+
+        // }
+    }
+
     public function ratings(){
         $query = ReviewRating::where('status', '=', 'active')->with(['patients', 'doctors', 'appointment'])->get();
         
