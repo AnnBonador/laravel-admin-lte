@@ -19,6 +19,7 @@ use App\Http\Controllers\API\AppointmentManagement;
 
 Route::post('register', [AccountManagement::class, 'register']); //universal for patient and doctor
 Route::post('login', [AccountManagement::class, 'login']);
+Route::post('reset-password-trigger', [AccountManagement::class, 'reset_password']);
 
 Route::get('rating', [DentistManagement::class, 'ratings']);
 
