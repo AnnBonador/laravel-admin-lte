@@ -117,7 +117,7 @@ class AccountManagement extends Controller
             case Password::RESET_LINK_SENT:
                 return response()->json(['status' => trans($response)]);
             case Password::INVALID_USER:
-                return response()->jsonErrors(['status' => trans($response)]);
+                return response()->json(['status' => trans($response)]);
         }
     }
 }
