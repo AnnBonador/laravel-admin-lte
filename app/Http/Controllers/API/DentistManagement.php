@@ -25,6 +25,11 @@ class DentistManagement extends Controller
         return response()->json($query);
     }
 
+    public function get_dentist_clinic($id){
+        $query = User::where('id', '=', $id)->with('clinic')->first();
+        return response()->json($query);
+    }
+
     public function get_treated($id){
         $query = DB::table('treated')
                 ->join('appointments', 'treated.app_id', '=', 'appointments.id')
