@@ -40,9 +40,23 @@ class DentistManagement extends Controller
     }
 
     public function create_schedule(Request $request){
-        // if($){
+        $validator = Validator::make($request->all(), [
+            'clinic_id' => 'required',
+            'doctor_id' => 'required',
+            'day' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'duration' => 'required',
+        ]);
 
-        // }
+        if($validator->fails()){
+            return response()->json($validator->errors());       
+        }
+
+        $input = $request->all();
+        $schedule = User::create($input);
+
+        return response()->json(['message' => 'Schedule Created Succesfully']);
     }
 
     public function ratings(){
