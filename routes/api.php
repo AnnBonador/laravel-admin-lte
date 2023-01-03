@@ -32,7 +32,7 @@ Route::middleware('auth:api')->group( function () {
     
     Route::get('patient_information', [PatientManagement::class, 'get_patient']);
     Route::get('dentist_information', [DentistManagement::class, 'dentist_information']);
-    
+    Route::get('dentist_information/{id}', [DentistManagement::class, 'dentist_information_ind']);
     //dentist
     Route::get('get_doctor_treated/{id}', [DentistManagement::class, 'get_treated']);
     Route::post('create_schedule', [DentistManagement::class, 'create_schedule']);
