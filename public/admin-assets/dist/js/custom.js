@@ -15,7 +15,7 @@ $(function () {
         format: 'L',
         minDate:new Date(),
         disabledDates: [new Date()],
-        minView: 2,
+        defaultDate: moment().add(1, 'day')
     });
     $('#schedDay').datetimepicker({
         format: 'L',

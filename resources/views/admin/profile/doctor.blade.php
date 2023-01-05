@@ -156,7 +156,7 @@
                                         </div>
                                         <div class="form-group col-sm-6">
                                             <label for="">College/University</label>
-                                            <input type="text" name="college" value="{{ $doctor->college }}"
+                                            <input type="text" name="college" value="{{ $user->college }}"
                                                 class="form-control" placeholder="Enter college">
                                             @if ($errors->has('college'))
                                                 <span class="text-danger text-left">{{ $errors->first('college') }}</span>

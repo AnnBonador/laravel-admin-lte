@@ -51,4 +51,9 @@ class LoginController extends Controller
             return redirect('/home')->with('status', 'You are now logged in');
         }
     }
+
+    public function logout(Request $request)
+    {
+        return redirect('login')->with(Auth::logout());
+    }
 }

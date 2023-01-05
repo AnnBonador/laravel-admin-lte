@@ -55,7 +55,6 @@ class ScheduleController extends Controller
         $services = Service::where('doctor_id', $id)->where('status', '1')->get();
         $date_id = Schedule::where('day', '>=', date('m/d/Y'))
             ->where('day', '!=', date('m/d/Y'))
-            ->where('day', '!=',  date("m/d/Y", strtotime('tomorrow')))
             ->where('doctor_id', $id)
             ->pluck('day', 'id');
         return response()->json(['services' => $services, 'date_id' => $date_id]);

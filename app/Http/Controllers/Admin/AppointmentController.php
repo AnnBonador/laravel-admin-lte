@@ -91,7 +91,6 @@ class AppointmentController extends Controller
 
             $schedule = Schedule::where('day', '>=', date('m/d/Y'))
                 ->where('day', '!=', date('m/d/Y'))
-                ->where('day', '!=',  date("m/d/Y", strtotime('tomorrow')))
                 ->where('doctor_id', auth()->id())
                 ->pluck('day', 'id');
             return view('admin.appointment.create', compact('clinic', 'doctors', 'patients', 'services', 'schedule'));

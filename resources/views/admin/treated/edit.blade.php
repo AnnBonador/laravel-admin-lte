@@ -118,6 +118,10 @@
                                             @endif
                                         @endforeach
                                         <br>
+                                        <b>Charges: </b>
+                                        ₱
+                                        {{ number_format($treated->appointment->services()->sum('charges'), 2, '.', ',') }}<br>
+
                                         @if ($treated->status == 'active')
                                             <span class="badge badge-primary">{{ $treated->status }}</span>
                                         @else

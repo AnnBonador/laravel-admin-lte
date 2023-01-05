@@ -93,28 +93,6 @@
                                             {{ $data->address }}, {{ $data->city }}, {{ $data->country }} <br><a
                                                 href="javascript:void(0);">Get
                                                 Directions</a></h5>
-                                        <ul>
-                                            <li>
-                                                <a href="assets/img/features/feature-01.jpg" data-fancybox="gallery2">
-                                                    <img src="assets/img/features/feature-01.jpg" alt="Feature Image">
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="assets/img/features/feature-02.jpg" data-fancybox="gallery2">
-                                                    <img src="assets/img/features/feature-02.jpg" alt="Feature Image">
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="assets/img/features/feature-03.jpg" data-fancybox="gallery2">
-                                                    <img src="assets/img/features/feature-03.jpg" alt="Feature Image">
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="assets/img/features/feature-04.jpg" data-fancybox="gallery2">
-                                                    <img src="assets/img/features/feature-04.jpg" alt="Feature Image">
-                                                </a>
-                                            </li>
-                                        </ul>
                                     </div>
                                     <div class="clinic-services">
                                         @foreach ($data->specialization_id as $speciality)

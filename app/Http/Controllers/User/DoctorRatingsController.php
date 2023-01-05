@@ -12,7 +12,7 @@ class DoctorRatingsController extends Controller
     {
         $request->validate([
             'star_rating' => 'required',
-            'comments' => 'required',
+            'comments' => 'required|max:255',
         ]);
 
         $ratings = new ReviewRating;

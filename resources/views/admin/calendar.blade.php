@@ -90,7 +90,14 @@
                                 <div class="row mb-2">
                                     <div class="col-md-12">
                                         <strong>Service:
-                                            <span class="fw-normal">{{ implode(', ', $events->service) }}</span>
+                                            <span class="fw-normal">
+                                                @foreach ($events->services as $service)
+                                                    {{ $service->name }}
+                                                    @if (!$loop->last)
+                                                        ,
+                                                    @endif
+                                                @endforeach
+                                            </span>
                                         </strong>
                                     </div>
                                 </div>

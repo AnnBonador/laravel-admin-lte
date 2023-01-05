@@ -1,7 +1,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
-      <a href="{{ route('home') }}" class="brand-link">
+      <a href="{{ url('/') }}" class="brand-link">
           <img src="{{ asset('uploads/setting/' . getLogo()) }}" alt="logo" class="brand-image img-circle elevation-3"
               style="opacity: .8">
           <span class="brand-text font-weight-light">{{ title() }}</span>
@@ -191,45 +191,46 @@
                       </li>
                   @endrole
 
-                  <li
-                      class="nav-item {{ request()->routeIs('settings.*') || request()->routeIs('specialization.*') || request()->routeIs('paypal.*') ? 'menu-open' : '' }}">
-                      <a href="#"
-                          class="nav-link {{ request()->routeIs('settings.*') || request()->routeIs('specialization.*') || request()->routeIs('paypal.*') ? 'active' : '' }}">
-                          <i class="nav-icon fas fa-wrench"></i>
-                          <p>
-                              Settings
-                              <i class="right fas fa-angle-left"></i>
-                          </p>
-                      </a>
-                      <ul class="nav nav-treeview">
-                          @hasrole('Super-Admin')
-                              <li class="nav-item">
-                                  <a href="{{ route('settings.index') }}"
-                                      class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}">
-                                      <i class="nav-icon fas fa-cog"></i>
-                                      <p>System Settings</p>
-                                  </a>
-                              </li>
-                          @endrole
-                          @hasanyrole('Super-Admin|Clinic Admin|Receptionist')
-                              <li class="nav-item">
-                                  <a href="{{ route('specialization.index') }}"
-                                      class="nav-link {{ request()->routeIs('specialization.*') ? 'active' : '' }}">
-                                      <i class="nav-icon fas fa-tooth"></i>
-                                      <p>Specialization</p>
-                                  </a>
-                              </li>
-                              <li class="nav-item">
-                                  <a href="{{ route('paypal.index') }}"
-                                      class="nav-link {{ request()->routeIs('paypal.*') ? 'active' : '' }}">
-                                      <i class="nav-icon fas fa-wallet"></i>
-                                      <p>Payment</p>
-                                  </a>
-                              </li>
-                          @endhasrole
-                      </ul>
-                  </li>
-
+                  @unlessrole('Doctor')
+                      <li
+                          class="nav-item {{ request()->routeIs('settings.*') || request()->routeIs('specialization.*') || request()->routeIs('paypal.*') ? 'menu-open' : '' }}">
+                          <a href="#"
+                              class="nav-link {{ request()->routeIs('settings.*') || request()->routeIs('specialization.*') || request()->routeIs('paypal.*') ? 'active' : '' }}">
+                              <i class="nav-icon fas fa-wrench"></i>
+                              <p>
+                                  Settings
+                                  <i class="right fas fa-angle-left"></i>
+                              </p>
+                          </a>
+                          <ul class="nav nav-treeview">
+                              @hasrole('Super-Admin')
+                                  <li class="nav-item">
+                                      <a href="{{ route('settings.index') }}"
+                                          class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}">
+                                          <i class="nav-icon fas fa-cog"></i>
+                                          <p>System Settings</p>
+                                      </a>
+                                  </li>
+                              @endrole
+                              @hasanyrole('Super-Admin|Clinic Admin|Receptionist')
+                                  <li class="nav-item">
+                                      <a href="{{ route('specialization.index') }}"
+                                          class="nav-link {{ request()->routeIs('specialization.*') ? 'active' : '' }}">
+                                          <i class="nav-icon fas fa-tooth"></i>
+                                          <p>Specialization</p>
+                                      </a>
+                                  </li>
+                                  <li class="nav-item">
+                                      <a href="{{ route('paypal.index') }}"
+                                          class="nav-link {{ request()->routeIs('paypal.*') ? 'active' : '' }}">
+                                          <i class="nav-icon fas fa-wallet"></i>
+                                          <p>Payment</p>
+                                      </a>
+                                  </li>
+                              @endhasrole
+                          </ul>
+                      </li>
+                  @endunlessrole
               </ul>
           </nav>
           <!-- /.sidebar-menu -->

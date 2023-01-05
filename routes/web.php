@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes(['verify' => true]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'redirectUser'])->name('home');
-
+Route::get('logout', [LoginController::class, 'logout']);
 Route::controller(App\Http\Controllers\ForgotPasswordController::class)->group(function () {
     Route::get('forget-password',  'showForgetPasswordForm')->name('forget.password.get');
     Route::post('forget-password',  'submitForgetPasswordForm')->name('forget.password.post');

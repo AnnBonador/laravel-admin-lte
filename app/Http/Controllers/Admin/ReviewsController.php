@@ -17,7 +17,7 @@ class ReviewsController extends Controller
                 $query->where('clinic_id', '=', auth()->user()->isClinicAdmin);
             })->get();
         } else if (auth()->user()->hasRole('Doctor')) {
-            $reviews = ReviewRating::where('doctor_id', auth()->id());
+            $reviews = ReviewRating::where('doctor_id', auth()->id())->get();
         } else if (auth()->user()->hasRole('Receptionist')) {
             $reviews = ReviewRating::whereHas('appointment', function (Builder $query) {
                 $query->where('clinic_id', '=', auth()->user()->cinic_id);

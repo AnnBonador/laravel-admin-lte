@@ -24,10 +24,20 @@ class MedicalController extends Controller
         }
 
         //patient registered
-        $results_patients = User::where('type', '0')->whereBetween('created_at',  $date)->count();
+        if (auth()->user()->hasRole('Super-Admin')) {
+            $results_patients = User::where('type', '0')->whereBetween('created_at', $date)->count();
+        } else if (auth()->user()->hasRole('Clinic Admin')) {
+            $results_patients = User::where('clinic_id', auth()->user()->isClinicAdmin)->whereBetween('updated_at', $date)->count();
+        }
 
         //treated
-        $results_treated = Treated::whereBetween('created_at',  $date)->count();
+        if (auth()->user()->hasRole('Clinic Admin')) {
+            $results_treated = Treated::whereHas('appointment', function ($query) use ($date) {
+                $query->where('clinic_id', auth()->user()->isClinicAdmin)->whereBetween('created_at',  $date);
+            })->count();
+        } else if (auth()->user()->hasRole('Super-Admin')) {
+            $results_treated = Treated::whereBetween('created_at',  $date)->count();
+        }
 
         return view('admin.reports.medical-report.view', compact('results_patients', 'results_treated'));
     }
@@ -42,10 +52,20 @@ class MedicalController extends Controller
         }
 
         //patient registered
-        $results_patients = User::where('type', '0')->whereBetween('created_at',  $date)->count();
+        if (auth()->user()->hasRole('Super-Admin')) {
+            $results_patients = User::where('type', '0')->whereBetween('created_at', $date)->count();
+        } else if (auth()->user()->hasRole('Clinic Admin')) {
+            $results_patients = User::where('clinic_id', auth()->user()->isClinicAdmin)->whereBetween('created_at', $date)->count();
+        }
 
         //treated
-        $results_treated = Treated::whereBetween('created_at',  $date)->count();
+        if (auth()->user()->hasRole('Super-Admin')) {
+            $results_treated = Treated::whereBetween('created_at',  $date)->count();
+        } else if (auth()->user()->hasRole('Clinic Admin')) {
+            $results_treated = Treated::whereHas('appointment', function ($query) use ($date) {
+                $query->where('clinic_id', auth()->user()->isClinicAdmin)->whereBetween('created_at',  $date);
+            })->count();
+        }
 
         return view('admin.reports.medical-report.print', compact('date_sub', 'results_patients', 'results_treated'));
     }
