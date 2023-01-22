@@ -280,4 +280,6 @@ Route::controller(App\Http\Controllers\Front\LocationController::class)->group(f
     Route::get('sort-doctors', 'sort')->name('doctor.filter.search');
 
     Route::get('search-clinics', 'clinicsIndex')->name('clinics.search');
+    Route::get('clinic-search', 'clinicSearch')->name('clinic.result.search');
+    Route::get('sort-clinics', 'sortClinic')->name('clinic.filter.search');
 });

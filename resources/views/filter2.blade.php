@@ -16,7 +16,8 @@
                     <div class="search-box mt-2">
                         <form action="{{ route('clinic.result.search') }}" method="GET">
                             <div class="form-group search-info">
-                                <input type="text" class="form-control" name="search" placeholder="Search Clinics">
+                                <input type="text" class="form-control" name="search"
+                                    value="{{ Request::get('search') }}" placeholder="Search Doctors, Services Etc.">
                             </div>
                             <button type="submit" class="btn btn-primary search-btn"><i class="fas fa-search"></i>
                                 <span>Search</span></button>
@@ -52,12 +53,14 @@
                                             <span class="checkmark"></span> Proximity
                                         </label>
                                     </div>
+                                    <div>
+                                        <input type="hidden" name="latitude" id="lat" value="">
+                                        <input type="hidden" name="longitude" id="long" value="">
+                                    </div>
                                 </div>
-                                <input type="hidden" name="latitude" id="lat" value="">
-                                <input type="hidden" name="longitude" id="long" value="">
                                 <div class="btn-search">
-                                    <button type="submit" id="filter" disabled="true"
-                                        class="btn btn-block">Search</button>
+                                    <button type="submit" id="filter"
+                                        disabled="true"class="btn btn-block">Search</button>
                                 </div>
                             </form>
                         </div>
@@ -73,10 +76,9 @@
                             <div class="card-body">
                                 <div class="clinic-content">
                                     <h4 class="clinic-name"><a
-                                            href="{{ route('clinics.profile', $data->id) }}">{{ $data->name }}</a></h4>
-                                    <p class="doc-speciality">{{ $data->email }}<br>
-                                        {{ $data->contact }}
-                                    </p>
+                                            href="{{ route('clinics.profile', $data->id) }}">{{ $data->name }}</a>
+                                    </h4>
+                                    <p class="doc-speciality">{{ $data->email }}</p>
 
                                     <div class="clinic-details mb-0">
                                         <h5 class="clinic-direction">

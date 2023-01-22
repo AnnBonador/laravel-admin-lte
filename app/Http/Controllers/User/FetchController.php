@@ -23,8 +23,6 @@ class FetchController extends Controller
         $id = $request->doctor_id;
         $services = Service::where('doctor_id', $id)->where('status', '1')->get();
         $date_id = Schedule::where('day', '>=', date('m/d/Y'))
-            ->where('day', '!=', date('m/d/Y'))
-            ->where('day', '!=',  date("m/d/Y", strtotime('tomorrow')))
             ->where('doctor_id', $id)
             ->pluck('day', 'id');
         return response()->json(['services' => $services, 'date_id' => $date_id]);
@@ -37,7 +35,7 @@ class FetchController extends Controller
 
         $slot = Schedule::where('id', $id)->where('doctor_id', $doctor_id)->first();
         $appointments = Appointment::where('doctor_id', $doctor_id)->get();
-        
+
         if (!empty($slot->start_time)) {
             $starttime = $slot->start_time;  // your start time
             $endtime =  $slot->end_time;  // End time

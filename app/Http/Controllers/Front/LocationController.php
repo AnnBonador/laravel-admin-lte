@@ -16,7 +16,7 @@ class LocationController extends Controller
     public function index(Request $request)
     {
         $doctors = User::with('ratings', 'service')->role('Doctor')->where('status', '1')->get();
-        return view('search-doctors', compact( 'doctors'));
+        return view('search-doctors', compact('doctors'));
     }
 
     public function search(Request $request)
@@ -84,5 +84,31 @@ class LocationController extends Controller
     {
         $clinics = Clinic::all();
         return view('search-clinics', compact('clinics'));
+    }
+
+    public function clinicSearch()
+    {
+        $results = Search::new()
+            ->add(Clinic::where('status', '1'), ['name', 'email', 'contact', 'address', 'city', 'country', 'specialization_id'])
+            ->beginWithWildcard()
+            ->search(request('search'));
+
+        return view('result1', compact('results'));
+    }
+
+    public function sortClinic(Request $request)
+    {
+        $clinics = Clinic::selectRaw("*,
+    ( 6371 * acos( cos( radians(?) ) *
+    cos( radians( latitude ) )
+    * cos( radians( longitude ) - radians(?)
+    ) + sin( radians(?) ) *
+    sin( radians( latitude ) ) )
+    ) AS distance", [$request->latitude, $request->longitude, $request->latitude])
+            ->having("distance", "<", 20)
+            ->orderBy("distance")
+            ->get();
+
+        return view('filter2', compact('clinics'));
     }
 }

@@ -32,5 +32,17 @@ window.onload = function() {
     for (var i = 0; i < check_opt.length; i++) {
         check_opt[i].addEventListener('click', detect)
     }
+    
     // when unchecked or checked, run the function
 }
+$(document).ready(function() {
+    $('.search-btn').attr('disabled', true);
+    $('input[name="search"]').on('input', function() {
+        if ($(this).val().length > 0) {
+            $('.search-btn').attr('disabled', false);
+        } else {
+            $('.search-btn').attr('disabled', true);
+        }
+    });
+});
+

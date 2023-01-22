@@ -8,7 +8,7 @@
                     <nav aria-label="breadcrumb" class="page-breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Search</li>
+                            <li class="breadcrumb-item active" aria-current="page">Search Results</li>
                         </ol>
                     </nav>
                     </nav>
@@ -16,7 +16,9 @@
                     <div class="search-box mt-2">
                         <form action="{{ route('clinic.result.search') }}" method="GET">
                             <div class="form-group search-info">
-                                <input type="text" class="form-control" name="search" placeholder="Search Clinics">
+                                <input type="text" class="form-control" name="search"
+                                    value="{{ Request::get('search') }}"
+                                    id="input-search"placeholder="Search Doctors, Services Etc.">
                             </div>
                             <button type="submit" class="btn btn-primary search-btn"><i class="fas fa-search"></i>
                                 <span>Search</span></button>
@@ -35,6 +37,7 @@
 
             <div class="row">
                 <p id="demo" class="d-none"></p>
+
                 <div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar">
 
                     <!-- Search Filter -->
@@ -53,8 +56,6 @@
                                         </label>
                                     </div>
                                 </div>
-                                <input type="hidden" name="latitude" id="lat" value="">
-                                <input type="hidden" name="longitude" id="long" value="">
                                 <div class="btn-search">
                                     <button type="submit" id="filter" disabled="true"
                                         class="btn btn-block">Search</button>
@@ -66,32 +67,39 @@
 
                 </div>
 
+
                 <div class="col-md-12 col-lg-8 col-xl-9">
+                    @if (count($results) > 0)
+                        <h4 class="breadcrumb-title">{{ $results->count() }} matches found</h4>
+                        @foreach ($results as $data)
+                            @if (class_basename($data) == 'Clinic')
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="clinic-content">
+                                            <h4 class="clinic-name"><a
+                                                    href="{{ route('clinics.profile', $data->id) }}">{{ $data->name }}</a>
+                                            </h4>
+                                            <p class="doc-speciality">{{ $data->email }}</p>
 
-                    @foreach ($clinics as $data)
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="clinic-content">
-                                    <h4 class="clinic-name"><a
-                                            href="{{ route('clinics.profile', $data->id) }}">{{ $data->name }}</a></h4>
-                                    <p class="doc-speciality">{{ $data->email }}<br>
-                                        {{ $data->contact }}
-                                    </p>
-
-                                    <div class="clinic-details mb-0">
-                                        <h5 class="clinic-direction">
-                                            {{ $data->address . ', ' . $data->city . ', ' . $data->country }}<br>
-                                            {{ $data->contact }}</h5>
-                                    </div>
-                                    <div class="clinic-services">
-                                        @foreach ($data->specialization_id as $speciality)
-                                            <span>{{ $speciality }}</span>
-                                        @endforeach
+                                            <div class="clinic-details mb-0">
+                                                <h5 class="clinic-direction">
+                                                    {{ $data->address . ', ' . $data->city . ', ' . $data->country }}<br>
+                                                    {{ $data->contact }}</h5>
+                                            </div>
+                                            <div class="clinic-services">
+                                                @foreach ($data->specialization_id as $speciality)
+                                                    <span>{{ $speciality }}</span>
+                                                @endforeach
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    @endforeach
+                            @endif
+                        @endforeach
+                    @else
+                        <h2 class="breadcrumb-title">No matches found</h2>
+                    @endif
+
 
                 </div>
             </div>
