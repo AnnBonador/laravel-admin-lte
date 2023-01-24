@@ -95,9 +95,11 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="clinic-booking">
-                                <a class="apt-btn" href="{{ route('user.appointments.create') }}">Book Appointment</a>
-                            </div>
+                            @unlessrole('Super-Admin|Receptionist|Doctor|Clinic Admin')
+                                <div class="clinic-booking">
+                                    <a class="apt-btn" href="{{ route('user.appointments.create') }}">Book Appointment</a>
+                                </div>
+                            @endunlessrole
                         </div>
                     </div>
                 </div>

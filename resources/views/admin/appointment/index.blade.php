@@ -52,7 +52,11 @@
                                 <tbody>
                                     @foreach ($appointments->sortBy('schedule_id') as $data)
                                         @if ($data->schedule()->exists())
-                                            @if ($data->schedule->day >= Carbon\Carbon::now()->format('m/d/Y'))
+                                            @php
+                                                $date1 = Carbon\Carbon::now();
+                                                $date2 = Carbon\Carbon::createFromFormat('m/d/Y', $data->schedule->day);
+                                            @endphp
+                                            @if ($date2->isFuture() || $date2->isToday())
                                                 <tr>
                                                     <td>
                                                         @if ($data->patients()->exists())
@@ -62,11 +66,17 @@
                                                             </b>
                                                         @endif
                                                         @if ($data->doctors()->exists())
-                                                            Doctor: {{ $data->doctors->full_name }}<br>
+                                                            Doctor:
+                                                            <a href="{{ route('doctor.profile', $data->doctors->id) }}">
+                                                                {{ $data->doctors->full_name }}<br>
+                                                            </a>
                                                         @endif
                                                         @if ($data->clinic()->exists())
-                                                            Clinic: <span
-                                                                class="text-primary">{{ $data->clinic->name }}</span><br>
+                                                            Clinic:
+                                                            <a href="{{ route('clinics.profile', $data->clinic->id) }}">
+                                                                <span
+                                                                    class="text-primary">{{ $data->clinic->name }}</span><br>
+                                                            </a>
                                                         @endif
                                                         <small>Payment: {{ $data->payment_option }}</small>
                                                     </td>

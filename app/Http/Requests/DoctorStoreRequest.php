@@ -40,8 +40,8 @@ class DoctorStoreRequest extends FormRequest
             'degree' => 'nullable',
             'college' => 'nullable',
             'about' => 'nullable',
-            'latitude' => 'nullable',
-            'longitude' => 'nullable',
+            'latitude' => ['nullable','regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
+            'longitude' => ['nullable','regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
             'year' => 'nullable',
             'image' => 'nullable|image|mimes:jpeg,gif,png,jpg|max:2048'
         ];

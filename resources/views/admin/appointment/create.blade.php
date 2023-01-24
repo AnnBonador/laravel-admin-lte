@@ -50,7 +50,8 @@
                                                 <label for="">Clinic</label>
                                                 <span class="text-danger">*</span>
                                                 <select name="clinic_id" data-placeholder="Search" data-allow-clear="true"
-                                                    class="form-control select2bs4" style="width: 100%;" id="load_clinic">
+                                                    class="form-control select2bs4" style="width: 100%;" id="load_clinic"
+                                                    required>
                                                     <option selected="selected"></option>
                                                     @foreach ($clinic as $id => $item)
                                                         <option value="{{ $id }}"
@@ -70,7 +71,8 @@
                                                 <span class="text-danger">*</span>
                                                 <input type="hidden" id="get_doctor_id">
                                                 <select name="doctor_id" data-placeholder="Search" data-allow-clear="true"
-                                                    class="form-control select2bs4" style="width: 100%;" id="load_doctor">
+                                                    class="form-control select2bs4" style="width: 100%;" id="load_doctor"
+                                                    required>
                                                     @role('Clinic Admin|Receptionist')
                                                         <option value=""></option>
                                                         @foreach ($doctors as $id => $item)
@@ -93,7 +95,7 @@
                                                 service</a>
                                             <select name="service[]" multiple="multiple" data-placeholder="Search"
                                                 data-allow-clear="true" class="form-control select2bs4" style="width: 100%;"
-                                                id="load_service">
+                                                id="load_service" required>
                                                 @role('Doctor')
                                                     <option value=""></option>
                                                     @foreach ($services as $item)
@@ -111,7 +113,8 @@
                                             <label for="">Appointment Date</label>
                                             <span class="text-danger">*</span>
                                             <select name="schedule_id" data-placeholder="Search" data-allow-clear="true"
-                                                class="form-control select2bs4" style="width: 100%;" id="load_date">
+                                                class="form-control select2bs4" style="width: 100%;" id="load_date"
+                                                required>
                                                 @role('Doctor')
                                                     <option value=""></option>
                                                     @foreach ($schedule as $id => $item)
@@ -132,7 +135,8 @@
                                             <a href="{{ route('patients.create') }}" class="float-right text-sm">Add
                                                 patient</a>
                                             <select name="patient_id" data-placeholder="Search" data-allow-clear="true"
-                                                class="form-control select2bs4" style="width: 100%;" id="load_patient">
+                                                class="form-control select2bs4" style="width: 100%;" id="load_patient"
+                                                required>
                                                 @hasanyrole('Clinic Admin|Doctor|Receptionist')
                                                     <option value=""></option>
                                                     @foreach ($patients as $id => $item)
@@ -332,7 +336,7 @@
                                 '<input type="radio" class="btn-check" name="booking_id" id="' +
                                 key +
                                 '"  value="' + key +
-                                '" autocomplete="off"><label class="btn btn-outline-primary fw-normal m-2"for="' +
+                                '" autocomplete="off" required><label class="btn btn-outline-primary fw-normal m-2"for="' +
                                 key + '">' + value + '</label>');
                         });
 

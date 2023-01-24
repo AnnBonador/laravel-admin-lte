@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Clinic;
-use App\Models\Schedule;
 use App\Models\Service;
+use App\Models\Schedule;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ScheduleStoreRequest;
-use App\Models\Appointment;
-use App\Models\User;
 
 class ScheduleController extends Controller
 {
@@ -51,10 +52,11 @@ class ScheduleController extends Controller
 
     public function getService(Request $request)
     {
+        $now = Carbon::now();
         $id = $request->doctor_id;
         $services = Service::where('doctor_id', $id)->where('status', '1')->get();
-        $date_id = Schedule::where('day', '>=', date('m/d/Y'))
-            ->where('day', '!=', date('m/d/Y'))
+        $date_id = Schedule::where('day', '>', $now->format('m/d/Y'))
+            ->whereRaw(DB::raw("substr(day, -4) = " . $now->format('Y')))
             ->where('doctor_id', $id)
             ->pluck('day', 'id');
         return response()->json(['services' => $services, 'date_id' => $date_id]);

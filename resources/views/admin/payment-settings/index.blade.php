@@ -27,10 +27,12 @@
                     <div class="card card-primary card-outline">
                         <div class="card-header">
                             <h3 class="card-title">Paypal List</h3>
-                            <a href="{{ route('paypal.create') }}" class="btn btn-sm btn-primary float-right"><i
-                                    class="fa fa-plus"></i>
-                                &nbsp;&nbsp;Add
-                                Paypal</a>
+                            @role('Super-Admin')
+                                <a href="{{ route('paypal.create') }}" class="btn btn-sm btn-primary float-right"><i
+                                        class="fa fa-plus"></i>
+                                    &nbsp;&nbsp;Add
+                                    Paypal</a>
+                            @endrole
                         </div>
                         <div class="card-body">
                             <table id="table1" class="table table-borderless table-hover" style="width:100%;">
@@ -51,9 +53,10 @@
                                             <td>
                                                 <a href="{{ route('paypal.edit', $data->id) }}"
                                                     class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
-
-                                                <button type="button" class="btn btn-sm btn-danger deleteRecordbtn"
-                                                    value="{{ $data->id }}"><i class="fa fa-trash"></i></button>
+                                                @role('Super-Admin')
+                                                    <button type="button" class="btn btn-sm btn-danger deleteRecordbtn"
+                                                        value="{{ $data->id }}"><i class="fa fa-trash"></i></button>
+                                                @endrole
                                             </td>
                                         </tr>
                                     @endforeach

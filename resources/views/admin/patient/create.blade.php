@@ -63,6 +63,9 @@
                                     @role('Clinic Admin')
                                         <input type="hidden" name="clinic_id" value="{{ Auth::user()->isClinicAdmin }}">
                                     @endrole
+                                    @role('Receptionist')
+                                        <input type="hidden" name="clinic_id" value="{{ Auth::user()->clinic_id }}">
+                                    @endrole
                                     @hasanyrole('Super-Admin|Doctor')
                                         <div class="form-group col-sm-4">
                                             <label for="">Select Clinic</label>

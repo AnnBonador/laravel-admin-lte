@@ -136,7 +136,11 @@
                                     <tbody>
                                         @foreach ($appointment->take(5) as $data)
                                             @if ($data->schedule()->exists())
-                                                @if ($data->schedule->day > Carbon\Carbon::now()->format('m/d/Y'))
+                                                @php
+                                                    $date1 = Carbon\Carbon::now();
+                                                    $date2 = Carbon\Carbon::createFromFormat('m/d/Y', $data->schedule->day);
+                                                @endphp
+                                                @if ($date1 < $date2)
                                                     <tr>
                                                         <td>
                                                             @if (!empty($data->patients->image))

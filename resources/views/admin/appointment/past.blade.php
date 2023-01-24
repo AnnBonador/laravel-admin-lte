@@ -48,7 +48,11 @@
                                 <tbody>
                                     @foreach ($appointments as $data)
                                         @if ($data->schedule()->exists())
-                                            @if ($data->schedule->day < Carbon\Carbon::now()->format('m/d/Y'))
+                                            @php
+                                                $date1 = Carbon\Carbon::now();
+                                                $date2 = Carbon\Carbon::createFromFormat('m/d/Y', $data->schedule->day);
+                                            @endphp
+                                            @if ($date2->isPast())
                                                 <tr>
                                                     <td>
                                                         @if ($data->patients()->exists())
